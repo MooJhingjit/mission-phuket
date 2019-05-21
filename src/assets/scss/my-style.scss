@@ -1,0 +1,66 @@
+@import '../../../node_modules/spectre.css/src/variables';
+// $fa-font-path: "~font-awesome/fonts";
+// @import "~font-awesome/scss/font-awesome";
+body{
+  .panel .panel-body{
+    padding: .8rem !important;
+  }
+  .item-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .item-right{
+    display: flex;
+    justify-content: flex-end
+  }
+  .no-margin{
+    margin: 0 !important;
+  }
+
+  header{
+    display: flex;
+    flex: 1;
+    padding: 15px;
+    border-bottom: 1px solid $gray-color;
+    .user-profile{
+      text-align: right;
+      p{
+        margin: 5px;
+        button{
+          margin: 0 2px;
+        }
+      }
+    }
+    @media (max-width: $size-sm) {
+      &>div{
+        text-align: center !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+  .navigation-bar{
+    padding: 10px 0;
+    .search-options{
+      font-size: 0.7em;
+    }
+  }
+  .content{
+    padding: 15px;
+    display: flex;
+    flex: 1;
+    &>.column>.card{
+      box-shadow: 0 0.25rem 1rem rgba(48,55,66,.15);
+    }
+  }
+  footer{
+    text-align: center;
+    display: block !important;
+    font-size: 0.7em;
+    p{
+      margin: 2px;
+    }
+  }
+}
