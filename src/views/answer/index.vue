@@ -1,6 +1,7 @@
 <template>
   <div class="container columns">
-    <div class="column col-4">
+    <navigation-bar/>
+    <div class="column col-4 col-md-12">
       <div class="panel">
         <div class="panel-header">
           <div class="panel-title">รายละเอียดรายการ</div>
@@ -8,12 +9,12 @@
         <div class="panel-body">
           <div class="empty">
             <div class="empty-icon"><i class="icon icon-3x icon-mail"></i></div>
-            <p class="empty-title h5">You have no new messages</p>
+            <p class="empty-title h5">รายละเอียด</p>
           </div>
         </div>
       </div>
     </div>
-    <div class="column col-8">
+    <div class="column col-8 col-md-12">
       <div class="panel">
         <div class="panel-header columns">
           <div class="column">
@@ -69,7 +70,12 @@
 </template>
 
 <script>
+import navigationBar from '@Components/navigation'
+
 export default {
+  components: {
+    navigationBar
+  },
   data () {
     return {
       local: {

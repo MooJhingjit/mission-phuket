@@ -23,37 +23,58 @@ export default new Router({
     {
       path: '/',
       redirect: '/report',
-      name: 'รายงานอุบัติการณ์',
+      name: 'Root',
+      meta: {
+        label: 'รายงานอุบัติการณ์',
+      },
       component: DefaultLayout,
       children: [
         {
           path: 'report',
-          name: null,
+          name: 'Report',
+          meta: {
+            label: '',
+          },
           component: Home
         },
         {
           path: 'report/create',
-          name: 'สร้างใหม่',
+          name: 'CreateReport',
+          meta: {
+            label: 'สร้างใหม่',
+          },
           component: Create
         },
         {
           path: 'report/:id',
-          name: 'รายละเอียด',
+          name: 'ReportDetail',
+          meta: {
+            label: 'รายละเอียด',
+          },
           component: Detail
         },
         {
           path: 'management/:id',
-          name: 'บันทึกส่วนงาน',
+          name: 'Management',
+          meta: {
+            label: 'บันทึกส่วนงาน',
+          },
           component: Management
         },
         {
           path: 'answer/:id',
-          name: 'แก้ไขอุบัติการณ์',
+          name: 'Answer',
+          meta: {
+            label: 'ตอบอุบัติการณ์',
+          },
           component: Answer
         },
         {
           path: 'settings',
-          name: 'ตั้งค่าระบบ',
+          name: 'Settings',
+          meta: {
+            label: 'ตั้งค่าระบบ',
+          },
           component: Settings
         },
         // {
@@ -286,6 +307,9 @@ export default new Router({
       path: '/login',
       // redirect: '',
       name: 'Login',
+      meta: {
+        label: 'Login',
+      },
       component: {
         render (c) { return c('router-view') }
       },
@@ -293,6 +317,9 @@ export default new Router({
         {
           path: '/login',
           name: 'Login',
+          meta: {
+            label: 'Login',
+          },
           component: Login
         },
         // {

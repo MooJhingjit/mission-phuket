@@ -19,6 +19,7 @@
     "npm": "^6.9.0",
     "spectre.css": "^0.5.8",
     "vue": "^2.6.10",
+    "vue-nprogress": "^0.1.5",
     "vue-router": "^3.0.6"
   },
   "devDependencies": {
