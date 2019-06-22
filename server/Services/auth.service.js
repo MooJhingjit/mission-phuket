@@ -8,13 +8,12 @@ const authUser = async function(user){
   let password = user.password;
   let err, comparison;
   [err, user] = await to(Users.findOne().byUsername(username));
-
+  
   if(err) TE(err.message);
   
   if(!user) TE('noUserFound');
   
   [err, isCorrect] = await to(bcrypt.compare(password, user.password));
-  
   // console.log(isCorrect);
   if(err) TE(err.message);
   

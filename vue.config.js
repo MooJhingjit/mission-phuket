@@ -9,13 +9,14 @@ module.exports = {
     resolve: {
       alias: {
         // @ is an alias to /src
-        '@Assets': resolve ('src/assets'),
-        // '@Views': resolve ('src/Views'),
-        // '@Layouts': resolve('src/Layouts'),
-        '@Components': resolve ('src/components'),
-        '@Libraries': resolve ('src/libraries'),
-        // '@Config': resolve ('src/Config'),
-        // '@Services': resolve ('src/Services')
+        '@Assets': resolve ('src/Assets'),
+        '@Views': resolve ('src/Views'),
+        '@Layouts': resolve('src/Layouts'),
+        '@Components': resolve ('src/Components'),
+        '@Libraries': resolve ('src/Libraries'),
+        '@Config': resolve ('src/Config'),
+        '@Views': resolve ('src/Views'),
+        '@Services': resolve ('src/Services')
       }
     }
   },

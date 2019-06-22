@@ -2,16 +2,16 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 // Containers
-const DefaultLayout = () => import('@/layouts/default')
+const DefaultLayout = () => import('@Layouts/default')
 
 // Views
-const Home = () => import('@/views/home')
-const Create = () => import('@/views/create')
-const Detail = () => import('@/views/detail')
-const Management = () => import('@/views/management')
-const Answer = () => import('@/views/answer')
-const Settings = () => import('@/views/settings')
-const Login = () => import('@/views/login')
+const Home = () => import('@Views/home')
+const Create = () => import('@Views/create')
+const Detail = () => import('@Views/detail')
+const Management = () => import('@Views/management')
+const Answer = () => import('@Views/answer')
+const Settings = () => import('@Views/settings')
+const Login = () => import('@Views/login')
 
 Vue.use(Router)
 

@@ -1,17 +1,17 @@
-// import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 // import config from '@Config/app.config'
 // import moment from 'moment'
 // import Helper from '@Libraries/common.helpers'
 // import { bus } from '@/main'
 export default {
   computed: {
-  //   ...mapGetters([
-  //     'GET_USERDATA_STORE',
-  //     'GET_APPDATA_STORE'
-  //   ]),
-  //   USER () {
-  //     return this.GET_USERDATA_STORE
-  //   },
+    ...mapGetters([
+      'GET_USERDATA_STORE'
+      // 'GET_APPDATA_STORE'
+    ]),
+    USER () {
+      return this.GET_USERDATA_STORE
+    },
   //   APPDATA () {
   //     return this.GET_APPDATA_STORE
   //   },
@@ -70,6 +70,14 @@ export default {
       // Helper.REMOVE_STORAGEITEM(config.variable.authStorage)
       // this.SET_APP_STORE({ data: {} })
       // this.GO_TOPAGE('Login')
+    },
+    GO_TOHOMEPAGE () {
+      let department = 'admin'
+      switch (department) {
+        case 'admin':
+          this.GO_TOPAGE('Report')
+          break
+      }
     }
   }
 }

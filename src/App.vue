@@ -2,18 +2,51 @@
   <div id="myApp">
     <nprogress-container></nprogress-container>
     <router-view></router-view>
+    <notifications group="default" position="bottom left"/>
   </div>
 </template>
 
 <script>
 import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
+
+import { mapActions } from 'vuex'
+import config from '@Config/app.config'
+import service from '@Services/app.service'
+import to from 'await-to-js';
+
 export default {
-  name: 'app',
   components: {
     NprogressContainer
   },
+  data () {
+    return {
+      local: {
+        username: null,
+        password: null
+      }
+    }
+  },
+  created () {
+    this.fetchData()
+  },
+  methods: {
+    ...mapActions([
+      'SET_USER_STORE'
+    ]),
+    async fetchData() {
+      if (this.$route.name === 'Login') return
+      let err, res;
+      let resourceName = config.api.user.profile;
+      [ err, res ] = await to(service.getResource({ resourceName, queryString: []}))
+      // console.log(res.data.user);
+      if(err) return
+      this.SET_USER_STORE({data: res.data.user})
+      return 
+    },
+  }
 }
 </script>
+
 
 <style lang="scss">
 @import '@/assets/scss/my-style.scss';

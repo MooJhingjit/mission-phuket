@@ -26,7 +26,7 @@ body{
     margin: 0 !important;
   }
 
-  header{
+  header.columns{
     display: flex;
     flex: 1;
     padding: 15px;
@@ -72,3 +72,26 @@ body{
     }
   }
 }
+.vdp-datepicker__calendar  {
+  .cell.today{
+    background: #66718a !important;
+    color: #fff!important;
+  }
+  .cell.selected{
+    background: $primary-color !important;
+    color: #fff!important;
+  }
+}
+label.require::before { 
+  content: "* ";
+  color: red;
+}
+// .datetime-picker{
+//   input{
+//     border: transparent !important;
+//     height: -webkit-fill-available !important;
+//   }
+//   input:focus{
+//     outline: none !important;
+//   }
+// }
