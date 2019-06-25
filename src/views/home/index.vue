@@ -20,27 +20,23 @@
         <table class="table table-striped table-hover">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>number</th>
-              <th>happendate</th>
-              <th>happentime</th>
-              <th>reportdate</th>
-              <th>reporttime</th>
-              <th>topatient</th>
-              <th>hn</th>
+              <th>วันที่เกิดเหตุ</th>
+              <th>ชื่อ-นามสกุล</th>
+              <th>ผู้รายงาน</th>
+              <th>วันที่รายงาน</th>
+              <th>ผู้ที่ได้รับผลกระทบ</th>
+              <th>รูปแบบของเหตุการณ์</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr @dblclick="GO_TOPAGE('ReportDetail')" :key="index" v-for="(item, index) in local.reportLists">
-              <td>....</td>
-              <td>....</td>
-              <td>....</td>
-              <td>....</td>
-              <td>....</td>
-              <td>....</td>
-              <td>....</td>
-              <td>....</td>
+            <tr @dblclick="GO_TOPAGE('EditReport', {key: item._id})" :key="index" v-for="(item, index) in local.reportLists">
+              <td>{{moment(item.incidentDate).format('DD/MM/YYYY HH:mm:ss')}}</td>
+              <td>{{item.name}}</td>
+              <td>{{item.reporter}}</td>
+              <td>{{moment(item.reportDate).format('DD/MM/YYYY')}}</td>
+              <td>{{item.affectedPerson}}</td>
+              <td>{{item.programType}}</td>
               <td style="text-align:center;">
                 <button class="btn m-1" @click="GO_TOPAGE('ReportDetail')"><i class="fas fa-info-circle"></i> รายละเอียด</button>
                 <button class="btn m-1" @click="GO_TOPAGE('Management')"><i class="fas fa-edit"></i> จัดการ</button>
@@ -83,6 +79,10 @@
 <script>
 import NavigationBar from '@Components/navigation'
 import AdvancedSearch from '@Components/searchBox/advanced'
+import to from 'await-to-js';
+import service from '@Services/app.service'
+import config from '@Config/app.config'
+import moment from 'moment';
 
 export default {
   components: {
@@ -93,20 +93,22 @@ export default {
   data () {
     return {
       local: {
-        reportLists: [
-          {},
-          {},
-          {},
-          {},
-          {},
-          {},
-          {},
-          {},
-        ]
-      }
+        reportLists: []
+      },
+      moment: moment
     }
   },
+  created () {
+    this.fetchData();
+  },
   methods: {
+    async fetchData () {
+      let err, res;
+      [ err, res ] = await to(service.getResource({ resourceName: config.api.report.index }));
+      if(err) return;
+      this.local.reportLists = res.data.reports
+      console.log(res);
+    },
     createReport() {
       this.GO_TOPAGE('CreateReport')
     }

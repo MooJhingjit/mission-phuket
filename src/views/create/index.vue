@@ -162,9 +162,9 @@
                       <select class="form-select" v-model="local.program.common.PCT">
                       <option :value="null">กรุณาเลือก</option>
                         <template v-for="(items, index) in clinicalProgram.common.PCT.options">
-                          <option v-if="!items.child.length" :key="index"  value="volvo">{{items.title}}</option>
+                          <option v-if="!items.child.length" :key="index" :value="items.value">{{items.title}}</option>
                           <optgroup v-else :key="index" :label="items.title">
-                            <option v-for="(subItems, subIndex) in items.child" :key="subIndex"  value="volvo">{{subItems.title}}</option>
+                            <option v-for="(subItems, subIndex) in items.child" :key="subIndex" :value="items.value">{{subItems.title}}</option>
                           </optgroup>
                         </template>
                       </select>
@@ -174,9 +174,9 @@
                       <select class="form-select" v-model="local.program.common.IC">
                       <option :value="null">กรุณาเลือก</option>
                        <template v-for="(items, index) in clinicalProgram.common.IC.options">
-                          <option v-if="!items.child.length" :key="index"  value="volvo">{{items.title}}</option>
+                          <option v-if="!items.child.length" :key="index" :value="items.value">{{items.title}}</option>
                           <optgroup v-else :key="index" :label="items.title">
-                            <option v-for="(subItems, subIndex) in items.child" :key="subIndex"  value="volvo">{{subItems.title}}</option>
+                            <option v-for="(subItems, subIndex) in items.child" :key="subIndex" :value="items.value">{{subItems.title}}</option>
                           </optgroup>
                         </template>
                       </select>
@@ -421,13 +421,16 @@ export default {
   },
   computed: {
     clinicalProgram () {
-      return config.programLists.clinical
+      return config.programLists.clinical;
     },
     nonClinicalProgram () {
-      return config.programLists.nonClinical
+      return config.programLists.nonClinical;
     },
     violenceProgram () {
-      return config.programLists.violence
+      return config.programLists.violence;
+    },
+    programType () {
+      return this.local.programType;
     }
     // review () {
     //   return config.programLists.clinical.common.review.options
@@ -441,7 +444,7 @@ export default {
         hn: null,
         name: null,
         age: null,
-        reportDate: moment().format('l'),
+        reportDate: moment().format('DD-MM-YYYY'),
         reporter: null,
         area: null,
         affectedPerson: null,
@@ -487,16 +490,25 @@ export default {
     }
   },
   created () {
-    // this.fetchData();
-    // console.log(this.USER);
     this.local.reporter = this.USER.name
+    if (this.$route.params.key) {
+      // edit mode
+      this.fetchData(this.$route.params.key);
+    }
   },
   methods: {
-    async fetchData() {
-      // let err, resUser, resDepartment;
-      // [ err, resUser ] = await to(service.getResource({ resourceName: config.api.user.index }));
-      // [ err, resDepartment ] = await to(service.getResource({ resourceName: config.api.department.index }));
-      // if(err) return;
+    async fetchData(reportId) {
+      let err, res;
+      [ err, res ] = await to(service.getResource({ resourceName: `${config.api.report.index}/${reportId}`}));
+      if(err) return;
+      let item = res.data.report;
+
+      
+      item.incidentDate = new Date(item.incidentDate)
+      // console.log(item.incidentDate);
+      // console.log(item);
+      item.reportDate = moment(item.reportDate).format('DD-MM-YYYY')
+      this.local = item;
       // this.local.departmentItems = resDepartment.data.department;
       // this.local.items = resUser.data.user;
     },
@@ -507,16 +519,22 @@ export default {
       ]
     },
     async event (type, data = null) {
-      let err, res, resourceName, queryString;
+      let err, res, resourceName, queryString, reportData;
+      if (this.$route.params.key && type === 'add') {
+        type = 'update';
+      }
       switch(type) {
         case 'add':
-          // [ err, res ] = await to(this.$validator.validate());
-          // if(err || !res) return
+          [ err, res ] = await to(this.$validator.validate());
+          if(err || !res) return
+          reportData = Object.assign({}, this.local);
+          reportData.reportDate = moment(this.local.reportDate).format();
+          // console.log(reportData);
           resourceName = config.api.report.index;
           [ err, res ] = await to(service.postResource({ resourceName, data: {
             ...this.local
           }}))
-          console.log(res);
+          // // console.log(res);
           if(err) return;
           break;
         case 'remove':
@@ -535,14 +553,15 @@ export default {
           // if(err) return;
           break;
         case 'update':
-          // resourceName = `${config.api.user.index}/${this.local.idSelected}`;
-          // [ err, res ] = await to(service.putResource({ resourceName, data: {
-          //   name: this.local.name,
-          //   username: this.local.username,
-          //   password: this.local.password,
-          //   departmentId: this.local.departmentId
-          // }}))
-          // if(err) return;
+          // console.log(this.local.reportDate);
+          [ err, res ] = await to(this.$validator.validate());
+          if(err || !res) return
+          reportData = Object.assign({}, this.local);
+          reportData.reportDate = moment(this.local.reportDate, 'DD-MM-YYYY').format()
+          resourceName = `${config.api.report.index}/${this.local._id}`;
+          [ err, res ] = await to(service.putResource({ resourceName, data: {
+            ...reportData
+          }}))
           break;
       }
       // this.resetForm();
@@ -552,8 +571,46 @@ export default {
         text: 'ทำรายการสำเร็จ',
         type: 'success',
       });
+    },
+    resetProgramForm () {
+      this.local.program = Object.assign({}, { // copy from state
+        common: {
+          review: null,
+          PCT: null,
+          IC: null,
+          PTC: null,
+          operation: null,
+        },
+        spacific: {
+          gynecology: null,
+          surgery: null,
+          medicine: null,
+          pediatrics: null,
+          orthopedic: null,
+          generalEnt: null,
+          optic: null,
+          anesthesiology: null,
+          radiology: null,
+          dental: null,
+        },
+        event: {
+          event: null
+        },
+        env: null,
+        facilities: null,
+        im: null,
+        hrd: null,
+        budget: null,
+        rights: null,
+      })
     }
-  }
+  },
+  watch: {
+    // whenever question changes, this function will run
+    programType: function (newQuestion, oldQuestion) {
+      // this.resetProgramForm()
+    }
+  },
 }
 </script>
 

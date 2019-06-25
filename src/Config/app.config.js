@@ -12,7 +12,7 @@ const api = {
     index: '/users'
   },
   report: {
-    index: '/report'
+    index: '/reports'
   },
   department: {
     index: '/department'

@@ -9,7 +9,7 @@
     type="datetime"
     width="100%"
     :placeholder="config.placeholder"
-    format="MM-DD-YYYY [เวลา] HH:mm">
+    format="DD-MM-YYYY [เวลา] HH:mm">
     </date-picker>
     <!-- <datepicker
       :id="`input_${config.key}`"
@@ -60,6 +60,7 @@ export default {
         this.$validator = this.config.validator
       }
       this.myValue = this.value
+      
     },
     getInputClass () {
       return [
@@ -70,8 +71,13 @@ export default {
   },
   watch: {
     myValue () {
+      // console.log(this.myValue);
       this.$emit('input', this.myValue)
-    }
+    },
+    value () {
+      // console.log(this.value);
+      this.myValue = this.value
+    },
   }
 }
 </script>

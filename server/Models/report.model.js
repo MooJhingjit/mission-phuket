@@ -5,11 +5,11 @@ const { to, TE }  = require('@service/util.service');
 const reportSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   programType: { type: String, required: true},
-  incidentDate: { type: String, required: true},
+  incidentDate: { type: Date, required: true},
   hn: { type: String, required: true},
   name: { type: String, required: true},
   age: { type: String, required: true},
-  reportDate: { type: String, required: true},
+  reportDate: { type: Date, required: true},
   reporter: { type: String, required: true},
   area: { type: String, required: true},
   affectedPerson: { type: String, required: true},

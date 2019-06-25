@@ -46,7 +46,15 @@ export default new Router({
           component: Create
         },
         {
-          path: 'report/:id',
+          path: 'report/edit/:key',
+          name: 'EditReport',
+          meta: {
+            label: 'แก้ไข',
+          },
+          component: Create
+        },
+        {
+          path: 'report/:key',
           name: 'ReportDetail',
           meta: {
             label: 'รายละเอียด',
@@ -54,7 +62,7 @@ export default new Router({
           component: Detail
         },
         {
-          path: 'management/:id',
+          path: 'management/:key',
           name: 'Management',
           meta: {
             label: 'บันทึกส่วนงาน',
@@ -62,7 +70,7 @@ export default new Router({
           component: Management
         },
         {
-          path: 'answer/:id',
+          path: 'answer/:key',
           name: 'Answer',
           meta: {
             label: 'ตอบอุบัติการณ์',
@@ -119,7 +127,7 @@ export default new Router({
         //       component: Users,
         //     },
         //     {
-        //       path: ':id',
+        //       path: ':key',
         //       meta: { label: 'User Details'},
         //       name: 'User',
         //       component: User,

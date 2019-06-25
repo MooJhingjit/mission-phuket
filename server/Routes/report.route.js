@@ -3,12 +3,15 @@ const router = express.Router()
 const { Reports } = require('@controller')
 
 
+router.get('/reports', function(req, res){
+  Reports.list(req, res)
+})
 
-// router.get('/user/profile', function(req, res){
-//   Users.profile(req, res)
-// })
+router.get('/reports/:id', function(req, res){
+  Reports.get(req, res)
+})
 
-router.post('/report', function(req, res){
+router.post('/reports', function(req, res){
   Reports.create(req, res)
 })
 
@@ -24,9 +27,9 @@ router.post('/report', function(req, res){
 //   Users.create(req, res)
 // })
 
-// router.put('/users/:id', function(req, res){
-//   Users.update(req, res)
-// })
+router.put('/reports/:id', function(req, res){
+  Reports.update(req, res)
+})
 
 // router.delete('/users', function(req, res){
 //   Users.remove(req, res)
