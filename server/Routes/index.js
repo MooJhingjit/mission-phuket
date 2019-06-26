@@ -10,7 +10,8 @@ app.use('/api',
     // require('./auth'),
     require('./user.route'),
     require('./department.route'),
-    require('./report.route')
+    require('./report.route'),
+    require('./management.route')
   ]
 );
 
