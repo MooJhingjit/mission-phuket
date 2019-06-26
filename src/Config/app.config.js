@@ -16,6 +16,9 @@ const api = {
   },
   department: {
     index: '/department'
+  },
+  management: {
+    index: '/management'
   }
 }
 

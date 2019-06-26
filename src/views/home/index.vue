@@ -39,7 +39,7 @@
               <td>{{item.programType}}</td>
               <td style="text-align:center;">
                 <button class="btn m-1" @click="GO_TOPAGE('ReportDetail')"><i class="fas fa-info-circle"></i> รายละเอียด</button>
-                <button class="btn m-1" @click="GO_TOPAGE('Management')"><i class="fas fa-edit"></i> จัดการ</button>
+                <button class="btn m-1" @click="GO_TOPAGE('Management', {key: item._id})"><i class="fas fa-edit"></i> จัดการ</button>
                 <button class="btn m-1" @click="GO_TOPAGE('Answer')"><i class="fas fa-edit "></i> ตอบ</button>
               </td>
             </tr>
