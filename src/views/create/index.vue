@@ -444,7 +444,7 @@ export default {
         hn: null,
         name: null,
         age: null,
-        reportDate: moment().format('DD-MM-YYYY'),
+        reportDate:  moment().format('DD-MM-YYYY'),
         reporter: null,
         area: null,
         affectedPerson: null,
@@ -525,14 +525,14 @@ export default {
       }
       switch(type) {
         case 'add':
+          // console.log(moment(this.local.reportDate, 'DD-MM-YYYY').format());
           [ err, res ] = await to(this.$validator.validate());
           if(err || !res) return
           reportData = Object.assign({}, this.local);
-          reportData.reportDate = moment(this.local.reportDate).format();
-          // console.log(reportData);
+          reportData.reportDate = moment(this.local.reportDate, 'DD-MM-YYYY').format()
           resourceName = config.api.report.index;
           [ err, res ] = await to(service.postResource({ resourceName, data: {
-            ...this.local
+            ...reportData
           }}))
           // // console.log(res);
           if(err) return;

@@ -19,6 +19,9 @@ const api = {
   },
   management: {
     index: '/management'
+  },
+  answer: {
+    index: '/answers'
   }
 }
 
