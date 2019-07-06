@@ -8,6 +8,12 @@ module.exports = {
     if(err) TE(err.message);
     return department
   },
+  async get (departmentId){
+    return Departments.findById(departmentId).then((department, err) => {
+      if(err) TE(err.message);
+      return department
+    })
+  },
   create(department, options = null){
     let err, res;
     let newDepartments = new Departments({

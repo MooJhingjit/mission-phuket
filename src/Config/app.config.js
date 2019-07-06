@@ -12,7 +12,8 @@ const api = {
     index: '/users'
   },
   report: {
-    index: '/reports'
+    index: '/reports',
+    translation: '/report-translation'
   },
   department: {
     index: '/department'
@@ -22,6 +23,9 @@ const api = {
   },
   answer: {
     index: '/answers'
+  },
+  overview: {
+    index: '/overview'
   }
 }
 

@@ -2,17 +2,7 @@
   <div class="container columns">
     <navigation-bar />
     <div class="column col-4 col-md-12">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">รายละเอียดรายการ</div>
-        </div>
-        <div class="panel-body">
-          <div class="empty">
-            <div class="empty-icon"><i class="icon icon-3x icon-mail"></i></div>
-            <p class="empty-title h5">รายละเอียด</p>
-          </div>
-        </div>
-      </div>
+      <report-detail v-if="local.report" :report="local.report"/>
     </div>
     <div class="column col-8 col-md-12">
       <div class="panel">
@@ -34,11 +24,11 @@
                     <th>ผู้รับผิดชอบ</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="item.answers.length">
                   <tr class="" :key="index" v-for="(anwser, index) in item.answers">
                     <td>{{anwser.cause}}</td>
-                    <td>{{anwser.protection}}</td>
-                    <td>{{anwser.responsiblePerson}}</td>
+                    <td>{{anwser.prevention}}</td>
+                    <td>{{anwser.responsible}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -57,56 +47,40 @@
 
 <script>
 import NavigationBar from '@Components/navigation'
+import reportDetail from '@Components/reportDetail';
+import to from 'await-to-js';
+import service from '@Services/app.service'
+import config from '@Config/app.config'
 
 export default {
   components: {
-    NavigationBar
+    NavigationBar,
+    reportDetail
   },
   data () {
     return {
       local: {
-        responsibilities: [
-          {
-            department: {
-              name: 'abc'
-            },
-            answers: [
-              {
-                cause: 'xxxx',
-                protection: 'zzzz',
-                responsiblePerson: 'xxxx'
-              },
-              {
-                cause: 'xxxx',
-                protection: 'zzzz',
-                responsiblePerson: 'xxxx'
-              },
-              {
-                cause: 'xxxx',
-                protection: 'zzzz',
-                responsiblePerson: 'xxxx'
-              }
-            ]
-          },
-          {
-            department: {
-              name: 'def'
-            },
-            answers: [
-              {
-                cause: 'xxxx',
-                protection: 'zzzz',
-                responsiblePerson: 'xxxx'
-              },
-              {
-                cause: 'xxxx',
-                protection: 'zzzz',
-                responsiblePerson: 'xxxx'
-              }
-            ]
-          }
-        ]
+        report: null,
+        responsibilities: []
       }
+    }
+  },
+  async created () {
+    await this.fetchReportData()
+    await this.fetchData()
+  },
+  methods: {
+    async fetchReportData () {
+      let err, res;
+      [ err, res ] = await to(service.getResource({ resourceName: `${config.api.report.index}/${this.$route.params.key}`}));
+      if(err) return;
+      this.local.report = res.data.report
+    },
+    async fetchData () {
+      let err, res;
+      [ err, res ] = await to(service.getResource({ resourceName: `${config.api.overview.index}/${this.$route.params.key}`}));
+      if(err) return;
+      this.local.responsibilities = res.data.responsibilities
     }
   }
 }

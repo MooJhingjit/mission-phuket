@@ -1,5 +1,5 @@
 import { mapGetters, mapActions } from 'vuex'
-// import config from '@Config/app.config'
+import config from '@Config/app.config'
 // import moment from 'moment'
 // import Helper from '@Libraries/common.helpers'
 // import { bus } from '@/main'
@@ -12,6 +12,9 @@ export default {
     USER () {
       return this.GET_USERDATA_STORE
     },
+    REPORT_CONFIG () {
+      return config.programLists;
+    }
   //   APPDATA () {
   //     return this.GET_APPDATA_STORE
   //   },

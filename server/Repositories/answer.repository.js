@@ -8,8 +8,8 @@ module.exports = {
   //   if(err) TE(err.message);
   //   return reports
   // },
-  async get (reportId){
-    return Answer.find({reportId}).then((answers, err) => {
+  async get (reportId, departmentId){
+    return Answer.find({reportId, departmentId}).then((answers, err) => {
       if(err) TE(err.message);
       return answers
     })
@@ -22,6 +22,7 @@ module.exports = {
       prevention: data.prevention,
       responsible: data.responsible,
       reportId: data.reportId,
+      departmentId: data.departmentId,
       updatedBy: options.user.name,
       createdBy: options.user.name
     })

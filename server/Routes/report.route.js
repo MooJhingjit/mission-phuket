@@ -2,6 +2,9 @@ const express = require('express')
 const router = express.Router()
 const { Reports } = require('@controller')
 
+router.get('/report-translation', function(req, res){
+  Reports.getReportTranslation(req, res)
+})
 
 router.get('/reports', function(req, res){
   Reports.list(req, res)

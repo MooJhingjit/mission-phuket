@@ -14,7 +14,7 @@ const options = {
 }
 Vue.use(VueSweetalert2, options);
 Vue.use(Notifications)
-Vue.use(VeeValidate)
+Vue.use(VeeValidate, {fieldsBagName: 'formFields'})
 Vue.use(NProgress, {
   latencyThreshold: 50, // Number of ms before progressbar starts showing, default: 100
   router: true, // Show progressbar when navigating routes, default: true

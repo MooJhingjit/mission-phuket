@@ -5,6 +5,7 @@ const { to, TE }  = require('@service/util.service');
 const answerSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   reportId: {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'report'},
+  departmentId: {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'department'},
   cause: {type: String, required: true},
   prevention: {type: String, required: true},
   responsible: {type: String, required: true},

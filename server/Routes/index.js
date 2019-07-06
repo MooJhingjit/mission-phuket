@@ -12,7 +12,8 @@ app.use('/api',
     require('./department.route'),
     require('./report.route'),
     require('./management.route'),
-    require('./answer.route')
+    require('./answer.route'),
+    require('./overview.route')
   ]
 );
 

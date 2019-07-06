@@ -11,6 +11,12 @@ module.exports = {
     if(err) return ReE(res, err, 422);
 		return ReS(res, {department});
   },
+  async get(req, res) {
+		let err, department;
+    [err, department] = await to(DepartmentRepo.get(req.params.id));
+    if(err) return ReE(res, err, 400);
+		return ReS(res, {department});
+	},
 	async create(req, res) {
 		let err, department;
 		[err, department] = await to(DepartmentRepo.create(req.body, {user: req.userSession})); // , {userObject: req.userObject}

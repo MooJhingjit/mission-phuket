@@ -10,7 +10,7 @@ module.exports = {
 	// },
   async get(req, res) {
 		let err, answers;
-    [err, answers] = await to(AnswerRepo.get(req.params.id));
+    [err, answers] = await to(AnswerRepo.get(req.params.id, req.params.departmentId));
     if(err) return ReE(res, err, 400);
 		return ReS(res, {answers});
 	},

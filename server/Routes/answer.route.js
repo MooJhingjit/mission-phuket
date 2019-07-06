@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { Answer } = require('@controller')
 
-router.get('/answers/:id', function(req, res){
+router.get('/answers/:id/department/:departmentId', function(req, res){
   Answer.get(req, res)
 })
 
