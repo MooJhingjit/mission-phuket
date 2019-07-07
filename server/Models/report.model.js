@@ -8,7 +8,7 @@ const reportSchema = new Schema({
   incidentDate: { type: Date, required: true},
   hn: { type: String, required: true},
   name: { type: String, required: true},
-  age: { type: String, required: true},
+  age: { type: Number, required: true},
   reportDate: { type: Date, required: true},
   reporter: { type: String, required: true},
   area: { type: String, required: true},

@@ -20,6 +20,7 @@ module.exports = {
       _id: new  mongoose.Types.ObjectId(),
       name: department.name,
       manager: department.manager,
+      isAdmin: department.isAdmin,
       createdBy: options.user.name
     })
     return newDepartments.save().then((newDepartments, err) => {
@@ -31,6 +32,7 @@ module.exports = {
     let newDepartments = {
       name: department.name,
       manager: department.manager,
+      isAdmin: department.isAdmin,
       updatedBy: options.user.name
     };
     let [err, res] = await to(Departments.findByIdAndUpdate(department.id, newDepartments));

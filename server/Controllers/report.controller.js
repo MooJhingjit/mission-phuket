@@ -4,23 +4,26 @@ const DepartmentRepo = require('@repository/department.repository');
 const AnswerRepo = require('@repository/answer.repository');
 const { to, ReE, ReS }  = require('@service/util.service');
 const Helper = require('../Libraries/helper.js')
-const { trans } = require('../Config')
+const { trans, reportConfig } = require('../Config')
 module.exports = {
+  async getReportConfig(req, res) {
+		return ReS(res, {reportConfig});
+  },
   async getReportTranslation(req, res) {
 		return ReS(res, {trans});
   },
   async list(req, res) {
-    let err, report;
-    let tableConfig = await Helper.getTableConfig(req.query.page, 2);
+    let err, report, departmentAssociated;
+    let tableConfig = await Helper.getTableConfig(req.query.page, 10);
+    [err, departmentAssociated] = await to(ManagementRepo.getByDepartment(req.userSession.departmentId));
     [err, report] = await to(ReportRepo.getDataTable({
       type: 'table',
-      searchType: req.query.searchType,
-      // searchStatusType: req.query.searchStatusType,
-      // mainSearch: req.query.mainSearch,
+      searchDetail: req.query,
       perPage: tableConfig.perPage,
       from: tableConfig.from,
       sort: req.query.sort,
-    }));
+      departmentAssociated
+    }, {...req.userSession}));
     if(err) return ReE(res, err, 400);
     let total = (!report) ? 0 : report.total
 
@@ -40,6 +43,7 @@ module.exports = {
 		let err, report;
     [err, report] = await to(ReportRepo.get(req.params.id));
     if(err) return ReE(res, err, 400);
+    report.programLists = reportConfig;
 		return ReS(res, {report});
   },
 	async create(req, res) {

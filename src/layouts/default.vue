@@ -15,7 +15,7 @@
       </div>
       <div class="column user-profile col-sm-12">
         <p class="text-bold">{{USER.name}}</p>
-        <p>ฝ่าย IT</p>
+        <p>{{USER.departmentName}}</p>
         <div>
           <button class="btn btn-action s-circle m-1 tooltip" data-tooltip="ตั้งค่าระบบ" @click="GO_TOPAGE('Settings')"> <i class="fas fa-cogs"></i> </button>
           <!-- <button class="btn btn-action s-circle m-1 tooltip" data-tooltip="ตั้งค่าบัญชีผู้ใช้"> <i class="fas fa-user"></i> </button> -->

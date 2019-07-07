@@ -8,20 +8,20 @@ module.exports = {
     if(err) TE(err.message);
     return reports
   },
-  async getDataTable (obj) {
+  async getDataTable (obj, user) {
     let err, reports, total;
     let condition,result = {};
     let perpage = (!obj.perPage) ? 0 : obj.perPage;
     let sort = { createdAt: 'asc'}
     sort = await this.sortDataTable(obj.sort);
-    condition = await this.setConditionDataTable(obj);
-
+    condition = this.getCondtions(obj, user);
+    // console.log(condition);
+    [err, total] = await to(Reports.find(condition).countDocuments());
     [err, reports] = await to(Reports.find(condition).sort(sort).limit(perpage).skip(obj.from));
     if(err) TE(err.message);
-    result.total = await Reports.find(condition).countDocuments()
+    result.total = total
     result.data = reports
     
-    // console.log(reports);
     return result
   },
   async sortDataTable (sortObj) {
@@ -35,9 +35,50 @@ module.exports = {
     }
     return sort;
   },
-  async setConditionDataTable (obj) {
+  getCondtions (obj, user) {
     let condition = {};
+    condition.$and = [];
     
+    // console.log(user);
+    if (!user.isAdmin) {
+      let reportIdArr = obj.departmentAssociated.map((item) => {
+        return item.reportId;
+      })
+      // console.log(reportIdArr);
+      condition._id = { $in: reportIdArr }
+    }
+    
+    if (obj.searchDetail.reportType && obj.searchDetail.reportType !== 'all') {
+      condition.programType = obj.searchDetail.reportType
+    }
+
+    if (obj.searchDetail.mainSearch) {
+      let regex = new RegExp(obj.searchDetail.mainSearch, 'i')
+      condition.$and.push(
+        { $or: [{name: regex }, {reporter: regex}] }
+      )
+    }
+    if (obj.searchDetail.reportStatus) {
+
+    }
+
+    if (obj.searchDetail.incidentDateEnd || obj.searchDetail.incidentDateStart) {
+      let conditionDate = [];
+      if (obj.searchDetail.incidentDateStart) {
+        conditionDate.push({incidentDate: { $gte: obj.searchDetail.incidentDateStart} });
+      } 
+      if (obj.searchDetail.incidentDateEnd) {
+        conditionDate.push({incidentDate: { $lte: obj.searchDetail.incidentDateEnd} });
+      }
+      condition.$and.push(
+        {
+          $and: conditionDate
+        }
+      )
+    }
+    if (!condition.$and.length) { // empty
+      delete condition.$and;
+    }
     return condition;
   },
   async get (reportId){

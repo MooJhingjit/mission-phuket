@@ -1,4 +1,5 @@
 const ManagementRepo = require('@repository/management.repository');
+const AnswerRepo = require('@repository/answer.repository');
 const { to, ReE, ReS }  = require('@service/util.service');
 
 module.exports = {
@@ -27,9 +28,9 @@ module.exports = {
 	// 	return ReS(res, {report});
   // },
   async remove(req, res) {
-    let err, management;
-    // console.log(req.query);
-		[err, management] = await to(ManagementRepo.remove(req.query)); // , {userObject: req.userObject}
+    let err, management, answer;
+    [err, management] = await to(ManagementRepo.remove(req.query)); // departmentId:, reportId
+    [err, answer] = await to(AnswerRepo.removeBymanagement(req.query)); // departmentId:, reportId
 		if(err) return ReE(res, err, 422);
 		return ReS(res, {management});
   }

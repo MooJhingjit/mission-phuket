@@ -60,6 +60,11 @@ module.exports = {
     if(err) TE(err.message);
     return res
   },
+  async removeBymanagement(data) {
+    let [err, res] = await to(Answer.remove({...data}));
+    if(err) TE(err.message);
+    return res
+  }
 }
 // const get = async function(user){
 //   return Users.findById(user._id).select("-password").then((user, err) => {

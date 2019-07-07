@@ -1,6 +1,9 @@
 
 <template>
- <div class="panel">
+ <div class="panel" v-if="
+    clinicalProgram
+    && nonClinicalProgram
+    && violenceProgram">
       <!-- <div class="panel-header">
         <div class="panel-title h6 text-bold">รายละเอียด: xxxxx</div>
       </div> -->
@@ -102,7 +105,7 @@
           </div>
         </details> -->
 
-        <details class="accordion" open>
+        <details class="accordion" open v-if="violenceReport && violenceReport.violence">
           <summary class="accordion-header">
             ระดับความรุนแรง
           </summary>
@@ -166,7 +169,8 @@
 <script>
 import moment from 'moment';
 import config from '@Config/app.config'
-
+import service from '@Services/app.service'
+import to from 'await-to-js';
 export default {
   props: {
     report: {
@@ -180,6 +184,7 @@ export default {
     return {
       moment,
       local: {
+        programLists: null,
         items: null,
         ordering: {
           initialReport: [
@@ -225,29 +230,53 @@ export default {
     },
 
     clinicalProgram () {
-      return config.programLists.clinical;
+      if (this.local.programLists && this.local.programLists.clinical) {
+        return this.local.programLists.clinical;
+      }
+      return null
     },
     nonClinicalProgram () {
-      return config.programLists.nonClinical;
+      if (this.local.programLists && this.local.programLists.nonClinical) {
+        return this.local.programLists.nonClinical;
+      }
+      return null
     },
     violenceProgram () {
-      return config.programLists.violence;
+      if (this.local.programLists && this.local.programLists.violence) {
+        return this.local.programLists.violence;
+      }
+      return null
     },
     programType () {
       return this.local.programType;
     }
   },
-  created () {
+  async created () {
+    await this.fetchConfigReport();
     this.local.items = this.report
     // console.log(this.programReport);
   },
   methods: {
+    async fetchConfigReport () {
+      // console.log('do');
+      let err, res;
+      [ err, res ] = await to(service.getResource({ resourceName: config.api.report.config }));
+      if(err) return;
+      this.local.programLists = res.data.reportConfig
+      // console.log(this.local.programLists);
+      // setTimeout( async() => {
+       
+      // }, 1000)
+    },
     selectObjByKey (keyArray) {
       let items = {}
-      keyArray.map((item) => {
+      if (this.local.items) {
+         keyArray.map((item) => {
         let newItem = this.local.items[item];
         items[item] = newItem
       })
+      }
+     
       return items;
     },
     getViolenceTitle  (type, key) {

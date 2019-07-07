@@ -1,134 +1,69 @@
 <template>
   <div class="container columns">
-     <navigation-bar>
-       <template v-slot:searchOptions>
-        <div class="columns col-12 p-relative">
-          <div class="column col-5 item-right"><button @click="createReport" class="btn"> <i class="fas fa-plus-circle"></i> สร้างใหม่</button></div>
-          <div class="column col-7">
-            <div class="has-icon-right">
-              <input type="text" class="form-input main-input" placeholder="...">
-              <i class="form-icon fas fa-search"></i>
-            </div>
-            
-          </div>
-          <advanced-search />
-        </div>
+     <navigation-bar :hasSlot="true">
+      <template v-slot:searchOptions>
+        <table-search-box :searchParams="local.searchParams" @search="(query) => searchHandle(query)"/>
       </template>
      </navigation-bar>
     <div class="column col-12">
       <div class="card">
-        <!-- <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>วันที่เกิดเหตุ</th>
-              <th>ชื่อ-นามสกุล</th>
-              <th>ผู้รายงาน</th>
-              <th>วันที่รายงาน</th>
-              <th>ผู้ที่ได้รับผลกระทบ</th>
-              <th>รูปแบบของเหตุการณ์</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr @dblclick="GO_TOPAGE('EditReport', {key: item._id})" :key="index" v-for="(item, index) in local.reportLists">
-              <td>{{moment(item.incidentDate).format('DD/MM/YYYY HH:mm:ss')}}</td>
-              <td>{{item.name}}</td>
-              <td>{{item.reporter}}</td>
-              <td>{{moment(item.reportDate).format('DD/MM/YYYY')}}</td>
-              <td>{{item.affectedPerson}}</td>
-              <td>{{item.programType}}</td>
-              <td style="text-align:center;">
-                <button class="btn m-1" @click="GO_TOPAGE('ReportDetail', {key: item._id})"><i class="fas fa-info-circle"></i> รายละเอียด</button>
-                <button class="btn m-1" @click="GO_TOPAGE('Management', {key: item._id})"><i class="fas fa-edit"></i> จัดการ</button>
-                <button class="btn m-1" @click="GO_TOPAGE('Answer', {key: item._id})"><i class="fas fa-edit "></i> ตอบ</button>
-              </td>
-            </tr>
-          </tbody>
-        </table> -->
         <vuetable ref="vuetable"
-                :css="{
-                  tableClass: 'table table-striped table-hover text-center'
-                }"
-                :row-class="onRowClass"
-                :http-options="httpOptions"
-                :fields="local.fields"
-                @vuetable:pagination-data="onPaginationData"
-                pagination-path=""
-                :append-params="params"
-                :sort-order="local.sortOrder"
-              >
-              <template slot="incidentDate" scope="props">
-                  <span>{{moment(props.rowData.incidentDate).format('DD/MM/YYYY HH:mm:ss')}}</span>
-              </template>
-              <template slot="name" scope="props">
-                  <span>{{props.rowData.name}}</span>
-              </template>
-              <template slot="affectedPerson" scope="props">
-                  <span>{{translate.affectedPerson[props.rowData.affectedPerson]}}</span>
-              </template>
-              <template slot="reportDate" scope="props">
-                  <span>{{moment(props.rowData.reportDate).format('DD/MM/YYYY')}}</span>
-              </template>  
-              <template slot="actions" scope="props">
-                <button class="btn m-1" @click="GO_TOPAGE('ReportDetail', {key: props.rowData._id})"><i class="fas fa-info-circle"></i> รายละเอียด</button>
-                <button class="btn m-1" @click="GO_TOPAGE('Management', {key: props.rowData._id})"><i class="fas fa-edit"></i> จัดการ</button>
-                <button class="btn m-1" @click="GO_TOPAGE('Answer', {key: props.rowData._id})"><i class="fas fa-edit "></i> ตอบ</button>
-              </template> 
-
-              
-
-              </vuetable>
-              <div class="columns">
-                <div class="column col-6 flex-item-center">
-                  <vuetable-pagination-info ref="paginationInfo"></vuetable-pagination-info>
-                </div>
-                <div class="column col-6">
-                  <vuetable-pagination ref="pagination"
-                    :css="{
-                      wrapperClass: 'pagination flex-item-right',
-                      activeClass: 'btn btn-primary active',
-                      disabledClass: 'disabled',
-                      pageClass: 'btn page-item',
-                      linkClass: 'page-item',
-                      paginationClass: 'ui bottom attached segment grid',
-                      paginationInfoClass: 'left floated left aligned six wide column',
-                      dropdownClass: 'ui search dropdown',
-                      icons: {
-                        first: 'angle double left icon',
-                        prev: 'left chevron icon',
-                        next: 'right chevron icon',
-                        last: 'angle double right icon',
-                      }
-                    }"
-                    @vuetable-pagination:change-page="onChangePage"
-                  ></vuetable-pagination>
-                </div>
-              </div>
-        <!-- <div class="item-right">
-          <ul class="pagination">
-              <li class="page-item disabled">
-                <a href="#" tabindex="-1">Previous</a>
-              </li>
-              <li class="page-item active">
-                <a href="#">1</a>
-              </li>
-              <li class="page-item">
-                <a href="#">2</a>
-              </li>
-              <li class="page-item">
-                <a href="#">3</a>
-              </li>
-              <li class="page-item">
-                <span>...</span>
-              </li>
-              <li class="page-item">
-                <a href="#">12</a>
-              </li>
-              <li class="page-item">
-                <a href="#">Next</a>
-              </li>
-            </ul>
-        </div> -->
+          :css="{
+            tableClass: 'table table-striped table-hover text-center'
+          }"
+          :row-class="onRowClass"
+          :http-options="httpOptions"
+          :fields="local.fields"
+          @vuetable:pagination-data="onPaginationData"
+          pagination-path=""
+          :append-params="params"
+          :sort-order="local.sortOrder"
+        >
+        <template slot="incidentDate" scope="props">
+            <span>{{moment(props.rowData.incidentDate).format('DD/MM/YYYY HH:mm:ss')}}</span>
+        </template>
+        <template slot="name" scope="props">
+            <span>{{props.rowData.name}}</span>
+        </template>
+        <template slot="affectedPerson" scope="props">
+            <span>{{translate.affectedPerson[props.rowData.affectedPerson]}}</span>
+        </template>
+        <template slot="reportDate" scope="props">
+            <span>{{moment(props.rowData.reportDate).format('DD/MM/YYYY')}}</span>
+        </template>  
+        <template slot="actions" scope="props">
+          <button class="btn m-1" @click="GO_TOPAGE('EditReport', {key: props.rowData._id})"><i class="fas fa-edit"></i> แก้ไข</button>
+          <button class="btn btn-warning m-1" @click="GO_TOPAGE('Management', {key: props.rowData._id})"><i class="fas fa-edit"></i> จัดการ</button>
+          <button class="btn m-1" @click="GO_TOPAGE('Answer', {key: props.rowData._id})"><i class="fas fa-edit "></i> ตอบ</button>
+          <button class="btn m-1" @click="GO_TOPAGE('ReportDetail', {key: props.rowData._id})"><i class="fas fa-info-circle"></i> ภาพรวม</button>
+        </template> 
+        </vuetable>
+        <div class="columns">
+          <div class="column col-6 flex-item-center">
+            <vuetable-pagination-info ref="paginationInfo"></vuetable-pagination-info>
+          </div>
+          <div class="column col-6">
+            <vuetable-pagination ref="pagination"
+              :css="{
+                wrapperClass: 'pagination flex-item-right',
+                activeClass: 'btn btn-primary active',
+                disabledClass: 'disabled',
+                pageClass: 'btn page-item',
+                linkClass: 'page-item',
+                paginationClass: 'ui bottom attached segment grid',
+                paginationInfoClass: 'left floated left aligned six wide column',
+                dropdownClass: 'ui search dropdown',
+                icons: {
+                  first: 'angle double left icon',
+                  prev: 'left chevron icon',
+                  next: 'right chevron icon',
+                  last: 'angle double right icon',
+                }
+              }"
+              @vuetable-pagination:change-page="onChangePage"
+            ></vuetable-pagination>
+          </div>
+        </div>
       </div>  
     </div>
   </div>
@@ -147,6 +82,7 @@ import moment from 'moment';
 import Vuetable from 'vuetable-2/src/components/Vuetable.vue'
 import VuetablePagination from 'vuetable-2/src/components/VuetablePagination.vue'
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo'
+import TableSearchBox from './searchBox'
 
 export default {
   components: {
@@ -154,7 +90,8 @@ export default {
     AdvancedSearch,
     Vuetable,
     VuetablePagination,
-    VuetablePaginationInfo
+    VuetablePaginationInfo,
+    TableSearchBox
   },
   name: 'Report',
   data () {
@@ -205,6 +142,13 @@ export default {
           //   direction: 'desc'
           // }
         ],
+        searchParams: {
+          mainSearch: '',
+          reportStatus: '0',
+          reportType: 'all',
+          incidentDateStart: '',
+          incidentDateEnd: '',
+        }
       },
       moment: moment
     }
@@ -229,11 +173,7 @@ export default {
       }
     },
     params () {
-      return {
-        // mainSearch: this.inputSearch,
-        // searchType: this.local.searchType,
-        // searchStatusType: this.local.searchStatusType
-      }
+      return this.local.searchParams
     }
   },
   methods: {
@@ -242,9 +182,6 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: config.api.report.translation }));
       if(err) return;
       this.local.config = res.data.trans
-    },
-    createReport() {
-      this.GO_TOPAGE('CreateReport')
     },
     onRowClass (dataItem, index) {
       return [
@@ -259,6 +196,11 @@ export default {
     onChangePage (page) {
       this.$refs.vuetable.changePage(page)
     },
+    searchHandle (query) {
+      // console.log(query);
+      this.local.searchParams = query
+      this.$refs.vuetable.refresh()
+    }
   }
 }
 </script>

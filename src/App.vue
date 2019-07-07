@@ -34,13 +34,14 @@ export default {
       'SET_USER_STORE'
     ]),
     async fetchData() {
+      // console.log(this.$route.name);
       if (this.$route.name === 'Login') return
       let err, res;
       let resourceName = config.api.user.profile;
       [ err, res ] = await to(service.getResource({ resourceName, queryString: []}))
       // console.log(res.data.user);
       if(err) return
-      this.SET_USER_STORE({data: res.data.user})
+      this.SET_USER_STORE({data: {...res.data.user, departmentName: res.data.department.name}})
       return 
     },
   }

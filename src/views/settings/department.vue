@@ -29,6 +29,10 @@
           @input="value => {local.manager = value}"
         ></my-input>
       </div>
+      <div class="form-group">
+        <label class="form-label"><input type="checkbox" value="1" v-model="local.isAdmin"> Admin</label>
+       
+      </div>
       <div class="columns">
         <template v-if="local.idSelected === null">
           <div class="column col-md-4">
@@ -69,12 +73,16 @@
           <tr>
             <th>หน่วยงาน</th>
             <th>ผู้จัดการ</th>
+            <th>ผู้ดูแลระบบ</th>
           </tr>
         </thead>
         <tbody>
           <tr :key="index" v-for="(item, index) in local.items" @click="selectItem(item)">
             <td>{{item.name}}</td>
             <td>{{item.manager}}</td>
+            <td>
+              <i class="fas fa-check" v-if="item.isAdmin"></i>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -97,6 +105,7 @@ export default {
       local: {
         name: null,
         manager: null,
+        isAdmin: false,
         idSelected: null,
         items: []
       }
@@ -120,7 +129,7 @@ export default {
           [ err, res ] = await to(this.$validator.validate());
           if(err || !res) return
           resourceName = config.api.department.index;
-          [ err, res ] = await to(service.postResource({ resourceName, data: {name:  this.local.name, manager: this.local.manager}}))
+          [ err, res ] = await to(service.postResource({ resourceName, data: {name:  this.local.name, manager: this.local.manager, isAdmin: this.local.isAdmin}}))
           break;
         case 'remove':
           const result = await this.$swal({
@@ -139,7 +148,7 @@ export default {
           break;
         case 'update':
           resourceName = `${config.api.department.index}/${this.local.idSelected}`;
-          [ err, res ] = await to(service.putResource({ resourceName, data: {name: this.local.name, manager: this.local.manager}}))
+          [ err, res ] = await to(service.putResource({ resourceName, data: {name: this.local.name, manager: this.local.manager, isAdmin: this.local.isAdmin}}))
           if(err) return;
           break;
       }
@@ -155,10 +164,12 @@ export default {
       this.local.idSelected = item._id
       this.local.name = item.name;
       this.local.manager = item.manager;
+      this.local.isAdmin = item.isAdmin;
     },
     resetForm () {
       this.local.name = '';
       this.local.manager = '';
+      this.local.isAdmin = false;
       this.local.idSelected = null;
       this.$validator.reset()
     }

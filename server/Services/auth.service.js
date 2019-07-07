@@ -23,6 +23,7 @@ const authUser = async function(user){
     {
       _id: user._id,
       name: user.name,
+      departmentId: user.department,
       username: user.username,
     },
     'MissionPhuket',

@@ -1,15 +1,18 @@
 const UserRepo = require('@repository/user.repository');
 const AuthService = require('@service/auth.service');
+const DepartmentRepo = require('@repository/department.repository');
+
 const { to, ReE, ReS }  = require('@service/util.service');
 
 module.exports = {
   async profile(req, res) {
-		let err, user;
+		let err, user, department;
     [err, user] = await to(UserRepo.get(req.userSession));
     // console.log(user);
+    [err, department] = await to(DepartmentRepo.get(user.department));
     if(err) return ReE(res, err, 400);
     // delete user.password;\
-		return ReS(res, {user});
+		return ReS(res, {user, department});
 	},
 	async login(req, res) {
     let err, token;

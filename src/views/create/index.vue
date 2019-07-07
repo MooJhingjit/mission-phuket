@@ -1,5 +1,5 @@
 <template>
-  <div class="container columns">
+  <div class="container columns" v-if="clinicalProgram && nonClinicalProgram && violenceProgram">
     <navigation-bar/>
     <div class="column col-12">
       <div class="card">
@@ -406,12 +406,13 @@
 
 <script>
 import NavigationBar from '@Components/navigation'
-import config from '@Config/app.config'
 import MyInput from '@Components/Form/myInput'
 import MyDatePicker from '@Components/Form/myDatePicker'
+import config from '@Config/app.config'
 import service from '@Services/app.service'
 import to from 'await-to-js';
 import moment from 'moment';
+import { setTimeout } from 'timers';
 
 export default {
   components: {
@@ -421,23 +422,33 @@ export default {
   },
   computed: {
     clinicalProgram () {
-      return config.programLists.clinical;
+      if (this.programLists && this.programLists.clinical) {
+        return this.programLists.clinical;
+      }
+      return null
     },
     nonClinicalProgram () {
-      return config.programLists.nonClinical;
+      if (this.programLists && this.programLists.nonClinical) {
+        return this.programLists.nonClinical;
+      }
+      return null
     },
     violenceProgram () {
-      return config.programLists.violence;
+      if (this.programLists && this.programLists.violence) {
+        return this.programLists.violence;
+      }
+      return null
     },
     programType () {
       return this.local.programType;
-    }
-    // review () {
-    //   return config.programLists.clinical.common.review.options
+    },
+    // isConfigLoaded () {
+    //   return this.local.isConfigLoaded
     // }
   },
   data () {
     return {
+      programLists: null,
       local: {
         programType: 'clinical', // defalut
         incidentDate: null,
@@ -489,11 +500,12 @@ export default {
       }
     }
   },
-  created () {
+  async created () {
     this.local.reporter = this.USER.name
+    await this.fetchConfigReport();
     if (this.$route.params.key) {
       // edit mode
-      this.fetchData(this.$route.params.key);
+      await this.fetchData(this.$route.params.key);
     }
   },
   methods: {
@@ -502,15 +514,19 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: `${config.api.report.index}/${reportId}`}));
       if(err) return;
       let item = res.data.report;
-
-      
       item.incidentDate = new Date(item.incidentDate)
-      // console.log(item.incidentDate);
-      // console.log(item);
       item.reportDate = moment(item.reportDate).format('DD-MM-YYYY')
       this.local = item;
-      // this.local.departmentItems = resDepartment.data.department;
-      // this.local.items = resUser.data.user;
+      
+    },
+    async fetchConfigReport () {
+      let err, res;
+      [ err, res ] = await to(service.getResource({ resourceName: config.api.report.config }));
+      if(err) return;
+       this.programLists = res.data.reportConfig
+      // setTimeout( async() => {
+       
+      // }, 1000)
     },
     getInputClass (key) {
       return [

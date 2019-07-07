@@ -14,6 +14,12 @@ module.exports = {
       return management
     })
   },
+  async getByDepartment (departmentId){
+    return Management.find({departmentId}).then((management, err) => {
+      if(err) TE(err.message);
+      return management
+    })
+  },
   async create(data, options = null){
     // console.log(data);
     let newDepartment = new Management({
