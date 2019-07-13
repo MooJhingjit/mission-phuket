@@ -7,6 +7,7 @@ const departmentSchema = new Schema({
    name: {type: String, required: true},
    manager: {type: String, required: true},
    isAdmin: {type: Boolean, required: true},
+   right: {type: Array, required: false},
    updatedBy: {type: String, required: false},
    createdBy: {type: String, required: false},
 },

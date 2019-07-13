@@ -408,8 +408,11 @@ const programLists = {
   // }
 }
 
+const privilege = ['Settings'] // for admin
+
 export default {
   api,
   variable,
-  programLists
+  programLists,
+  privilege
 }

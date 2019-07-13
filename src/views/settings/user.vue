@@ -29,7 +29,7 @@
           @input="value => {local.username = value}"
         ></my-input>
       </div>
-      <div class="form-group">
+      <div class="form-group" v-if="local.idSelected === null">
         <label class="form-label" for="input-example-1">รหัสผ่าน</label>
         <my-input
           :config="{

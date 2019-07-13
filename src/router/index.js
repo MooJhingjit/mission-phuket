@@ -33,7 +33,7 @@ export default new Router({
           path: 'report',
           name: 'Report',
           meta: {
-            label: '',
+            label: 'หน้าหลัก',
           },
           component: Home
         },
@@ -312,11 +312,11 @@ export default new Router({
       ]
     },
     {
-      path: '/login',
+      path: '/',
       // redirect: '',
-      name: 'Login',
+      name: 'Other',
       meta: {
-        label: 'Login',
+        label: 'Other',
       },
       component: {
         render (c) { return c('router-view') }

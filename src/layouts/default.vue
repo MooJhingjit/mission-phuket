@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="USER">
     <header class="columns">
       <div class="column d-flex col-sm-12">
         <div class="columns col-oneline item-center c-hand" @click="GO_TOPAGE('Report')">
@@ -17,7 +17,7 @@
         <p class="text-bold">{{USER.name}}</p>
         <p>{{USER.departmentName}}</p>
         <div>
-          <button class="btn btn-action s-circle m-1 tooltip" data-tooltip="ตั้งค่าระบบ" @click="GO_TOPAGE('Settings')"> <i class="fas fa-cogs"></i> </button>
+          <button class="btn btn-action s-circle m-1 tooltip" v-if="USER_RIGHT.includes('Settings')" data-tooltip="ตั้งค่าระบบ" @click="GO_TOPAGE('Settings')"> <i class="fas fa-cogs"></i> </button>
           <!-- <button class="btn btn-action s-circle m-1 tooltip" data-tooltip="ตั้งค่าบัญชีผู้ใช้"> <i class="fas fa-user"></i> </button> -->
           <button class="btn btn-action s-circle m-1 tooltip btn-error" @click="logout" data-tooltip="ออกจากระบบ"> <i class="fas fa-sign-out-alt"></i> </button>
         </div>
@@ -49,7 +49,7 @@ export default {
   // },
   methods: {
     logout() {
-      this.GO_TOPAGE('Login')
+      this.LOGOUT()
     }
   }
 }

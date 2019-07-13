@@ -1,7 +1,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import config from '@Config/app.config'
 // import moment from 'moment'
-// import Helper from '@Libraries/common.helpers'
+import Helper from '@Libraries/common.helpers'
 // import { bus } from '@/main'
 export default {
   computed: {
@@ -11,6 +11,12 @@ export default {
     ]),
     USER () {
       return this.GET_USERDATA_STORE
+    },
+    IS_ADMIN () {
+      return this.GET_USERDATA_STORE.isAdmin
+    },
+    USER_RIGHT () {
+      return this.GET_USERDATA_STORE.right
     },
     REPORT_CONFIG () {
       return config.programLists;
@@ -37,6 +43,9 @@ export default {
   },
   filters: {},
   methods: {
+    ...mapActions([
+      'RESET_STATE'
+    ]),
     GO_TOPAGE (pageName, options = {}) {
       this.$router.push({
         name: pageName,
@@ -81,6 +90,26 @@ export default {
           this.GO_TOPAGE('Report')
           break
       }
+    },
+     HAD_AUTH () {
+      if (Helper.GET_STORAGEITEM(config.variable.authStorage) === '1') {
+        return true
+      }
+      return false
+    },
+    HAS_PRIVILEGE (pageName) {
+      if (this.USER && this.USER.departmentName === 'Administrator') return true;
+      if (this.USER && this.USER.right && this.USER.right.includes(pageName)) {
+        return true
+      }
+      return false;
+    },
+    LOGOUT () {
+      Helper.REMOVE_STORAGEITEM(config.variable.tokenStorage)
+      Helper.REMOVE_STORAGEITEM(config.variable.authStorage)
+      this.RESET_STATE()
+      this.GO_TOPAGE('Login')
     }
+
   }
 }

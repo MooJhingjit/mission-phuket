@@ -1,7 +1,11 @@
-const state = {
-  app: {},
-  user: null
+const getDefaultState = () => {
+  return {
+    app: {},
+    user: null
+  }
 }
+
+const state = getDefaultState();
 
 const mutations = {
   SET_APPDATA (state, payload) {
@@ -9,7 +13,10 @@ const mutations = {
   },
   SET_USERDATA (state, payload) {
     state.user = payload
-  }
+  },
+  RESET_STATE (state) {
+    Object.assign(state, getDefaultState())
+  },
 }
 
 const actions = {
@@ -18,7 +25,10 @@ const actions = {
   },
   SET_APP_STORE: ({ commit }, obj) => {
     commit('SET_APPDATA', obj.data)
-  }
+  },
+  RESET_STATE: ({ commit }) => {
+    commit('RESET_STATE')
+  },
 }
 
 const getters = {

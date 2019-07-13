@@ -41,9 +41,28 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName, queryString: []}))
       // console.log(res.data.user);
       if(err) return
-      this.SET_USER_STORE({data: {...res.data.user, departmentName: res.data.department.name}})
+      this.SET_USER_STORE({data: {
+        ...res.data.user,
+        departmentName: res.data.department.name,
+        ...res.data.department
+      }})
       return 
-    },
+    }
+  },
+  watch: {
+   async '$route'  (to, from) {
+      if (!this.HAD_AUTH()) {
+        this.GO_TOPAGE('Login')
+        return
+      }
+      if (from.name === 'Login') {
+        await this.fetchData()
+      }
+      if (!this.HAS_PRIVILEGE(to.name) || to.name === 'Login') {
+        this.GO_TOPAGE('Report')
+        return
+      }
+    }
   }
 }
 </script>

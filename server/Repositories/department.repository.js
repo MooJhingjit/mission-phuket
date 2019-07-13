@@ -21,6 +21,7 @@ module.exports = {
       name: department.name,
       manager: department.manager,
       isAdmin: department.isAdmin,
+      right: department.right,
       createdBy: options.user.name
     })
     return newDepartments.save().then((newDepartments, err) => {
@@ -33,6 +34,7 @@ module.exports = {
       name: department.name,
       manager: department.manager,
       isAdmin: department.isAdmin,
+      right: department.right,
       updatedBy: options.user.name
     };
     let [err, res] = await to(Departments.findByIdAndUpdate(department.id, newDepartments));

@@ -63,6 +63,7 @@ import config from '@Config/app.config'
 import service from '@Services/app.service'
 import to from 'await-to-js';
 import Helper from '@Libraries/common.helpers'
+import { setTimeout } from 'timers';
 
 export default {
   components: {
@@ -103,11 +104,11 @@ export default {
       }
     },
     async initAppData (data) {
-      Helper.SET_STORAGEITEM(config.variable.tokenStorage, data.token)
-      Helper.SET_STORAGEITEM(config.variable.authStorage, 1)
+      await Helper.SET_STORAGEITEM(config.variable.tokenStorage, data.token)
+      await Helper.SET_STORAGEITEM(config.variable.authStorage, 1)
       let userData = await this.fetchData()
-      this.SET_USER_STORE({data: userData})
-      this.GO_TOHOMEPAGE()
+      await this.SET_USER_STORE({data: userData})
+      this.GO_TOPAGE('Report')
       // GOTOHOME
     }
   }

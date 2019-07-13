@@ -30,7 +30,8 @@
         ></my-input>
       </div>
       <div class="form-group">
-        <label class="form-label"><input type="checkbox" value="1" v-model="local.isAdmin"> Admin</label>
+        <label class="form-label"><input type="checkbox" value="1" v-model="local.isAdmin" @change="selectAdmin(local.isAdmin)"> ผู้ดูแลระบบ</label>
+        <label class="form-label" :key="index" v-for="(route, index) in local.allRoutes"><input type="checkbox" :value="route.name" v-model="local.right"> {{route.meta.label}}</label>
        
       </div>
       <div class="columns">
@@ -107,12 +108,23 @@ export default {
         manager: null,
         isAdmin: false,
         idSelected: null,
-        items: []
+        items: [],
+        allRoutes: [],
+        right: []
       }
     }
   },
   created () {
     this.fetchData();
+    this.$router.options.routes.filter((root) => {
+      return root.name === 'Root'
+    })[0].children.map((item) => {
+      this.local.allRoutes.push({
+        ...item,
+
+      })
+      // console.log(item);
+    })
   },
   methods: {
     async fetchData() {
@@ -129,7 +141,9 @@ export default {
           [ err, res ] = await to(this.$validator.validate());
           if(err || !res) return
           resourceName = config.api.department.index;
-          [ err, res ] = await to(service.postResource({ resourceName, data: {name:  this.local.name, manager: this.local.manager, isAdmin: this.local.isAdmin}}))
+          [ err, res ] = await to(service.postResource({ resourceName, data: {
+            name:  this.local.name, manager: this.local.manager, isAdmin: this.local.isAdmin, right: this.local.right
+          }}))
           break;
         case 'remove':
           const result = await this.$swal({
@@ -148,7 +162,9 @@ export default {
           break;
         case 'update':
           resourceName = `${config.api.department.index}/${this.local.idSelected}`;
-          [ err, res ] = await to(service.putResource({ resourceName, data: {name: this.local.name, manager: this.local.manager, isAdmin: this.local.isAdmin}}))
+          [ err, res ] = await to(service.putResource({ resourceName, data: {
+            name: this.local.name, manager: this.local.manager, isAdmin: this.local.isAdmin, right: this.local.right
+          }}))
           if(err) return;
           break;
       }
@@ -165,13 +181,25 @@ export default {
       this.local.name = item.name;
       this.local.manager = item.manager;
       this.local.isAdmin = item.isAdmin;
+      this.local.right = item.right;
     },
     resetForm () {
       this.local.name = '';
       this.local.manager = '';
       this.local.isAdmin = false;
+      this.local.right = [];
       this.local.idSelected = null;
       this.$validator.reset()
+    },
+    selectAdmin (isAdmin) {
+      // console.log(isAdmin);
+      if (isAdmin) {
+        this.local.allRoutes.map((item) => {
+          this.local.right.push(item.name)
+        })
+        return
+      }
+      this.local.right = [];
     }
   }
 }
