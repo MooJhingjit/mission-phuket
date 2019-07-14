@@ -130,6 +130,9 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: `${config.api.report.index}/${this.$route.params.key}`}));
       if(err) return;
       this.local.report = res.data.report
+      if (this.local.report.status === 'approved') {
+        this.GO_TOPAGE('Report')
+      }
       // console.log(this.local.report);
     },
     async fetchData () {
@@ -139,6 +142,7 @@ export default {
         }));
       if(err) return;
       this.local.items = res.data.answers
+      
     },
     async event (type, data = null) {
       let err, res, resourceName, queryString, reportData;
@@ -174,7 +178,7 @@ export default {
           if (!result.value) return;
           resourceName = config.api.answer.index;
           // console.log(data);
-           queryString = { answerId: data._id};
+           queryString = { answerId: data._id, reportId: this.$route.params.key};
           [ err, res ] = await to(service.deleteResource({ resourceName, queryString}));
           if(err) return;
           await this.fetchData()
@@ -186,6 +190,7 @@ export default {
         text: 'ทำรายการสำเร็จ',
         type: 'success',
       });
+      this.fetchReportData()
     },
     resetForm () {
       this.local.cause = null

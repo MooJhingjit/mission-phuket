@@ -52,6 +52,7 @@ const reportSchema = new Schema({
   causeAnalysis: { type: String, required: true},
   comment: { type: String, required: true},
   note: { type: String, required: true},
+  status: { type: String, required: true},
   updatedBy: {type: String, required: false},
   createdBy: {type: String, required: false},
 },

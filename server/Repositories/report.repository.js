@@ -48,6 +48,10 @@ module.exports = {
       condition._id = { $in: reportIdArr }
     }
     
+    if (obj.searchDetail.reportStatus && obj.searchDetail.reportStatus !== 'all') {
+      condition.status = obj.searchDetail.reportStatus
+    }
+
     if (obj.searchDetail.reportType && obj.searchDetail.reportType !== 'all') {
       condition.programType = obj.searchDetail.reportType
     }
@@ -91,6 +95,7 @@ module.exports = {
     let newReport = new Reports({
       _id: new  mongoose.Types.ObjectId(),
       ...report,
+      status: 'reportCreated',
       updatedBy: options.user.name,
       createdBy: options.user.name
     })
@@ -100,33 +105,41 @@ module.exports = {
     })
   },
   async update(report, options = null) {
-    let newReport = {
-      programType: report.programType,
-      incidentDate: report.incidentDate,
-      hn: report.hn,
-      name: report.name,
-      age: report.age,
-      reportDate: report.reportDate,
-      reporter: report.reporter,
-      area: report.area,
-      affectedPerson: report.affectedPerson,
-      program: report.program,
-      violence: report.violence,
-      eventBriefing: report.eventBriefing,
-      causeAnalysis: report.causeAnalysis,
-      comment: report.comment,
-      note: report.note,
-      updatedBy: options.user.name
-    };
-    let [err, res] = await to(Reports.findByIdAndUpdate(report.id, newReport));
+    let field = {};
+    if (options.type === 'update') {
+      field = {
+        programType: report.programType,
+        incidentDate: report.incidentDate,
+        hn: report.hn,
+        name: report.name,
+        age: report.age,
+        reportDate: report.reportDate,
+        reporter: report.reporter,
+        area: report.area,
+        affectedPerson: report.affectedPerson,
+        program: report.program,
+        violence: report.violence,
+        eventBriefing: report.eventBriefing,
+        causeAnalysis: report.causeAnalysis,
+        comment: report.comment,
+        note: report.note,
+        updatedBy: options.user.name
+      };
+    } else if (options.type === 'updateStatus') {
+      field = {
+        status: report.status
+      };
+    }
+    console.log(field);
+    let [err, res] = await to(Reports.findByIdAndUpdate(report.id, field));
     if(err) TE(err.message);
     return res
   },
-  // async remove(user) {
-  //   let [err, res] = await to(Users.findOneAndDelete({_id: user.id}));
-  //   if(err) TE(err.message);
-  //   return res
-  // },
+  async remove(report) {
+    let [err, res] = await to(Reports.findOneAndDelete({_id: report.id}));
+    if(err) TE(err.message);
+    return res
+  },
 }
 // const get = async function(user){
 //   return Users.findById(user._id).select("-password").then((user, err) => {

@@ -38,9 +38,12 @@ router.post('/reports', function(req, res){
 router.put('/reports/:id', function(req, res){
   Reports.update(req, res)
 })
+router.put('/update-report-status/:id', function(req, res){
+  Reports.updateStatus(req, res)
+})
 
-// router.delete('/users', function(req, res){
-//   Users.remove(req, res)
-// })
+router.delete('/reports', function(req, res){
+  Reports.remove(req, res)
+})
 
 module.exports = router

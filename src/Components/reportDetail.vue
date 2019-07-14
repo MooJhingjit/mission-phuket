@@ -8,7 +8,10 @@
         <div class="panel-title h6 text-bold">รายละเอียด: xxxxx</div>
       </div> -->
       <div class="panel-body">
-       
+        <div class="chip" v-if="local.items && local.items.status">
+          <i :class="['fas fa-circle', getReportStatusTrans(this.local.items.status).color]" style="margin-right: 5px"></i>
+          {{getReportStatusTrans(this.local.items.status).value}}
+        </div>
         <details class="accordion" open>
           <summary class="accordion-header">
             วันที่/สถานที่/ผู้รายงาน
@@ -288,12 +291,20 @@ export default {
       return this.clinicalProgram.common[type].options.filter((item) => {
         return item.value === key
       })[0].title
+    },
+    getReportStatusTrans (status) {
+      return config.reportStatus.filter((item) => {
+        return item.key === status
+      })[0]
     }
   },
   watch: {
-    // myValue () {
-    //   this.$emit('input', this.myValue)
-    // }
+    report: {
+        handler: function() {
+          this.local.items = this.report
+        },
+        deep: true
+    }
   }
    
 }

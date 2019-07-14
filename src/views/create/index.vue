@@ -514,6 +514,9 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: `${config.api.report.index}/${reportId}`}));
       if(err) return;
       let item = res.data.report;
+      if (item.status === 'approved') {
+        this.GO_TOPAGE('Report')
+      }
       item.incidentDate = new Date(item.incidentDate)
       item.reportDate = moment(item.reportDate).format('DD-MM-YYYY')
       this.local = item;
@@ -587,6 +590,9 @@ export default {
         text: 'ทำรายการสำเร็จ',
         type: 'success',
       });
+      if (type === 'add') {
+        this.GO_TOPAGE('Report')
+      }
     },
     resetProgramForm () {
       this.local.program = Object.assign({}, { // copy from state

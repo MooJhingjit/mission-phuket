@@ -80,6 +80,9 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: `${config.api.report.index}/${this.$route.params.key}`}));
       if(err) return;
       this.local.report = res.data.report
+      if (this.local.report.status === 'approved') {
+        this.GO_TOPAGE('Report')
+      }
       // console.log(this.local.report);
     },
     async fetchData () {
@@ -144,11 +147,13 @@ export default {
           break;
       }
       this.local.departmentInput = null
+      
       this.$notify({
         group: 'default',
         text: 'ทำรายการสำเร็จ',
         type: 'success',
       });
+      this.fetchReportData()
     },
     getDepartmentName (departmentId) {
       let item = this.local.departmentOptionsDefault.filter((item) => {

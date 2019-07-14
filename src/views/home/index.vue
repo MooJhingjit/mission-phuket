@@ -32,9 +32,9 @@
             <span>{{moment(props.rowData.reportDate).format('DD/MM/YYYY')}}</span>
         </template>  
         <template slot="actions" scope="props">
-          <button v-if="USER_RIGHT.includes('EditReport')" class="btn m-1" @click="GO_TOPAGE('EditReport', {key: props.rowData._id})"><i class="fas fa-edit"></i> แก้ไข</button>
-          <button v-if="USER_RIGHT.includes('Management')" class="btn btn-warning m-1" @click="GO_TOPAGE('Management', {key: props.rowData._id})"><i class="fas fa-edit"></i> จัดการ</button>
-          <button v-if="USER_RIGHT.includes('Answer')" class="btn m-1" @click="GO_TOPAGE('Answer', {key: props.rowData._id})"><i class="fas fa-edit "></i> ตอบ</button>
+          <button v-if="USER_RIGHT.includes('EditReport') && props.rowData.status !== 'approved'" class="btn m-1" @click="GO_TOPAGE('EditReport', {key: props.rowData._id})"><i class="fas fa-edit"></i> แก้ไข</button>
+          <button v-if="USER_RIGHT.includes('Management') && props.rowData.status !== 'approved'" class="btn btn-warning m-1" @click="GO_TOPAGE('Management', {key: props.rowData._id})"><i class="fas fa-edit"></i> จัดการ</button>
+          <button v-if="USER_RIGHT.includes('Answer') && props.rowData.status !== 'approved'" class="btn m-1" @click="GO_TOPAGE('Answer', {key: props.rowData._id})"><i class="fas fa-edit "></i> ตอบ</button>
           <button v-if="USER_RIGHT.includes('ReportDetail')" class="btn m-1" @click="GO_TOPAGE('ReportDetail', {key: props.rowData._id})"><i class="fas fa-info-circle"></i> ภาพรวม</button>
         </template> 
         </vuetable>
@@ -148,6 +148,7 @@ export default {
           reportType: 'all',
           incidentDateStart: '',
           incidentDateEnd: '',
+          reportStatus: 'all'
         }
       },
       moment: moment

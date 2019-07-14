@@ -64,6 +64,11 @@ module.exports = {
     if(err) TE(err.message);
     return res
   },
+  async removeByCondition(data) {
+    let [err, res] = await to(Management.remove({...data}));
+    if(err) TE(err.message);
+    return res
+  },
 }
 // const get = async function(user){
 //   return Users.findById(user._id).select("-password").then((user, err) => {

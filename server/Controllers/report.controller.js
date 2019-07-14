@@ -54,7 +54,19 @@ module.exports = {
   },
   async update(req, res) {
     let err, report;
-		[err, report] = await to(ReportRepo.update({...req.body, id: req.params.id}, {user: req.userSession}));
+		[err, report] = await to(ReportRepo.update(
+      {...req.body, id: req.params.id},
+      {user: req.userSession, type: 'update'}
+    ));
+		if(err) return ReE(res, err, 422);
+		return ReS(res, {report});
+  },
+  async updateStatus(req, res) {
+    let err, report;
+		[err, report] = await to(ReportRepo.update(
+      {id: req.params.id, status: req.body.status},
+      {user: req.userSession, type: 'updateStatus'}
+    ));
 		if(err) return ReE(res, err, 422);
 		return ReS(res, {report});
   },
@@ -88,13 +100,17 @@ module.exports = {
     // [err, report] = await to(ReportRepo.getOverview(req.params.id));
     // if(err) return ReE(res, err, 400);
 		// return ReS(res, {report});
-	}
+	},
   
-  // async remove(req, res) {
-  //   let err, user;
-  //   // console.log(req.query);
-	// 	[err, user] = await to(UserRepo.remove(req.query)); // , {userObject: req.userObject}
-	// 	if(err) return ReE(res, err, 422);
-	// 	return ReS(res, {user});
-  // }
+  async remove(req, res) {
+    let err, report, answer, management;
+
+    [err, answer] = await to(AnswerRepo.removeByCondition({reportId: req.query.id}));
+    if(err) return ReE(res, err, 422);
+    [err, management] = await to(ManagementRepo.removeByCondition({reportId: req.query.id}));
+    if(err) return ReE(res, err, 422);
+		[err, report] = await to(ReportRepo.remove(req.query)); // , {userObject: req.userObject}
+		if(err) return ReE(res, err, 422);
+		return ReS(res, {status: 'success'});
+  }
 };

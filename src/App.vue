@@ -40,7 +40,10 @@ export default {
       let resourceName = config.api.user.profile;
       [ err, res ] = await to(service.getResource({ resourceName, queryString: []}))
       // console.log(res.data.user);
-      if(err) return
+      if(err) {
+        this.LOGOUT()
+        return;
+      }
       this.SET_USER_STORE({data: {
         ...res.data.user,
         departmentName: res.data.department.name,

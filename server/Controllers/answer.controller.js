@@ -1,5 +1,6 @@
 const AnswerRepo = require('@repository/answer.repository');
 const { to, ReE, ReS }  = require('@service/util.service');
+const reportService  = require('@service/report.service');
 
 module.exports = {
   // async list(req, res) {
@@ -17,7 +18,8 @@ module.exports = {
 	async create(req, res) {
 		let err, answers;
 		[err, answers] = await to(AnswerRepo.create(req.body, {user: req.userSession}));
-		if(err) return ReE(res, err, 422);
+    if(err) return ReE(res, err, 422);
+    reportService.checkAndUpdateReportStatus({reportId: req.body.reportId})
 		return ReS(res, {answers});
   },
   // async update(req, res) {
@@ -30,7 +32,8 @@ module.exports = {
     let err, answers;
     // console.log(req.query);
 		[err, answers] = await to(AnswerRepo.remove(req.query)); // , {userObject: req.userObject}
-		if(err) return ReE(res, err, 422);
+    if(err) return ReE(res, err, 422);
+    reportService.checkAndUpdateReportStatus({reportId: req.query.reportId})
 		return ReS(res, {answers});
   }
 };

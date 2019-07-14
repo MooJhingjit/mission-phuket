@@ -85,6 +85,15 @@ export default new Router({
           },
           component: Settings
         },
+        {
+          path: 'reportAction',
+          name: 'ReportAction',
+          meta: {
+            label: 'อัพเดท/ลบ รายงาน',
+            type: 'event'
+          },
+          component: null
+        },
         // {
         //   path: 'theme',
         //   redirect: '/theme/colors',

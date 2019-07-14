@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="USER">
+  <div class="container" v-if="USER && USER_RIGHT">
     <header class="columns">
       <div class="column d-flex col-sm-12">
         <div class="columns col-oneline item-center c-hand" @click="GO_TOPAGE('Report')">

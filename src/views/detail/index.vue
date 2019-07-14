@@ -38,9 +38,9 @@
       </div>
     </div>
     <div class="column col-12 text-right">
-      <button class="m-2 btn"><i class="fas fa-check-circle"></i> Approve</button>
+      <button class="m-2 btn" v-if="USER_RIGHT.includes('ReportAction') && !local.isReportApproved" @click="event('updateStatus', 'approved')"><i class="fas fa-check-circle"></i> Approve</button>
       <button class="m-2 btn btn-link"><i class="fas fa-print"></i> Print Report</button>
-      <button class="m-2 btn btn-error"><i class="fas fa-trash-alt"></i> Delete</button>
+      <button class="m-2 btn btn-error" @click="event('remove')"><i class="fas fa-trash-alt"></i> Delete</button>
     </div>
   </div>
 </template>
@@ -61,7 +61,8 @@ export default {
     return {
       local: {
         report: null,
-        responsibilities: []
+        responsibilities: [],
+        isReportApproved: false
       }
     }
   },
@@ -75,12 +76,61 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: `${config.api.report.index}/${this.$route.params.key}`}));
       if(err) return;
       this.local.report = res.data.report
+      this.local.isReportApproved = (res.data.report.status === 'approved')
     },
     async fetchData () {
       let err, res;
       [ err, res ] = await to(service.getResource({ resourceName: `${config.api.overview.index}/${this.$route.params.key}`}));
       if(err) return;
       this.local.responsibilities = res.data.responsibilities
+    },
+    async event (type, data = null) {
+      let err, res, resourceName;
+      let queryString = {};
+      let tf = false;
+      switch(type) {
+        case 'remove':
+          tf = await this.$swal({
+            text: "ลบรายงานนี้!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ตกลง',
+            cancelButtonText: 'ยกเลิก',
+            reverseButtons: true
+          });
+          if (!tf.value) return;
+          resourceName = config.api.report.index;
+          queryString = { id: this.$route.params.key };
+          [ err, res ] = await to(service.deleteResource({ resourceName, queryString }));
+          if(err) return;
+          break;
+        case 'updateStatus':
+          tf = await this.$swal({
+            text: "ยืนยันการทำรายการ",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ตกลง',
+            cancelButtonText: 'ยกเลิก',
+            reverseButtons: true
+          });
+          if (!tf.value) return;
+          resourceName = `${config.api.report.approve}/${this.$route.params.key}`;
+          [ err, res ] = await to(service.putResource({ resourceName, data: {
+            status: 'approved'
+          }}))
+          if(err) return;
+          this.local.isReportApproved = true
+          await this.fetchReportData()
+          break;
+      }
+      this.$notify({
+        group: 'default',
+        text: 'ทำรายการสำเร็จ',
+        type: 'success',
+      });
+      if (type === 'remove') {
+        this.GO_TOPAGE('Report')
+      }
     }
   }
 }

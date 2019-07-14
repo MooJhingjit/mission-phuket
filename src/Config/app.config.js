@@ -14,7 +14,8 @@ const api = {
   report: {
     index: '/reports',
     config: '/report-config',
-    translation: '/report-translation'
+    translation: '/report-translation',
+    approve: '/update-report-status'
   },
   department: {
     index: '/department'
@@ -408,11 +409,19 @@ const programLists = {
   // }
 }
 
-const privilege = ['Settings'] // for admin
+// const privilege = ['Settings'] // for admin
 
+const reportStatus = [
+  {key: 'all' , value: 'ทุกสถานะ', color: 'text-gray'},
+  {key: 'reportCreated' , value: 'ยังไม่ส่งแบบติดตาม', color: 'text-error'},
+  {key: 'departmentSpecified' , value: 'ส่งแบบติดตามแล้วยังไม่ตอบกลับ', color: 'text-warning'},
+  {key: 'hadSomeAnswer' , value: 'ส่งแบบติดตามและตอบกลับบางส่วน', color: 'text-warning'},
+  {key: 'hadAllAnswer' , value: 'ส่งแบบติดตามและตอบกลับครบถ้วน', color: 'text-dark'},
+  {key: 'approved' , value: 'เสร็จสิ้น(Approved)', color: 'text-success'}
+]
 export default {
   api,
   variable,
   programLists,
-  privilege
+  reportStatus
 }

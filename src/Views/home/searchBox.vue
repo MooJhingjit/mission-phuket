@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-body">
       <div class="columns">
-        <div class="column col-2 item-center" v-if="USER_RIGHT.includes('CreateReport')">
+        <div class="column col-2 item-center" v-if="USER && USER_RIGHT.includes('CreateReport')">
           <button @click="GO_TOPAGE('CreateReport')" class="btn"> <i class="fas fa-plus-circle"></i> สร้างใหม่</button>
         </div>
         <div class="column">
@@ -57,9 +57,7 @@
               <div class="form-group">
                 <!-- <label class="form-label" for="input-example-1">สถานะ</label> -->
                 <select class="form-select" v-model="local.reportStatus">
-                  <option value="0">ยังไม่ส่งแบบติดตาม</option>
-                  <option value="1">xxxxxxx</option>
-                  <option value="2">xxxxxxx</option>
+                  <option :value="item.key" :key="index" v-for="(item, index) in reportStatus">{{item.value}}</option>
                 </select>
               </div>
             </div>
@@ -92,6 +90,7 @@
 <script>
 import MyDatePicker from '@Components/Form/myDatePicker'
 import MyInput from '@Components/Form/myInput'
+import config from '@Config/app.config'
 
 export default {
   components: {
@@ -113,9 +112,9 @@ export default {
     this.local = this.searchParams
   },
   computed: {
-    // routeLists () {
-    //   return this.$route.matched.filter((route) => route.meta.label)
-    // }
+    reportStatus () {
+      return config.reportStatus
+    }
   },
   methods: {
     search() {
