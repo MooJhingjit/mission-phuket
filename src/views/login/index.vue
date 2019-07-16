@@ -49,6 +49,7 @@
               @submit="(tf) => login()"></my-button>
           </div>
         </div>
+        <p v-if="local.isLoginError" class="form-input-hint text-error" style="margin: unset">โปรดตรวจสอบชื่อผู้ใช้และรหัสผ่าน </p>
       </div>
     </div>
   </div>
@@ -74,7 +75,8 @@ export default {
     return {
       local: {
         username: null,
-        password: null
+        password: null,
+        isLoginError: false
       }
     }
   },
@@ -98,7 +100,11 @@ export default {
           username: this.local.username,
           password: this.local.password
         }}))
-        if(err) return
+        if(err) {
+          console.log('error');
+          this.local.isLoginError = true
+          return;
+        }
         // console.log(res);
         this.initAppData(res.data)
       }

@@ -108,7 +108,7 @@ export default {
       })
     },
     async event (type, data = null) {
-      let err, res, resourceName, queryString, reportData;
+      let err, res, resourceName, queryString, tf;
       switch(type) {
         case 'add':
           [ err, res ] = await to(this.$validator.validate());
@@ -127,7 +127,7 @@ export default {
           this.filterOutDepartment()
           break;
         case 'remove':
-          const result = await this.$swal({
+          tf = await this.$swal({
             text: "ลบข้อมูลนี้!",
             type: 'warning',
             showCancelButton: true,
@@ -135,7 +135,7 @@ export default {
             cancelButtonText: 'ยกเลิก',
             reverseButtons: true
           });
-          if (!result.value) return;
+          if (!tf.value) return;
           resourceName = config.api.management.index;
           data.managementId = this.$route.params.key
           // console.log(data);

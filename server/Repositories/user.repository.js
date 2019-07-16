@@ -53,12 +53,17 @@ module.exports = {
     })
   },
   async update(user, options = null) {
+    
     let newUser = {
       name: user.name,
       username: user.username,
       department: user.departmentId,
       updatedBy: options.user.name
     };
+    if (user.newPassword) {
+      let [err, hashPassword] = await to(bcrypt.hash(user.newPassword, 10));
+      newUser.password = hashPassword
+    }
     let [err, res] = await to(Users.findByIdAndUpdate(user.id, newUser));
     if(err) TE(err.message);
     return res

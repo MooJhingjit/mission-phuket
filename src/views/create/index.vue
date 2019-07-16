@@ -412,7 +412,6 @@ import config from '@Config/app.config'
 import service from '@Services/app.service'
 import to from 'await-to-js';
 import moment from 'moment';
-import { setTimeout } from 'timers';
 
 export default {
   components: {
@@ -538,7 +537,7 @@ export default {
       ]
     },
     async event (type, data = null) {
-      let err, res, resourceName, queryString, reportData;
+      let err, res, resourceName, reportData;
       if (this.$route.params.key && type === 'add') {
         type = 'update';
       }
@@ -629,9 +628,9 @@ export default {
   },
   watch: {
     // whenever question changes, this function will run
-    programType: function (newQuestion, oldQuestion) {
+    // programType: function (newQuestion, oldQuestion) {
       // this.resetProgramForm()
-    }
+    // }
   },
 }
 </script>

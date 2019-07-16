@@ -77,12 +77,6 @@ export default {
           break
       }
     },
-    LOGOUT () {
-      // Helper.REMOVE_STORAGEITEM(config.variable.tokenStorage)
-      // Helper.REMOVE_STORAGEITEM(config.variable.authStorage)
-      // this.SET_APP_STORE({ data: {} })
-      // this.GO_TOPAGE('Login')
-    },
     GO_TOHOMEPAGE () {
       let department = 'admin'
       switch (department) {

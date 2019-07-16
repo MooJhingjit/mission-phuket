@@ -74,7 +74,6 @@
 
 import commonHelper from '@Libraries/common.helpers'
 import NavigationBar from '@Components/navigation'
-import AdvancedSearch from '@Components/searchBox/advanced'
 import to from 'await-to-js';
 import service from '@Services/app.service'
 import config from '@Config/app.config'
@@ -87,7 +86,6 @@ import TableSearchBox from './searchBox'
 export default {
   components: {
     NavigationBar,
-    AdvancedSearch,
     Vuetable,
     VuetablePagination,
     VuetablePaginationInfo,
@@ -144,7 +142,6 @@ export default {
         ],
         searchParams: {
           mainSearch: '',
-          reportStatus: '0',
           reportType: 'all',
           incidentDateStart: '',
           incidentDateEnd: '',
@@ -184,11 +181,11 @@ export default {
       if(err) return;
       this.local.config = res.data.trans
     },
-    onRowClass (dataItem, index) {
-      return [
+    onRowClass () {
+      // return [
         // { 'text-error': (this.IS_LATE(dataItem.product.dateEnd) && (dataItem.product.status === 'ip' || dataItem.product.status === 'done')) },
         // { 'text-warning': (this.IS_SAMEDATE(dataItem.product.dateEnd) && (dataItem.product.status === 'ip' || dataItem.product.status === 'done')) }
-      ]
+      // ]
     },
     onPaginationData (paginationData) {
       this.$refs.pagination.setPaginationData(paginationData)

@@ -29,6 +29,18 @@
           @input="value => {local.username = value}"
         ></my-input>
       </div>
+      <div class="form-group">
+        <label class="form-label" for="input-example-1">หน่วยงาน</label>
+        <div class="form-group">
+          <select :class="getInputClass('department')" v-model="local.departmentId" name="department" v-validate="'required'">
+            <option :value="null">กรุณาเลือก</option>
+            <option :key="index" v-for="(item, index) in local.departmentItems" :value="item._id">
+              {{ item.name }}
+            </option>
+          </select>
+        </div>
+        <p class="form-input-hint text-error" style="margin: unset" v-if="errors.first('department')">กรุณาตรวจสอบข้อมูลข้างต้น</p>
+      </div>
       <div class="form-group" v-if="local.idSelected === null">
         <label class="form-label" for="input-example-1">รหัสผ่าน</label>
         <my-input
@@ -43,14 +55,40 @@
           @input="value => {local.password = value}"
         ></my-input>
       </div>
-      <div class="form-group">
-        <label class="form-label" for="input-example-1">หน่วยงาน</label>
-        <div class="form-group">
-          <select class="form-select" v-model="local.departmentId">
-            <option :key="index" v-for="(item, index) in local.departmentItems" :value="item._id">
-              {{ item.name }}
-            </option>
-          </select>
+      <div class="form-group"  v-if="local.idSelected !== null">
+        <label class="form-label c-hand" @click="toggleResetPass()">เปลี่ยนรหัสผ่าน [{{(local.showResetPass) ? 'ปิด' : 'เปิด'}}]</label>
+        <div class="columns" v-if="local.showResetPass">
+          <div class="column col-md-12">
+            <div class="form-group">
+              <label class="form-label" for="input-example-1">รหัสผ่านใหม่</label>
+              <my-input
+                :config="{
+                  type: 'password',
+                  key: 'newPassword',
+                  placeholder: '',
+                  rules: 'required',
+                  validator: $validator
+                }"
+                :value="local.newPassword"
+                @input="value => {local.newPassword = value}"
+              ></my-input>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-example-1">ยืนยันรหัสผ่านใหม่</label>
+              <my-input
+                :config="{
+                  type: 'password',
+                  key: 'confirmNewPassword',
+                  placeholder: '',
+                  rules: 'required',
+                  validator: $validator
+                }"
+                :value="local.confirmNewPassword"
+                @input="value => {local.confirmNewPassword = value}"
+              ></my-input>
+            </div>
+            <label class="text-error" v-if="local.isPassNotMatch">ข้อมูลรหัสผ่านไม่ตรงกัน กรุณาตรวจสอบ</label>
+          </div>
         </div>
       </div>
       <div class="columns">
@@ -120,10 +158,14 @@ export default {
         name: null,
         username: null,
         password: null,
+        newPassword: null,
+        confirmNewPassword: null,
         departmentId: null,
         idSelected: null,
         items: [],
-        departmentItems: []
+        departmentItems: [],
+        showResetPass: true,
+        isPassNotMatch: false
       }
     }
   },
@@ -142,7 +184,7 @@ export default {
       this.local.items = resUser.data.user;
     },
     async event (type, data = null) {
-      let err, res, resourceName, queryString;
+      let err, res, resourceName, queryString, userData;
       switch(type) {
         case 'add':
           [ err, res ] = await to(this.$validator.validate());
@@ -172,15 +214,26 @@ export default {
           break;
         case 'update':
           resourceName = `${config.api.user.index}/${this.local.idSelected}`;
-          [ err, res ] = await to(service.putResource({ resourceName, data: {
+          userData = {
             name: this.local.name,
             username: this.local.username,
             password: this.local.password,
             departmentId: this.local.departmentId
-          }}))
+          }
+          if (this.local.showResetPass) {
+            // console.log(this.passwordInValid());
+            if (this.passwordInValid()) {
+              this.local.isPassNotMatch = true
+              return;
+            }
+            userData.newPassword = this.local.newPassword
+          }
+          // console.log(userData)
+          [ err, res ] = await to(service.putResource({ resourceName, data: userData}))
           if(err) return;
           break;
       }
+      
       this.resetForm();
       this.fetchData();
       this.$notify({
@@ -188,6 +241,12 @@ export default {
         text: 'ทำรายการสำเร็จ',
         type: 'success',
       });
+    },
+    passwordInValid () {
+      return (
+        (this.local.newPassword !== this.local.confirmNewPassword)
+        || this.local.newPassword === '' 
+        || this.local.newPassword === null ) ? true : false;
     },
     selectItem (item) {
       this.local.idSelected = item._id
@@ -200,8 +259,12 @@ export default {
       this.local.name = '';
       this.local.username = '';
       this.local.password = '';
-      this.local.departmentId = '';
+      this.local.newPassword = '';
+      this.local.confirmNewPassword = '';
+      this.local.departmentId = null;
       this.local.idSelected = null;
+      this.local.showResetPass = false;
+      this.local.isPassNotMatch = false;
       this.$validator.reset()
     },
     getDepartmentName (departmentId) {
@@ -210,6 +273,16 @@ export default {
       return this.local.departmentItems.filter((item) => {
         return item._id === departmentId
       })[0].name
+    },
+    getInputClass (key) {
+      return [
+        'form-select',
+        { 'is-error': this.errors.has(key) }
+      ]
+    },
+    toggleResetPass () {
+      this.local.showResetPass = !this.local.showResetPass
+      this.local.isPassNotMatch = false
     }
   }
 }
