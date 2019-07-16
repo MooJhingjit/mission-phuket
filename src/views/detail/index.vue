@@ -40,7 +40,7 @@
     <div class="column col-12 text-right">
       <button class="m-2 btn" v-if="USER_RIGHT.includes('ReportAction') && !local.isReportApproved" @click="event('updateStatus', 'approved')"><i class="fas fa-check-circle"></i> Approve</button>
       <button class="m-2 btn btn-link"><i class="fas fa-print"></i> Print Report</button>
-      <button class="m-2 btn btn-error" @click="event('remove')"><i class="fas fa-trash-alt"></i> Delete</button>
+      <button class="m-2 btn btn-error" v-if="USER_RIGHT.includes('ReportAction')" @click="event('remove')"><i class="fas fa-trash-alt"></i> Delete</button>
     </div>
   </div>
 </template>
