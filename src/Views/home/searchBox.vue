@@ -2,12 +2,12 @@
   <div class="card">
     <div class="card-body">
       <div class="columns">
-        <div class="column col-2 item-center" v-if="USER && USER_RIGHT.includes('CreateReport')">
+        <div class="column col-sm-12 col-2 item-center" v-if="USER && USER_RIGHT.includes('CreateReport')">
           <button @click="GO_TOPAGE('CreateReport')" class="btn"> <i class="fas fa-plus-circle"></i> สร้างใหม่</button>
         </div>
-        <div class="column">
+        <div class="column col-sm-12">
           <div class="columns">
-            <div class="column col-5">
+            <div class="column col-sm-12 col-5">
               <div class="form-group">
                 <!-- <label class="form-label" for="input-example-1">ค้นหา</label> -->
                 <!-- <input class="form-input" type="text" id="input-example-1" placeholder="คำค้นหา"> -->
@@ -23,7 +23,7 @@
                 ></my-input>
               </div>
             </div>
-            <div class="column">
+            <div class="column col-sm-12">
               <div class="form-group">
                 <!-- <label class="form-label" for="input-example-1">วันที่เริ่ม</label> -->
                 <my-date-picker
@@ -37,7 +37,7 @@
                 ></my-date-picker>
               </div>
             </div>
-            <div class="column">
+            <div class="column col-sm-12">
               <div class="form-group">
                 <!-- <label class="form-label" for="input-example-1">วันที่สิ้นสุด</label> -->
                 <my-date-picker
@@ -53,7 +53,7 @@
             </div>
           </div>
           <div class="columns mt-2">
-            <div class="column col-5">
+            <div class="column col-sm-12 col-5">
               <div class="form-group">
                 <!-- <label class="form-label" for="input-example-1">สถานะ</label> -->
                 <select class="form-select" v-model="local.reportStatus">
@@ -61,7 +61,7 @@
                 </select>
               </div>
             </div>
-            <div class="column col-5">
+            <div class="column col-sm-12  col-5">
               <div class="form-group">
                 <!-- <label class="form-label" for="input-example-1"></label> -->
                 <label class="form-radio form-inline">

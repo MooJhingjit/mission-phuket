@@ -64,7 +64,6 @@ import config from '@Config/app.config'
 import service from '@Services/app.service'
 import to from 'await-to-js';
 import Helper from '@Libraries/common.helpers'
-import { setTimeout } from 'timers';
 
 export default {
   components: {
@@ -101,7 +100,6 @@ export default {
           password: this.local.password
         }}))
         if(err) {
-          console.log('error');
           this.local.isLoginError = true
           return;
         }

@@ -2,11 +2,11 @@
   <div class="container" v-if="USER && USER_RIGHT">
     <header class="columns">
       <div class="column d-flex col-sm-12">
-        <div class="columns col-oneline item-center c-hand" @click="GO_TOPAGE('Report')">
-          <div class="column col-3 item-center">
-            <img src="https://walktalkwellness.files.wordpress.com/2017/02/cropped-hospital-phuket-mission-logo1.jpg" width="80" height="80">
+        <div class="columns item-center c-hand" @click="GO_TOPAGE('Report')">
+          <div class="column col-4 item-center logo">
+            <img src="@/Assets/logo.png">
           </div>
-          <div class="column col-9">
+          <div class="column col-8">
             <h4>รายงานอุบัติการณ์</h4>
             <h6>โรงพยาบาลมิชชั่นภูเก็ต </h6>
           </div>
@@ -42,11 +42,11 @@
 <script>
 export default {
   name: 'DefaultLayout',
-  // computed: {
-  //   routeLists () {
-  //     return this.$route.matched.filter((route) => route.meta.label)
-  //   }
-  // },
+  computed: {
+    // logo () {
+    //   return '@/assets/logo.png'
+    // }
+  },
   methods: {
     logout() {
       this.LOGOUT()
@@ -66,5 +66,11 @@ export default {
 .fade-enter,
 .fade-leave-active {
   opacity: 0
+}
+.logo {
+   img{
+    width: 130px;
+    height: 130px;
+  }
 }
 </style>

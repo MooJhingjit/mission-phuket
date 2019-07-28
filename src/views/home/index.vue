@@ -6,7 +6,7 @@
       </template>
      </navigation-bar>
     <div class="column col-12">
-      <div class="card">
+      <div class="card" style="overflow: scroll;">
         <vuetable ref="vuetable"
           :css="{
             tableClass: 'table table-striped table-hover text-center'
