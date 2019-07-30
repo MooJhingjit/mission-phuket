@@ -1,8 +1,7 @@
 <template>
   <div class="container columns" v-if="clinicalProgram
   && nonClinicalProgram 
-  && violenceProgram
-  && this.IS_REPORTCREATER(local.createdByDepartment)">
+  && violenceProgram">
     <navigation-bar/>
     <div class="column col-12">
       <div class="card">
@@ -24,7 +23,7 @@
           </div>
           <div class="column col-4 col-sm-12">
             <div class="form-group">
-              <label class="form-label require">HN</label>
+              <label class="form-label">HN</label>
               <my-input
                 :config="{
                   type: 'text',
@@ -40,7 +39,7 @@
           </div>
           <div class="column col-4 col-sm-12">
             <div class="form-group">
-              <label class="form-label require">ชื่อ-นามสกุล</label>
+              <label class="form-label">ชื่อ-นามสกุล</label>
               <my-input
                 :config="{
                   type: 'text',
@@ -56,7 +55,7 @@
           </div>
           <div class="column col-4 col-sm-12">
             <div class="form-group">
-              <label class="form-label require">อายุ</label>
+              <label class="form-label">อายุ</label>
               <my-input
                 :config="{
                   type: 'text',
@@ -377,11 +376,11 @@
               <div class="columns">
                 <div class="column col-6 col-sm-12">
                   <div class="form-group">
-                    <label class="form-label">บรรยายสรุปเหตุการณ์ที่เกิด</label>
+                    <label class="form-label require">บรรยายสรุปเหตุการณ์ที่เกิด</label>
                     <textarea class="form-input" v-model="local.eventBriefing" placeholder="" rows="5"></textarea>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">วิเคราะห์สาเหตุและแนวทางแก้ไข</label>
+                    <label class="form-label require">วิเคราะห์สาเหตุและแนวทางแก้ไข</label>
                     <textarea class="form-input" v-model="local.causeAnalysis" placeholder="" rows="5"></textarea>
                   </div>
                 </div>
