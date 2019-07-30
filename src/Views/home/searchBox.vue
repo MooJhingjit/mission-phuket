@@ -15,7 +15,7 @@
                   :config="{
                     type: 'text',
                     key: 'mainSearch',
-                    placeholder: 'ค้นหา ชื่อ-นามสกุล, ผู้รายงาน',
+                    placeholder: 'ค้นหา ชื่อ-นามสกุล',
                     rules: ''
                   }"
                   :value="local.mainSearch"
