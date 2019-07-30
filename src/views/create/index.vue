@@ -27,7 +27,7 @@
                   type: 'text',
                   key: 'hn',
                   placeholder: '',
-                  rules: 'required',
+                  rules: '',
                   validator: $validator
                 }"
                 :value="local.hn"
@@ -43,7 +43,7 @@
                   type: 'text',
                   key: 'name',
                   placeholder: '',
-                  rules: 'required',
+                  rules: '',
                   validator: $validator
                 }"
                 :value="local.name"
@@ -59,7 +59,7 @@
                   type: 'text',
                   key: 'age',
                   placeholder: '',
-                  rules: 'required',
+                  rules: '',
                   validator: $validator
                 }"
                 :value="local.age"
@@ -93,7 +93,8 @@
                   key: 'reporter',
                   placeholder: '',
                   rules: 'required',
-                  validator: $validator
+                  validator: $validator,
+                  isDisable: true
                 }"
                 :value="local.reporter"
                 @input="value => {local.reporter = value}"
@@ -548,6 +549,7 @@ export default {
           if(err || !res) return
           reportData = Object.assign({}, this.local);
           reportData.reportDate = moment(this.local.reportDate, 'DD-MM-YYYY').format()
+          reportData.createdByDepartment = this.USER.department
           resourceName = config.api.report.index;
           [ err, res ] = await to(service.postResource({ resourceName, data: {
             ...reportData

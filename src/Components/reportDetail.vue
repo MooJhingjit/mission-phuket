@@ -59,7 +59,7 @@
                 <!-- <div class="tile-subtitle"></div> -->
               </div>
             </div>
-            <div class="tile tile-centered m-1">
+            <div class="tile tile-centered m-1" v-if="IS_ADMIN">
               <div class="tile-content">
                 <div class="tile-title">ผู้รายงาน: {{initialReport.reporter}}</div>
                 <!-- <div class="tile-subtitle"></div> -->

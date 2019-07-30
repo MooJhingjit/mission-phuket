@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-body">
       <div class="columns">
-        <div class="column col-sm-12 col-2 item-center" v-if="USER && USER_RIGHT.includes('CreateReport')">
+        <div class="column col-sm-12 col-2 item-center">
           <button @click="GO_TOPAGE('CreateReport')" class="btn"> <i class="fas fa-plus-circle"></i> สร้างใหม่</button>
         </div>
         <div class="column col-sm-12">

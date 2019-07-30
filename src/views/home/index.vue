@@ -13,7 +13,7 @@
           }"
           :row-class="onRowClass"
           :http-options="httpOptions"
-          :fields="local.fields"
+          :fields="tableFields"
           @vuetable:pagination-data="onPaginationData"
           pagination-path=""
           :append-params="params"
@@ -109,10 +109,6 @@ export default {
             title: 'ชื่อ-นามสกุล'
           },
           {
-            name: 'reporter',
-            title: 'ผู้รายงาน'
-          },
-          {
             name: '__slot:reportDate',
             title: 'วันที่รายงาน',
             sortField: 'reportDate'
@@ -156,6 +152,16 @@ export default {
     // console.log(this.REPORT_CONFIG);
   },
   computed: {
+    tableFields () {
+      if (this.IS_ADMIN) {
+        this.local.fields.splice(5, 0, {
+            name: 'reporter',
+            title: 'ผู้รายงาน'
+          });
+        return this.local.fields;
+      }
+      return this.local.fields;
+    },
     translate () {
       if (this.local.config !== null){
         return this.local.config

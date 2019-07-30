@@ -39,13 +39,14 @@ module.exports = {
     let condition = {};
     condition.$and = [];
     
-    // console.log(user);
     if (!user.isAdmin) {
+      
       let reportIdArr = obj.departmentAssociated.map((item) => {
         return item.reportId;
       })
-      // console.log(reportIdArr);
-      condition._id = { $in: reportIdArr }
+      condition.$and.push(
+        { $or: [{_id: { $in: reportIdArr } }, {createdByDepartment: user.departmentId}] }
+      )
     }
     
     if (obj.searchDetail.reportStatus && obj.searchDetail.reportStatus !== 'all') {
