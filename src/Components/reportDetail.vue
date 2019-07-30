@@ -14,7 +14,7 @@
         </div>
         <details class="accordion" open>
           <summary class="accordion-header">
-            วันที่/สถานที่/ผู้รายงาน
+            รายละเอียดเบื้องต้น
           </summary>
           <div class="accordion-body empty">
             <div class="tile tile-centered m-1">

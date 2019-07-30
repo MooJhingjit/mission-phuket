@@ -61,6 +61,9 @@ export default {
         return queryString.slice(0, -1)
       }
     },
+    IS_REPORTCREATER (createdByDepartment) {
+      return (createdByDepartment === this.USER.department || this.IS_ADMIN)
+    },
     NOTIFY (type, msg = null) {
       switch (type) {
         case 'success':

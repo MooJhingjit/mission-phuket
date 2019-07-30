@@ -1,5 +1,8 @@
 <template>
-  <div class="container columns" v-if="clinicalProgram && nonClinicalProgram && violenceProgram">
+  <div class="container columns" v-if="clinicalProgram
+  && nonClinicalProgram 
+  && violenceProgram
+  && this.IS_REPORTCREATER(local.createdByDepartment)">
     <navigation-bar/>
     <div class="column col-12">
       <div class="card">
@@ -514,8 +517,9 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: `${config.api.report.index}/${reportId}`}));
       if(err) return;
       let item = res.data.report;
-      if (item.status === 'approved') {
+      if (item.status === 'approved' || !this.IS_REPORTCREATER(item.createdByDepartment)) {
         this.GO_TOPAGE('Report')
+        return;
       }
       item.incidentDate = new Date(item.incidentDate)
       item.reportDate = moment(item.reportDate).format('DD-MM-YYYY')
