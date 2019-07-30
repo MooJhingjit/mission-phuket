@@ -60,7 +60,8 @@ module.exports = {
     if (obj.searchDetail.mainSearch) {
       let regex = new RegExp(obj.searchDetail.mainSearch, 'i')
       condition.$and.push(
-        { $or: [{name: regex }, {reporter: regex}] }
+        // { $or: [{name: regex }, {reporter: regex}] }
+        { $or: [{name: regex }] }
       )
     }
     if (obj.searchDetail.reportStatus) {
