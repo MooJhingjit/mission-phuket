@@ -75,6 +75,17 @@
                 </label>
                 
               </div>
+              <div class="form-group" v-if="!IS_ADMIN">
+                <!-- <label class="form-label" for="input-example-1"></label> -->
+                <label class="form-radio form-inline">
+                  <input type="radio" name="reportAssociated" value="waitForAnswer" v-model="local.reportAssociated"><i class="form-icon"></i> ที่ต้องตอบกลับ
+                </label>
+                <label class="form-radio form-inline">
+                  <input type="radio" name="reportAssociated" value="all" v-model="local.reportAssociated"><i class="form-icon"></i> ทั้งหมด
+                </label>
+                
+                
+              </div>
             </div>
             <div class="column">
               <!-- <label class="form-label" for="input-example-1"></label> -->

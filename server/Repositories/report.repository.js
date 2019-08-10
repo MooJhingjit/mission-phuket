@@ -1,4 +1,4 @@
-const { Reports } = require('@model');
+const { Reports, Answer } = require('@model');
 const { to, TE }  = require('@service/util.service');
 const mongoose = require('mongoose');
 
@@ -14,14 +14,13 @@ module.exports = {
     let perpage = (!obj.perPage) ? 0 : obj.perPage;
     let sort = { createdAt: 'asc'}
     sort = await this.sortDataTable(obj.sort);
-    condition = this.getCondtions(obj, user);
+    condition = await this.getCondtions(obj, user);
     // console.log(condition);
     [err, total] = await to(Reports.find(condition).countDocuments());
     [err, reports] = await to(Reports.find(condition).sort(sort).limit(perpage).skip(obj.from));
     if(err) TE(err.message);
     result.total = total
     result.data = reports
-    
     return result
   },
   async sortDataTable (sortObj) {
@@ -35,7 +34,7 @@ module.exports = {
     }
     return sort;
   },
-  getCondtions (obj, user) {
+  async getCondtions (obj, user) {
     let condition = {};
     condition.$and = [];
     
@@ -44,9 +43,23 @@ module.exports = {
       let reportIdArr = obj.departmentAssociated.map((item) => {
         return item.reportId;
       })
-      condition.$and.push(
-        { $or: [{_id: { $in: reportIdArr } }, {createdByDepartment: user.departmentId}] }
-      )
+      if (obj.searchDetail.reportAssociated === 'waitForAnswer') {
+        reportIdArr = await Promise.all(
+          reportIdArr.map(async (item) => {
+            let [err, total] = await to(Answer.find({reportId: item, departmentId: user.departmentId}).countDocuments());
+            // console.log(total);
+            return (total) ? null : item;
+          })
+        )
+        condition.$and.push(
+          { $and: [{_id: { $in: reportIdArr } }] }
+        )
+      } else {
+        condition.$and.push(
+          { $or: [{_id: { $in: reportIdArr } }, {createdByDepartment: user.departmentId}] }
+        )
+      }
+      
     }
     
     if (obj.searchDetail.reportStatus && obj.searchDetail.reportStatus !== 'all') {

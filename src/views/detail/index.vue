@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="column col-12 text-right">
-      <button class="m-2 btn" v-if="USER_RIGHT.includes('ReportAction') && !local.isReportApproved" @click="event('updateStatus', 'approved')"><i class="fas fa-check-circle"></i> Approve</button>
+      <button class="m-2 btn" v-if="USER_RIGHT.includes('ReportAction') && local.reportStatus === 'hadAllAnswer'" @click="event('updateStatus', 'approved')"><i class="fas fa-check-circle"></i> Approve</button>
       <button class="m-2 btn btn-link"><i class="fas fa-print"></i> Print Report</button>
       <button class="m-2 btn btn-error" v-if="USER_RIGHT.includes('ReportAction')" @click="event('remove')"><i class="fas fa-trash-alt"></i> Delete</button>
     </div>
@@ -61,8 +61,8 @@ export default {
     return {
       local: {
         report: null,
-        responsibilities: [],
-        isReportApproved: false
+        responsibilities: []
+        // isReportApproved: false
       }
     }
   },
@@ -76,7 +76,8 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: `${config.api.report.index}/${this.$route.params.key}`}));
       if(err) return;
       this.local.report = res.data.report
-      this.local.isReportApproved = (res.data.report.status === 'approved')
+      // this.local.isReportApproved = (res.data.report.status === 'approved')
+      this.local.reportStatus = res.data.report.status
     },
     async fetchData () {
       let err, res;
@@ -119,7 +120,7 @@ export default {
             status: 'approved'
           }}))
           if(err) return;
-          this.local.isReportApproved = true
+          // this.local.isReportApproved = true
           await this.fetchReportData()
           break;
       }

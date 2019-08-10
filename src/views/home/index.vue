@@ -34,7 +34,7 @@
         <template slot="actions" scope="props">
           <button v-if="USER_RIGHT.includes('EditReport') && IS_REPORTCREATER(props.rowData.createdByDepartment) && props.rowData.status !== 'approved'" class="btn m-1" @click="GO_TOPAGE('EditReport', {key: props.rowData._id})"><i class="fas fa-edit"></i> แก้ไข</button>
           <button v-if="USER_RIGHT.includes('Management') && props.rowData.status !== 'approved'" class="btn btn-warning m-1" @click="GO_TOPAGE('Management', {key: props.rowData._id})"><i class="fas fa-edit"></i> จัดการ</button>
-          <button v-if="USER_RIGHT.includes('Answer') && props.rowData.status !== 'approved'" class="btn m-1" @click="GO_TOPAGE('Answer', {key: props.rowData._id})"><i class="fas fa-edit "></i> ตอบ</button>
+          <button v-if="USER_RIGHT.includes('Answer') && props.rowData.status !== 'approved' && local.reportAssociated.includes(props.rowData._id)" class="btn m-1" @click="GO_TOPAGE('Answer', {key: props.rowData._id})"><i class="fas fa-edit "></i> ตอบ</button>
           <button v-if="USER_RIGHT.includes('ReportDetail')" class="btn m-1" @click="GO_TOPAGE('ReportDetail', {key: props.rowData._id})"><i class="fas fa-info-circle"></i> ภาพรวม</button>
         </template> 
         </vuetable>
@@ -139,6 +139,7 @@ export default {
         searchParams: {
           mainSearch: '',
           reportType: 'all',
+          reportAssociated: 'waitForAnswer',
           incidentDateStart: '',
           incidentDateEnd: '',
           reportStatus: 'all'
@@ -186,12 +187,12 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: config.api.report.translation }));
       if(err) return;
       this.local.config = res.data.trans
+      this.local.reportAssociated = res.data.reportAssociated
     },
-    onRowClass () {
-      // return [
-        // { 'text-error': (this.IS_LATE(dataItem.product.dateEnd) && (dataItem.product.status === 'ip' || dataItem.product.status === 'done')) },
-        // { 'text-warning': (this.IS_SAMEDATE(dataItem.product.dateEnd) && (dataItem.product.status === 'ip' || dataItem.product.status === 'done')) }
-      // ]
+    onRowClass (prop) {
+      return [
+        // {'text-error': this.local.reportAssociated.includes(prop._id)}
+      ];
     },
     onPaginationData (paginationData) {
       this.$refs.pagination.setPaginationData(paginationData)

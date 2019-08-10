@@ -10,7 +10,11 @@ module.exports = {
 		return ReS(res, {reportConfig});
   },
   async getReportTranslation(req, res) {
-		return ReS(res, {trans});
+    let [err, reportAssociated] = await to(ManagementRepo.getByDepartment(req.userSession.departmentId));
+    reportAssociated = reportAssociated.map((item) => {
+      return item.reportId;
+    })
+		return ReS(res, {trans, reportAssociated});
   },
   async list(req, res) {
     let err, report, departmentAssociated;

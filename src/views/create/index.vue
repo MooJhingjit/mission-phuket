@@ -86,7 +86,7 @@
               ></my-input>
             </div>
           </div>
-          <div class="column col-4 col-sm-12">
+          <div class="column col-4 col-sm-12" v-if="this.IS_ADMIN">
             <div class="form-group">
               <label class="form-label require">ผู้รายงาน</label>
               <my-input
@@ -96,7 +96,7 @@
                   placeholder: '',
                   rules: 'required',
                   validator: $validator,
-                  isDisable: true
+                  isDisable: (this.IS_ADMIN) ? false : true
                 }"
                 :value="local.reporter"
                 @input="value => {local.reporter = value}"
@@ -341,11 +341,11 @@
 
           <div class="card mt-2">
             <div class="card-header">
-              <div class="card-title text-bold">ระดับความรุนแรงทางคลินิก และความรุนแรงทั่วไป</div>
+              <div class="card-title text-bold">ระดับความรุนแรง</div>
             </div>
             <div class="card-body">
               <div class="columns">
-                <div class="column col-6 col-sm-12">
+                <div :key="'violenceClinical'" class="column col-6 col-sm-12" v-if="local.programType === 'clinical'">
                   <div class="form-group">
                     <label class="form-label require">{{violenceProgram.clinical.title}}</label>
                     <select :class="getInputClass('violenceClinical')" v-model="local.violence.clinical" name="violenceClinical" v-validate="'required'">
@@ -355,7 +355,7 @@
                   </div>
                   <p class="form-input-hint text-error" v-if="errors.first('violenceClinical')">กรุณาตรวจสอบข้อมูลข้างต้น</p>
                 </div>
-                <div class="column col-6 col-sm-12">
+                <div :key="'violenceGeneral'" class="column col-6 col-sm-12" v-if="local.programType === 'non-clinical'">
                   <div class="form-group">
                     <label class="form-label require">{{violenceProgram.general.title}}</label>
                     <select :class="getInputClass('violenceGeneral')" v-model="local.violence.general" name="violenceGeneral" v-validate="'required'">
@@ -549,6 +549,7 @@ export default {
         case 'add':
           // console.log(moment(this.local.reportDate, 'DD-MM-YYYY').format());
           [ err, res ] = await to(this.$validator.validate());
+          console.log(res);
           if(err || !res) return
           reportData = Object.assign({}, this.local);
           reportData.reportDate = moment(this.local.reportDate, 'DD-MM-YYYY').format()
