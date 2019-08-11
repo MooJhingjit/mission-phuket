@@ -113,13 +113,13 @@
             ระดับความรุนแรง
           </summary>
           <div class="accordion-body empty">
-            <div class="tile tile-centered m-1">
+            <div class="tile tile-centered m-1" v-if="violenceReport.violence.clinical">
               <div class="tile-content">
                 <div class="tile-title">ระดับความรุนแรงทางคลินิก:</div>
                 <div class="tile-subtitle">{{getViolenceTitle('clinical', violenceReport.violence.clinical)}}</div>
               </div>
             </div>
-            <div class="tile tile-centered m-1">
+            <div class="tile tile-centered m-1" v-if="violenceReport.violence.general">
               <div class="tile-content">
                 <div class="tile-title">ระดับความรุนแรงทั่วไป:</div>
                 <div class="tile-subtitle">{{getViolenceTitle('general', violenceReport.violence.general)}}</div>
