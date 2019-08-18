@@ -34,10 +34,10 @@
               <label>วันที่รายงาน</label>: {{moment(report.reportDate).format('DD-MM-YYYY')}}
             </td>
             <td>
-              <label>ผู้รายงาน</label>: {{report.reporter}}
+              <label>สถานะ</label>: {{getReportStatusTrans(report.status).value}}
             </td>
             <td>
-              <label>สถานะ</label>: {{getReportStatusTrans(report.status).value}}
+              <template v-if="IS_ADMIN"><label>ผู้รายงาน</label>: {{report.reporter}}</template>
             </td>
           </tr>
         </table>
