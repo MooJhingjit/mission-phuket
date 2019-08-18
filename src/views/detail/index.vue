@@ -39,9 +39,10 @@
     </div>
     <div class="column col-12 text-right">
       <button class="m-2 btn" v-if="USER_RIGHT.includes('ReportAction') && local.reportStatus === 'hadAllAnswer'" @click="event('updateStatus', 'approved')"><i class="fas fa-check-circle"></i> Approve</button>
-      <button class="m-2 btn btn-link"><i class="fas fa-print"></i> Print Report</button>
+      <button class="m-2 btn btn-link" @click="printReport()"><i class="fas fa-print"></i> Print Report</button>
       <button class="m-2 btn btn-error" v-if="USER_RIGHT.includes('ReportAction')" @click="event('remove')"><i class="fas fa-trash-alt"></i> Delete</button>
     </div>
+    <report-template class="report-template" ref="reportTemplate" v-if="local.report" :reportObj="local.report"></report-template>
   </div>
 </template>
 
@@ -51,11 +52,12 @@ import reportDetail from '@Components/reportDetail';
 import to from 'await-to-js';
 import service from '@Services/app.service'
 import config from '@Config/app.config'
-
+import reportTemplate from './report'
 export default {
   components: {
     NavigationBar,
-    reportDetail
+    reportDetail,
+    reportTemplate
   },
   data () {
     return {
@@ -84,6 +86,9 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: `${config.api.overview.index}/${this.$route.params.key}`}));
       if(err) return;
       this.local.responsibilities = res.data.responsibilities
+    },
+    printReport () {
+      this.$refs.reportTemplate.print()
     },
     async event (type, data = null) {
       let err, res, resourceName;
@@ -136,3 +141,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.report-template{
+  display: none
+}
+</style>
