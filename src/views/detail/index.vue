@@ -13,7 +13,6 @@
           <div class="card m-2" :key="index" v-for="(item, index) in local.responsibilities">
             <div class="card-header">
               <div class="card-title">แผนก {{item.department.name}}</div>
-              <!-- <div class="card-subtitle text-gray">...</div> -->
             </div>
             <div class="card-body p-1">
               <table class="table table-striped table-hover">
@@ -42,7 +41,7 @@
       <button class="m-2 btn btn-link" @click="printReport()"><i class="fas fa-print"></i> Print Report</button>
       <button class="m-2 btn btn-error" v-if="USER_RIGHT.includes('ReportAction')" @click="event('remove')"><i class="fas fa-trash-alt"></i> Delete</button>
     </div>
-    <report-template class="report-template" ref="reportTemplate" v-if="local.report" :reportObj="local.report"></report-template>
+    <report-template class="report-template" ref="reportTemplate" v-if="local.report" :responsibilities="local.responsibilities" :reportObj="local.report"></report-template>
   </div>
 </template>
 

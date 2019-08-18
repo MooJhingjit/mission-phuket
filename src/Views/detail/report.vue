@@ -181,6 +181,33 @@
           </tr>
         </table>
       </section>
+      <br/>
+      <section class="section">
+        <p>ส่วนงานที่ต้องแก้ไข</p>
+        
+
+        <div :key="index" v-for="(item, index) in responsibilities">
+          <label>แผนก {{item.department.name}}</label>
+          <table width="100%" border="1">
+            <thead>
+              <tr>
+                <th>สาเหตุ</th>
+                <th>ป้องกัน</th>
+                <th>ผู้รับผิดชอบ</th>
+              </tr>
+            </thead>
+            <tbody v-if="item.answers.length">
+              <tr :key="index" v-for="(anwser, index) in item.answers">
+                <td>{{anwser.cause}}</td>
+                <td>{{anwser.prevention}}</td>
+                <td>{{anwser.responsible}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </section>
     </section>
     <br/>
     <footer>
@@ -200,7 +227,11 @@ export default {
     reportObj: {
       type: Object,
       required: true
-    }
+    },
+    responsibilities: {
+      type: Array,
+      required: true
+    },
   },
   components: {
   },
