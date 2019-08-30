@@ -72,7 +72,7 @@ export default {
 
 
 <style lang="scss">
-@import '@/assets/scss/my-style.scss';
+@import '@/Assets/scss/my-style.scss';
 @import '../node_modules/spectre.css/dist/spectre.min';
 @import '../node_modules/spectre.css/dist/spectre-exp.min';
 

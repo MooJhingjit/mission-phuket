@@ -135,7 +135,7 @@
           <div class="accordion-body empty">
             <div class="tile tile-centered m-1">
               <div class="tile-content">
-                <div class="tile-title">บรรยายสรุปเหตุการณ์ที่เกิด:</div>
+                <div class="tile-title">สรุปเหตุการณ์ (ใคร ทำอะไร ที่ไหน อย่างไร):</div>
                 <div class="tile-subtitle">{{analysisReport.eventBriefing}}</div>
               </div>
             </div>
@@ -147,7 +147,7 @@
             </div>
             <div class="tile tile-centered m-1">
               <div class="tile-content">
-                <div class="tile-title">วิเคราะห์สาเหตุและแนวทางแก้ไข:</div>
+                <div class="tile-title">กิจกรรมที่ควรทำ/แนวทางการแก้ไข:</div>
                 <div class="tile-subtitle">{{analysisReport.causeAnalysis}}</div>
               </div>
             </div>
