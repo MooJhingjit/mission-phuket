@@ -49,7 +49,7 @@ const reportSchema = new Schema({
     // clinical: null, general: null
   },
   eventBriefing: { type: String, required: true},
-  causeAnalysis: { type: String, required: true},
+  causeAnalysis: { type: String, required: false},
   comment: { type: String, required: false},
   note: { type: String, required: false},
   status: { type: String, required: true},
