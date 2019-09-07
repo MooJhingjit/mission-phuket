@@ -62,12 +62,14 @@ export default {
     return {
       local: {
         report: null,
-        responsibilities: []
+        responsibilities: [],
+        reportTrans: {}
         // isReportApproved: false
       }
     }
   },
   async created () {
+    await this.fetchReportTransData();
     await this.fetchReportData()
     await this.fetchData()
   },
@@ -76,7 +78,8 @@ export default {
       let err, res;
       [ err, res ] = await to(service.getResource({ resourceName: `${config.api.report.index}/${this.$route.params.key}`}));
       if(err) return;
-      this.local.report = res.data.report
+      
+      this.local.report = this.adjustData(res.data.report)
       // this.local.isReportApproved = (res.data.report.status === 'approved')
       this.local.reportStatus = res.data.report.status
     },
@@ -85,6 +88,20 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: `${config.api.overview.index}/${this.$route.params.key}`}));
       if(err) return;
       this.local.responsibilities = res.data.responsibilities
+    },
+    async fetchReportTransData () { // translation data
+      let err, res;
+      [ err, res ] = await to(service.getResource({ resourceName: config.api.report.translation }));
+      if(err) return;
+      this.local.reportTrans = res.data.trans
+    },
+    adjustData (data) {
+      let affectedPersonArr = data.affectedPerson.split('|');
+      let affectedPersonStr = affectedPersonArr.map((item) => {
+        return this.local.reportTrans.affectedPerson[item]
+      }).join(', ')
+      data.affectedPerson = affectedPersonStr;
+      return data
     },
     printReport () {
       this.$refs.reportTemplate.print()

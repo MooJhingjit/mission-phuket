@@ -26,7 +26,7 @@
             <span>{{props.rowData.name}}</span>
         </template>
         <template slot="affectedPerson" scope="props">
-            <span>{{translate.affectedPerson[props.rowData.affectedPerson]}}</span>
+            <span>{{getAffectedPerson(props.rowData.affectedPerson)}}</span>
         </template>
         <template slot="reportDate" scope="props">
             <span>{{moment(props.rowData.reportDate).format('DD/MM/YYYY')}}</span>
@@ -205,6 +205,14 @@ export default {
       // console.log(query);
       this.local.searchParams = query
       this.$refs.vuetable.refresh()
+    },
+    getAffectedPerson (arr = []) {
+      arr = arr.split('|');
+      let person = arr.map((item) => {
+        return this.translate.affectedPerson[item]
+      })
+      return person.join(', ')
+      
     }
   }
 }

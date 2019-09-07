@@ -19,49 +19,49 @@
           <div class="accordion-body empty">
             <div class="tile tile-centered m-1">
               <div class="tile-content">
-                <div class="tile-title">วันที่เกิดเหตุ: {{moment(initialReport.incidentDate).format('DD-MM-YYYY')}}</div>
+                <div class="tile-title" :title="moment(initialReport.incidentDate).format('DD-MM-YYYY')">วันที่เกิดเหตุ: {{moment(initialReport.incidentDate).format('DD-MM-YYYY')}}</div>
                 <!-- <div class="tile-subtitle"></div> -->
               </div>
             </div>
             <div class="tile tile-centered m-1">
               <div class="tile-content">
-                <div class="tile-title">HN: {{initialReport.hn}}</div>
+                <div class="tile-title" :title="initialReport.hn">HN: {{initialReport.hn}}</div>
                 <!-- <div class="tile-subtitle"></div> -->
               </div>
             </div>
             <div class="tile tile-centered m-1">
               <div class="tile-content">
-                <div class="tile-title">ชื่อ-นามสกุล: {{initialReport.name}}</div>
+                <div class="tile-title" :title="initialReport.name">ชื่อ-นามสกุล: {{initialReport.name}}</div>
                 <!-- <div class="tile-subtitle"></div> -->
               </div>
             </div>
             <div class="tile tile-centered m-1">
               <div class="tile-content">
-                <div class="tile-title">อายุ: {{initialReport.age}}</div>
+                <div class="tile-title" :title="initialReport.age">อายุ: {{initialReport.age}}</div>
                 <!-- <div class="tile-subtitle"></div> -->
               </div>
             </div>
             <div class="tile tile-centered m-1">
               <div class="tile-content">
-                <div class="tile-title">แผนกบริเวณที่พบเหตุ: {{initialReport.area}}</div>
+                <div class="tile-title" :title="initialReport.area">แผนกบริเวณที่พบเหตุ: {{initialReport.area}}</div>
                 <!-- <div class="tile-subtitle"></div> -->
               </div>
             </div>
             <div class="tile tile-centered m-1">
               <div class="tile-content">
-                <div class="tile-title">ผู้ที่ได้รับผลกระทบ: {{initialReport.affectedPerson}}</div>
+                <div class="tile-title" :title="initialReport.affectedPerson">ผู้ที่ได้รับผลกระทบ: {{initialReport.affectedPerson}}</div>
                 <!-- <div class="tile-subtitle"></div> -->
               </div>
             </div>
             <div class="tile tile-centered m-1">
               <div class="tile-content">
-                <div class="tile-title">วันที่รายงาน: {{moment(initialReport.reportDate).format('DD-MM-YYYY')}}</div>
+                <div class="tile-title" :title="moment(initialReport.reportDate).format('DD-MM-YYYY')">วันที่รายงาน: {{moment(initialReport.reportDate).format('DD-MM-YYYY')}}</div>
                 <!-- <div class="tile-subtitle"></div> -->
               </div>
             </div>
             <div class="tile tile-centered m-1" v-if="IS_ADMIN">
               <div class="tile-content">
-                <div class="tile-title">ผู้รายงาน: {{initialReport.reporter}}</div>
+                <div class="tile-title" :title="initialReport.reporter">ผู้รายงาน: {{initialReport.reporter}}</div>
                 <!-- <div class="tile-subtitle"></div> -->
               </div>
             </div>

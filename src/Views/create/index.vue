@@ -119,7 +119,7 @@
               ></my-input>
             </div>
           </div>
-          <div class="column col-4 col-sm-12">
+          <!-- <div class="column col-4 col-sm-12">
             <div class="form-group">
               <label class="form-label require">ผู้ที่ได้รับผลกระทบ</label>
               <label class="form-radio form-inline">
@@ -133,6 +133,24 @@
               </label>
               <label class="form-radio form-inline">
                 <input type="radio" name="affectedPerson" v-validate="'required'" value="environment" v-model="local.affectedPerson"><i class="form-icon"></i> สิ่งแวดล้อม
+              </label>
+            </div>
+            <p class="form-input-hint text-error" v-if="errors.first('affectedPerson')">กรุณาตรวจสอบข้อมูลข้างต้น</p>
+          </div> -->
+          <div class="column col-4 col-sm-12">
+            <div class="form-group">
+              <label class="form-label require">ผู้ที่ได้รับผลกระทบ</label>
+              <label class="form-checkbox form-inline">
+                <input type="checkbox" name="affectedPerson" v-validate="'required'" value="patient" v-model="local.affectedPerson"><i class="form-icon"></i> ผู้ป่วย
+              </label>
+              <label class="form-checkbox form-inline">
+                <input type="checkbox" name="affectedPerson" v-validate="'required'" value="relative" v-model="local.affectedPerson"><i class="form-icon"></i> ญาติ
+              </label>
+              <label class="form-checkbox form-inline">
+                <input type="checkbox" name="affectedPerson" v-validate="'required'" value="authorities" v-model="local.affectedPerson"><i class="form-icon"></i> เจ้าหน้าที่
+              </label>
+              <label class="form-checkbox form-inline">
+                <input type="checkbox" name="affectedPerson" v-validate="'required'" value="environment" v-model="local.affectedPerson"><i class="form-icon"></i> สิ่งแวดล้อม
               </label>
             </div>
             <p class="form-input-hint text-error" v-if="errors.first('affectedPerson')">กรุณาตรวจสอบข้อมูลข้างต้น</p>
@@ -460,7 +478,7 @@ export default {
         reportDate:  moment().format('DD-MM-YYYY'),
         reporter: null,
         area: null,
-        affectedPerson: null,
+        affectedPerson: [],
         program: {
           common: {
             review: null,
@@ -521,6 +539,7 @@ export default {
         return;
       }
       item.incidentDate = new Date(item.incidentDate)
+      item.affectedPerson = item.affectedPerson.split('|');
       item.reportDate = moment(item.reportDate).format('DD-MM-YYYY')
       this.local = item;
       
@@ -554,6 +573,7 @@ export default {
           reportData = Object.assign({}, this.local);
           reportData.reportDate = moment(this.local.reportDate, 'DD-MM-YYYY').format()
           reportData.createdByDepartment = this.USER.department
+          reportData.affectedPerson = this.local.affectedPerson.join('|')
           resourceName = config.api.report.index;
           [ err, res ] = await to(service.postResource({ resourceName, data: {
             ...reportData
@@ -582,6 +602,7 @@ export default {
           if(err || !res) return
           reportData = Object.assign({}, this.local);
           reportData.reportDate = moment(this.local.reportDate, 'DD-MM-YYYY').format()
+          reportData.affectedPerson = this.local.affectedPerson.join('|')
           resourceName = `${config.api.report.index}/${this.local._id}`;
           [ err, res ] = await to(service.putResource({ resourceName, data: {
             ...reportData

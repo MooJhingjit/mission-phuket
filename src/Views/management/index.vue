@@ -65,11 +65,13 @@ export default {
         departmentOptionsDefault: [],
         departmentInput: null,
         managementLists: null,
-        report: null
+        report: null,
+        reportTrans: {}
       }
     }
   },
   async created () {
+    await this.fetchReportTransData()
     await this.fetchReportData()
     await this.fetchData()
     this.fetchDepartmentData();
@@ -79,11 +81,25 @@ export default {
       let err, res;
       [ err, res ] = await to(service.getResource({ resourceName: `${config.api.report.index}/${this.$route.params.key}`}));
       if(err) return;
-      this.local.report = res.data.report
+      this.local.report = this.adjustData(res.data.report)
       if (this.local.report.status === 'approved') {
         this.GO_TOPAGE('Report')
       }
       // console.log(this.local.report);
+    },
+    async fetchReportTransData () { // translation data
+      let err, res;
+      [ err, res ] = await to(service.getResource({ resourceName: config.api.report.translation }));
+      if(err) return;
+      this.local.reportTrans = res.data.trans
+    },
+    adjustData (data) {
+      let affectedPersonArr = data.affectedPerson.split('|');
+      let affectedPersonStr = affectedPersonArr.map((item) => {
+        return this.local.reportTrans.affectedPerson[item]
+      }).join(', ')
+      data.affectedPerson = affectedPersonStr;
+      return data
     },
     async fetchData () {
       let err, res;
