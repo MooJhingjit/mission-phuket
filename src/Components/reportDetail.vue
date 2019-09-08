@@ -2,6 +2,7 @@
 <template>
  <div class="panel" v-if="
     clinicalProgram
+    && programReport.program
     && nonClinicalProgram
     && violenceProgram">
       <!-- <div class="panel-header">
@@ -67,46 +68,41 @@
             </div>
           </div>
         </details>
-        <!-- <details class="accordion" open>
+        <details class="accordion" open>
           <summary class="accordion-header">
             รูปแบบของเหตุการณ์ ({{programReport.programType}})
           </summary>
           <div class="accordion-body empty" v-if="programReport.programType === 'clinical'">
-            <div class="tile tile-centered m-1">
+            <div class="tile tile-centered m-1" :key="`common${index}`" v-for="(item, index) in getClinicalKeys('common')">
               <div class="tile-content">
-                <div class="tile-title">การทบทวนเวชระเบียน</div>
-                <div class="tile-subtitle">{{getClinicalProgramTitle('review', programReport.program.common.review)}}</div>
+                <div class="tile-title" :title="clinicalProgram.common[item].title">{{clinicalProgram.common[item].title}}</div>
+                <div class="tile-subtitle">{{getClinicalProgramRes('common', item, programReport.program.common[item])}}</div>
               </div>
             </div>
-            <div class="tile tile-centered m-1">
+            <hr/>
+            <div class="tile tile-centered m-1" :key="`spacific${index}`" v-for="(item, index) in getClinicalKeys('spacific')">
               <div class="tile-content">
-                <div class="tile-title">โปรแกรมความเสี่ยงด้านการดูแลผู้ป่วย (PCT)</div>
-                <div class="tile-subtitle">{{getClinicalProgramTitle('PCT', programReport.program.common.PCT)}}</div>
+                <div class="tile-title" :title="clinicalProgram.spacific[item].title">{{clinicalProgram.spacific[item].title}}</div>
+                <div class="tile-subtitle">{{getClinicalProgramRes('spacific' ,item, programReport.program.spacific[item])}}</div>
               </div>
             </div>
-            <div class="tile tile-centered m-1">
+            <hr/>
+            <div class="tile tile-centered m-1" :key="`event${index}`" v-for="(item, index) in getClinicalKeys('event')">
               <div class="tile-content">
-                <div class="tile-title">โปรแกรมความเสี่ยงด้านการป้องกันและควบคุมการติดเชื้อ (IC)</div>
-                <div class="tile-subtitle">{{getClinicalProgramTitle('IC', programReport.program.common.IC)}}</div>
-              </div>
-            </div>
-            <div class="tile tile-centered m-1">
-              <div class="tile-content">
-                <div class="tile-title">โปรแกรมความเสี่ยงด้านระบบยา/ความคลาดเคลื่อนทางยา(PTC)</div>
-                <div class="tile-subtitle">{{getClinicalProgramTitle('PTC', programReport.program.common.PTC)}}</div>
-              </div>
-            </div>
-            <div class="tile tile-centered m-1">
-              <div class="tile-content">
-                <div class="tile-title">โปรแกรมความเสี่ยงด้านการผ่าตัด/วิสัญญี</div>
-                <div class="tile-subtitle">{{getClinicalProgramTitle('operation', programReport.program.common.operation)}}</div>
+                <div class="tile-title" :title="clinicalProgram.event[item].title">{{clinicalProgram.event[item].title}}</div>
+                <div class="tile-subtitle">{{getClinicalProgramRes('event' ,item, programReport.program.event[item])}}</div>
               </div>
             </div>
           </div>
           <div class="accordion-body empty" v-else>
-
+            <div class="tile tile-centered m-1" :key="`NonClinical${index}`" v-for="(item, index) in getNonClinicalKeys()">
+              <div class="tile-content">
+                <div class="tile-title" :title="nonClinicalProgram[item].title">{{nonClinicalProgram[item].title}}</div>
+                <div class="tile-subtitle">{{getNonClinicalProgramRes(item, programReport.program[item])}}</div>
+              </div>
+            </div>
           </div>
-        </details> -->
+        </details>
 
         <details class="accordion" open v-if="violenceReport && violenceReport.violence">
           <summary class="accordion-header">
@@ -116,13 +112,13 @@
             <div class="tile tile-centered m-1" v-if="violenceReport.violence.clinical">
               <div class="tile-content">
                 <div class="tile-title">ระดับความรุนแรงทางคลินิก:</div>
-                <div class="tile-subtitle">{{getViolenceTitle('clinical', violenceReport.violence.clinical)}}</div>
+                <div class="tile-subtitle">{{getViolenceRes('clinical', violenceReport.violence.clinical)}}</div>
               </div>
             </div>
             <div class="tile tile-centered m-1" v-if="violenceReport.violence.general">
               <div class="tile-content">
                 <div class="tile-title">ระดับความรุนแรงทั่วไป:</div>
-                <div class="tile-subtitle">{{getViolenceTitle('general', violenceReport.violence.general)}}</div>
+                <div class="tile-subtitle">{{getViolenceRes('general', violenceReport.violence.general)}}</div>
               </div>
             </div>
           </div>
@@ -222,7 +218,7 @@ export default {
     initialReport () {
       return this.selectObjByKey(this.local.ordering.initialReport)
     },
-    programReport () {
+    programReport () { // get real value from db
       return this.selectObjByKey(this.local.ordering.eventReport)
     },
     violenceReport () {
@@ -231,14 +227,13 @@ export default {
     analysisReport () {
       return this.selectObjByKey(this.local.ordering.analysisReport)
     },
-
-    clinicalProgram () {
+    clinicalProgram () { // get key, title, selections
       if (this.local.programLists && this.local.programLists.clinical) {
         return this.local.programLists.clinical;
       }
       return null
     },
-    nonClinicalProgram () {
+    nonClinicalProgram () { // get key, title, selections
       if (this.local.programLists && this.local.programLists.nonClinical) {
         return this.local.programLists.nonClinical;
       }
@@ -257,7 +252,6 @@ export default {
   async created () {
     await this.fetchConfigReport();
     this.local.items = this.report
-    // console.log(this.programReport);
   },
   methods: {
     async fetchConfigReport () {
@@ -266,7 +260,6 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: config.api.report.config }));
       if(err) return;
       this.local.programLists = res.data.reportConfig
-      // console.log(this.local.programLists);
       // setTimeout( async() => {
        
       // }, 1000)
@@ -279,24 +272,40 @@ export default {
         items[item] = newItem
       })
       }
-     
       return items;
     },
-    getViolenceTitle  (type, key) {
-      return this.violenceProgram[type].options.filter((item) => {
+    getViolenceRes  (type, key) {
+      let res =  this.violenceProgram[type].options.filter((item) => {
         return item.value === key
-      })[0].title
+      })[0]
+      if(res) return res.title;
+      return '-'
     },
-    getClinicalProgramTitle (type, key) {
-      return this.clinicalProgram.common[type].options.filter((item) => {
+    getClinicalProgramRes (groupName, type, key) {
+      let res = this.clinicalProgram[groupName][type].options.filter((item) => {
         return item.value === key
-      })[0].title
+      })[0]
+      if(res) return res.title;
+      return '-'
+    },
+    getNonClinicalProgramRes (type, key) {
+      let res = this.nonClinicalProgram[type].options.filter((item) => {
+        return item.value === key
+      })[0]
+      if(res) return res.title;
+      return '-'
     },
     getReportStatusTrans (status) {
       return config.reportStatus.filter((item) => {
         return item.key === status
       })[0]
-    }
+    },
+    getClinicalKeys (formKey) {
+      return Object.keys(this.clinicalProgram[formKey])
+    },
+    getNonClinicalKeys (formKey) {
+      return ['budget', 'env', 'facilities', 'hrd', 'im', 'rights'];
+    },
   },
   watch: {
     report: {

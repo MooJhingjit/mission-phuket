@@ -13,6 +13,12 @@
         </div>
         
       </div>
+      <div class="column col-sm-12 item-center">
+        <div class="item-center text-error" style="flex-direction: column">
+          <h4>NO BLAM</h4>
+          <h4>"ไม่ตำหนิ"</h4>
+        </div>
+      </div>
       <div class="column user-profile col-sm-12">
         <p class="text-bold">{{USER.name}}</p>
         <p>{{USER.departmentName}}</p>

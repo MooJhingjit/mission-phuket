@@ -1,32 +1,36 @@
 <template>
   <div ref="report" class="page" v-if="local.programLists">
     <header>
-      <h3>รายงานอุบัติการณ์ โรงพยาบาลมิชชั่นภูเก็ต</h3>
-      <h4>ผู้ออกรายงาน: {{USER.name}} วันที่ {{moment().format('DD-MM-YYYY HH:mm')}}</h4>
+      <h2>โรงพยาบาลมิชชั่นภูเก็ต</h2>
+      <h3>รายงานอุบัติการณ์ (Hospital Risk Profile)</h3>
+      <!-- <h4>ผู้ออกรายงาน: {{USER.name}} วันที่ {{moment().format('DD-MM-YYYY HH:mm')}}</h4> -->
     </header>
+    <br/>
+    <hr>
     <section>
       <section class="title-section">
-        <table width="100%" border="1">
+        <table width="100%">
           <tr>
             <td>
-              <label>วันที่เกิดเหตุ</label>: {{moment(report.incidentDate).format('DD-MM-YYYY')}}
+              <label>วันที่เกิดเหตุ</label>: {{moment(report.incidentDate).format('DD-MM-YYYY HH:mm:ss')}}
             </td>
+            <td>
+              <label>ผู้ที่ได้รับผลกระทบ</label>: {{report.affectedPerson}}
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
             <td>
               <label>HN</label>: {{report.hn}}
             </td>
             <td>
               <label>ชื่อ-นามสกุล</label>: {{report.name}}
+              <!-- <label>แผนกบริเวณที่พบเหตุ</label>: {{report.area}} -->
             </td>
-          </tr>
-          <tr>
             <td>
               <label>อายุ</label>: {{report.age}}
-            </td>
-            <td>
-              <label>แผนกบริเวณที่พบเหตุ</label>: {{report.area}}
-            </td>
-            <td>
-              <label>ผู้ที่ได้รับผลกระทบ</label>: {{report.affectedPerson}}
+              <!-- <label>ผู้ที่ได้รับผลกระทบ</label>: {{report.affectedPerson}} -->
             </td>
           </tr>
           <tr>
@@ -34,18 +38,27 @@
               <label>วันที่รายงาน</label>: {{moment(report.reportDate).format('DD-MM-YYYY')}}
             </td>
             <td>
-              <label>สถานะ</label>: {{getReportStatusTrans(report.status).value}}
+              <template v-if="IS_ADMIN"><label>ผู้รายงาน</label>: {{report.reporter}}</template>
+              
             </td>
             <td>
-              <template v-if="IS_ADMIN"><label>ผู้รายงาน</label>: {{report.reporter}}</template>
+              <!-- <label>สถานะ</label>: {{getReportStatusTrans(report.status).value}} -->
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <label>แผนกบริเวณที่พบเหตุ</label>: {{report.area}}
             </td>
           </tr>
         </table>
       </section>
-      <br/>
-      <section class="section" v-if="report.programType === 'non-clinical'">
+      <hr>
+      <section>
+        <label>รูปแบบของเหตุการณ์ที่เกิด:  {{(report.programType === 'non-clinical') ? 'Non Clinical': 'Clinical'}}</label>
+      </section>
+      <!-- <section class="section" v-if="report.programType === 'non-clinical'">
         <p>รูปแบบของเหตุการณ์ที่เกิด: Non Clinical</p>
-        <table width="100%" border="1">
+        <table width="100%">
           <tr>
             <td>
               <label>{{nonClinicalProgram.env.title}}</label>: {{getNonClinicalValue('env', report.program.env)}}
@@ -151,67 +164,36 @@
             <td>
               <label>{{clinicalProgram.event.event.title}}</label>: {{getClinicalValue('event', 'event', report.program.event.event)}}
             </td>
-            <!-- <td></td> -->
           </tr>
         </table>
+      </section> -->
+      <hr>
+      <section>
+        <div><label>เหตุการณ์ที่เกิดขึ้นของอุบัติการณ์ครั้งนี้</label></div>
+        <br/>
+        <div>หมวดเหตุการณ์:</div>
+        <br/>
+        <div>ระดับความรุนแรง: {{getViolence()}}</div>
       </section>
-      <br/>
-      <section class="section">
-        <label>ระดับความรุนแรง</label>: {{getViolence()}}
+      <hr>
+      <label>สรุปเหตุการณ์ (ใคร ทำอะไร เมื่อไหร่ และผลจากเหตุการณ์เป็นอย่างไร)</label>
+      <section class="section" style="min-height: 50px; margin-bottom: 15px">
+        {{report.eventBriefing}}
       </section>
-      <br/>
-      <section class="section">
-        <p>รูปแบบของการวิเคราะห์และการอธิบาย</p>
-        <table width="100%" border="1">
-          <tr>
-            <td>
-              <label>บรรยายสรุปเหตุการณ์ที่เกิด</label>: {{report.eventBriefing}}
-            </td>
-            <td>
-              <label>วิเคราะห์สาเหตุและแนวทางแก้ไข</label>: {{report.causeAnalysis}}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>ความเห็นหัวหน้างาน/ฝ่าย</label>: {{report.comment}}
-            </td>
-            <td>
-              <label>หมายเหตุ</label>: {{report.note}}
-            </td>
-          </tr>
-        </table>
+      <label>กิจกรรมที่ควรทำ / การแก้ไขปัญหาเบื้องต้น</label>
+      <section class="section" style="min-height: 50px; margin-bottom: 15px">
+        {{report.causeAnalysis}}
       </section>
-      <br/>
-      <section class="section">
-        <p>ส่วนงานที่ต้องแก้ไข</p>
-        
-
-        <div :key="index" v-for="(item, index) in responsibilities">
-          <label>แผนก {{item.department.name}}</label>
-          <table width="100%" border="1">
-            <thead>
-              <tr>
-                <th>สาเหตุ</th>
-                <th>ป้องกัน</th>
-                <th>ผู้รับผิดชอบ</th>
-              </tr>
-            </thead>
-            <tbody v-if="item.answers.length">
-              <tr :key="index" v-for="(anwser, index) in item.answers">
-                <td>{{anwser.cause}}</td>
-                <td>{{anwser.prevention}}</td>
-                <td>{{anwser.responsible}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-
+      <label>ความเห็นหัวหน้างาน / ฝ่าย</label>
+      <section class="section" style="min-height: 50px; margin-bottom: 15px">
+        {{report.comment}}
       </section>
     </section>
     <br/>
+    <hr>
     <footer>
-      <!-- <p>สถานะ: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p> -->
+      <p>ผู้ออกรายงาน: {{USER.name}}</p>
+      <p>วันที่ {{moment().format('DD-MM-YYYY HH:mm')}}</p>
     </footer>
   </div>
 </template>
@@ -294,11 +276,14 @@ export default {
       } else {
         style.appendChild(document.createTextNode(css))
         style.appendChild(document.createTextNode(`.page{margin: 0 auto;width: 1000px;border: 1px solid #ccc;padding: 15px;color: #595959;}
+html{font-size: 14px}
+hr{margin: 15px 0}
 header {text-align: center;}
 table {border-collapse: collapse;}
-table, td {border: 1px solid #ccc;padding: 10px; word-wrap: break-word;}
+table, td {border: 0px solid #ccc; word-wrap: break-word;}
+table, td, label {font-size: 14px;}
 .section{padding: 10px;border: 1px solid #ccc;}
-label, p {font-weight: bold;}
+label, p {}
 footer{text-align: right;}`) )
       }
       win.document.getElementsByTagName('head')[0].appendChild(style)
