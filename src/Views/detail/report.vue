@@ -56,136 +56,134 @@
       <section>
         <label>รูปแบบของเหตุการณ์ที่เกิด:  {{(report.programType === 'non-clinical') ? 'Non Clinical': 'Clinical'}}</label>
       </section>
-      <!-- <section class="section" v-if="report.programType === 'non-clinical'">
-        <p>รูปแบบของเหตุการณ์ที่เกิด: Non Clinical</p>
-        <table width="100%">
-          <tr>
-            <td>
-              <label>{{nonClinicalProgram.env.title}}</label>: {{getNonClinicalValue('env', report.program.env)}}
-            </td>
-            <td>
-              <label>{{nonClinicalProgram.facilities.title}}</label>: {{getNonClinicalValue('facilities', report.program.facilities)}}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>{{nonClinicalProgram.im.title}}</label>: {{getNonClinicalValue('im', report.program.im)}}
-            </td>
-            <td>
-              <label>{{nonClinicalProgram.hrd.title}}</label>: {{getNonClinicalValue('hrd', report.program.hrd)}}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>{{nonClinicalProgram.budget.title}}</label>: {{getNonClinicalValue('budget', report.program.budget)}}
-            </td>
-            <td>
-              <label>{{nonClinicalProgram.rights.title}}</label>: {{getNonClinicalValue('rights', report.program.rights)}}
-            </td>
-          </tr>
-        </table>
-      </section>
-      <section class="section" v-else>
-        <p>รูปแบบของเหตุการณ์ที่เกิด: Clinical</p>
-
-        <label>ความเสี่ยงทางคลินิกทั่วไป (Common Clinical Risk)</label>
-        <table width="100%" border="1">
-          <tr>
-            <td>
-              <label>{{clinicalProgram.common.IC.title}}</label>: {{getClinicalValue('common', 'IC', report.program.common.IC)}}
-            </td>
-            <td>
-              <label>{{clinicalProgram.common.PCT.title}}</label>: {{getClinicalValue('common', 'PCT', report.program.common.PCT)}}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>{{clinicalProgram.common.PTC.title}}</label>: {{getClinicalValue('common', 'PTC', report.program.common.PTC)}}
-            </td>
-            <td>
-              <label>{{clinicalProgram.common.operation.title}}</label>: {{getClinicalValue('common', 'operation', report.program.common.operation)}}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>{{clinicalProgram.common.review.title}}</label>: {{getClinicalValue('common', 'review', report.program.common.review)}}
-            </td>
-            <td></td>
-          </tr>
-        </table>
-        <br/>
-        <label>ความเสี่ยงทางคลินิกเฉพาะโรค (Disease-Specific Clinical Risk)</label>
-        <table width="100%" border="1">
-          <tr>
-            <td>
-              <label>{{clinicalProgram.spacific.anesthesiology.title}}</label>: {{getClinicalValue('spacific', 'anesthesiology', report.program.spacific.anesthesiology)}}
-            </td>
-            <td>
-              <label>{{clinicalProgram.spacific.dental.title}}</label>: {{getClinicalValue('spacific', 'dental', report.program.spacific.dental)}}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>{{clinicalProgram.spacific.generalEnt.title}}</label>: {{getClinicalValue('spacific', 'generalEnt', report.program.spacific.generalEnt)}}
-            </td>
-            <td>
-              <label>{{clinicalProgram.spacific.gynecology.title}}</label>: {{getClinicalValue('spacific', 'gynecology', report.program.spacific.gynecology)}}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>{{clinicalProgram.spacific.medicine.title}}</label>: {{getClinicalValue('spacific', 'medicine', report.program.spacific.medicine)}}
-            </td>
-            <td>
-              <label>{{clinicalProgram.spacific.optic.title}}</label>: {{getClinicalValue('spacific', 'optic', report.program.spacific.optic)}}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>{{clinicalProgram.spacific.orthopedic.title}}</label>: {{getClinicalValue('spacific', 'orthopedic', report.program.spacific.orthopedic)}}
-            </td>
-            <td>
-              <label>{{clinicalProgram.spacific.pediatrics.title}}</label>: {{getClinicalValue('spacific', 'pediatrics', report.program.spacific.pediatrics)}}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>{{clinicalProgram.spacific.radiology.title}}</label>: {{getClinicalValue('spacific', 'radiology', report.program.spacific.radiology)}}
-            </td>
-            <td>
-              <label>{{clinicalProgram.spacific.surgery.title}}</label>: {{getClinicalValue('spacific', 'surgery', report.program.spacific.surgery)}}
-            </td>
-          </tr>
-        </table>
-        <br/>
-        <label>Sentinel Event</label>
-        <table width="100%" border="1">
-          <tr>
-            <td>
-              <label>{{clinicalProgram.event.event.title}}</label>: {{getClinicalValue('event', 'event', report.program.event.event)}}
-            </td>
-          </tr>
-        </table>
-      </section> -->
       <hr>
       <section>
         <div><label>เหตุการณ์ที่เกิดขึ้นของอุบัติการณ์ครั้งนี้</label></div>
         <br/>
-        <div>หมวดเหตุการณ์:</div>
+        <section class="section" v-if="report.programType === 'non-clinical'">
+          <!-- <p>หมวดเหตุการณ์: Non Clinical</p> -->
+          <table width="100%" border="1" class="border">
+            <tr>
+              <td>
+                <label>{{nonClinicalProgram.env.title}}</label>: {{getNonClinicalValue('env', report.program.env)}}
+              </td>
+              <td>
+                <label>{{nonClinicalProgram.facilities.title}}</label>: {{getNonClinicalValue('facilities', report.program.facilities)}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>{{nonClinicalProgram.im.title}}</label>: {{getNonClinicalValue('im', report.program.im)}}
+              </td>
+              <td>
+                <label>{{nonClinicalProgram.hrd.title}}</label>: {{getNonClinicalValue('hrd', report.program.hrd)}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>{{nonClinicalProgram.budget.title}}</label>: {{getNonClinicalValue('budget', report.program.budget)}}
+              </td>
+              <td>
+                <label>{{nonClinicalProgram.rights.title}}</label>: {{getNonClinicalValue('rights', report.program.rights)}}
+              </td>
+            </tr>
+          </table>
+        </section>
+        <section class="section" v-else>
+          <!-- <p>หมวดเหตุการณ์: Clinical</p> -->
+          <label>ความเสี่ยงทางคลินิกทั่วไป (Common Clinical Risk)</label>
+          <table width="100%" border="1" class="border">
+            <tr>
+              <td>
+                <label>{{clinicalProgram.common.IC.title}}</label>: {{getClinicalValue('common', 'IC', report.program.common.IC)}}
+              </td>
+              <td>
+                <label>{{clinicalProgram.common.PCT.title}}</label>: {{getClinicalValue('common', 'PCT', report.program.common.PCT)}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>{{clinicalProgram.common.PTC.title}}</label>: {{getClinicalValue('common', 'PTC', report.program.common.PTC)}}
+              </td>
+              <td>
+                <label>{{clinicalProgram.common.operation.title}}</label>: {{getClinicalValue('common', 'operation', report.program.common.operation)}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>{{clinicalProgram.common.review.title}}</label>: {{getClinicalValue('common', 'review', report.program.common.review)}}
+              </td>
+              <td></td>
+            </tr>
+          </table>
+          <br/>
+          <label>ความเสี่ยงทางคลินิกเฉพาะโรค (Disease-Specific Clinical Risk)</label>
+          <table width="100%" border="1" class="border">
+            <tr>
+              <td>
+                <label>{{clinicalProgram.spacific.anesthesiology.title}}</label>: {{getClinicalValue('spacific', 'anesthesiology', report.program.spacific.anesthesiology)}}
+              </td>
+              <td>
+                <label>{{clinicalProgram.spacific.dental.title}}</label>: {{getClinicalValue('spacific', 'dental', report.program.spacific.dental)}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>{{clinicalProgram.spacific.generalEnt.title}}</label>: {{getClinicalValue('spacific', 'generalEnt', report.program.spacific.generalEnt)}}
+              </td>
+              <td>
+                <label>{{clinicalProgram.spacific.gynecology.title}}</label>: {{getClinicalValue('spacific', 'gynecology', report.program.spacific.gynecology)}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>{{clinicalProgram.spacific.medicine.title}}</label>: {{getClinicalValue('spacific', 'medicine', report.program.spacific.medicine)}}
+              </td>
+              <td>
+                <label>{{clinicalProgram.spacific.optic.title}}</label>: {{getClinicalValue('spacific', 'optic', report.program.spacific.optic)}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>{{clinicalProgram.spacific.orthopedic.title}}</label>: {{getClinicalValue('spacific', 'orthopedic', report.program.spacific.orthopedic)}}
+              </td>
+              <td>
+                <label>{{clinicalProgram.spacific.pediatrics.title}}</label>: {{getClinicalValue('spacific', 'pediatrics', report.program.spacific.pediatrics)}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>{{clinicalProgram.spacific.radiology.title}}</label>: {{getClinicalValue('spacific', 'radiology', report.program.spacific.radiology)}}
+              </td>
+              <td>
+                <label>{{clinicalProgram.spacific.surgery.title}}</label>: {{getClinicalValue('spacific', 'surgery', report.program.spacific.surgery)}}
+              </td>
+            </tr>
+          </table>
+          <br/>
+          <label>Sentinel Event</label>
+          <table width="100%" border="1" class="border">
+            <tr>
+              <td>
+                <label>{{clinicalProgram.event.event.title}}</label>: {{getClinicalValue('event', 'event', report.program.event.event)}}
+              </td>
+            </tr>
+          </table>
+        </section>
         <br/>
         <div>ระดับความรุนแรง: {{getViolence()}}</div>
       </section>
       <hr>
       <label>สรุปเหตุการณ์ (ใคร ทำอะไร เมื่อไหร่ และผลจากเหตุการณ์เป็นอย่างไร)</label>
-      <section class="section" style="min-height: 50px; margin-bottom: 15px">
+      <section class="section border" style="min-height: 50px; margin-bottom: 15px">
         {{report.eventBriefing}}
       </section>
       <label>กิจกรรมที่ควรทำ / การแก้ไขปัญหาเบื้องต้น</label>
-      <section class="section" style="min-height: 50px; margin-bottom: 15px">
+      <section class="section border" style="min-height: 50px; margin-bottom: 15px">
         {{report.causeAnalysis}}
       </section>
       <label>ความเห็นหัวหน้างาน / ฝ่าย</label>
-      <section class="section" style="min-height: 50px; margin-bottom: 15px">
+      <section class="section border" style="min-height: 50px; margin-bottom: 15px">
         {{report.comment}}
       </section>
     </section>
@@ -282,7 +280,9 @@ header {text-align: center;}
 table {border-collapse: collapse;}
 table, td {border: 0px solid #ccc; word-wrap: break-word;}
 table, td, label {font-size: 14px;}
-.section{padding: 10px;border: 1px solid #ccc;}
+table.border td {border: 1px solid #ccc; word-wrap: break-word; padding: 3px;}
+table.border td label {font-weight: bold;}
+.section.border{padding: 10px;border: 1px solid #ccc;}
 label, p {}
 footer{text-align: right;}`) )
       }
