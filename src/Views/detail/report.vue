@@ -175,15 +175,15 @@
       </section>
       <hr>
       <label>สรุปเหตุการณ์ (ใคร ทำอะไร เมื่อไหร่ และผลจากเหตุการณ์เป็นอย่างไร)</label>
-      <section class="section border" style="min-height: 50px; margin-bottom: 15px">
+      <section class="section border" style="min-height: 30px; margin-bottom: 10px">
         {{report.eventBriefing}}
       </section>
       <label>กิจกรรมที่ควรทำ / การแก้ไขปัญหาเบื้องต้น</label>
-      <section class="section border" style="min-height: 50px; margin-bottom: 15px">
+      <section class="section border" style="min-height: 30px; margin-bottom: 10px">
         {{report.causeAnalysis}}
       </section>
       <label>ความเห็นหัวหน้างาน / ฝ่าย</label>
-      <section class="section border" style="min-height: 50px; margin-bottom: 15px">
+      <section class="section border" style="min-height: 30px; margin-bottom: 10px">
         {{report.comment}}
       </section>
     </section>
