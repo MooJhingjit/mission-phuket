@@ -53,12 +53,12 @@
         </table>
       </section>
       <hr>
-      <section>
-        <label>รูปแบบของเหตุการณ์ที่เกิด:  {{(report.programType === 'non-clinical') ? 'Non Clinical': 'Clinical'}}</label>
+      <!-- <section>
+        <label>รูปแบบของเหตุการณ์ที่เกิด:  </label>
       </section>
-      <hr>
+      <hr> -->
       <section>
-        <div><label>เหตุการณ์ที่เกิดขึ้นของอุบัติการณ์ครั้งนี้</label></div>
+        <div><label>เหตุการณ์ที่เกิดขึ้นของอุบัติการณ์ครั้งนี้ ({{(report.programType === 'non-clinical') ? 'Non Clinical': 'Clinical'}})</label></div>
         <br/>
         <section class="section" v-if="report.programType === 'non-clinical'">
           <!-- <p>หมวดเหตุการณ์: Non Clinical</p> -->
