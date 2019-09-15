@@ -154,13 +154,13 @@ export default {
   },
   computed: {
     tableFields () {
-      // if (this.IS_ADMIN) {
+      if (this.IS_ADMIN) {
         this.local.fields.splice(5, 0, {
             name: 'reporter',
             title: 'ผู้รายงาน'
           });
         return this.local.fields;
-      // }
+      }
       return this.local.fields;
     },
     translate () {
