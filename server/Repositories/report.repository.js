@@ -37,10 +37,8 @@ module.exports = {
   async getCondtions (obj, user) {
     let condition = {};
     condition.$and = [];
-    
     if (!user.isAdmin) {
-      
-      let reportIdArr = obj.departmentAssociated.map((item) => {
+      let reportIdArr = obj.reportAssociated.map((item) => {
         return item.reportId;
       })
       if (obj.searchDetail.reportAssociated === 'waitForAnswer') {
@@ -56,10 +54,9 @@ module.exports = {
         )
       } else {
         condition.$and.push(
-          { $or: [{_id: { $in: reportIdArr } }, {createdByDepartment: user.departmentId}] }
+          { $or: [{_id: { $in: reportIdArr } }, {createdByDepartment: [...user.childDepartments, user.departmentId]}] }
         )
       }
-      
     }
     
     if (obj.searchDetail.reportStatus && obj.searchDetail.reportStatus !== 'all') {

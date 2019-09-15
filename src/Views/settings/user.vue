@@ -41,6 +41,21 @@
         </div>
         <p class="form-input-hint text-error" style="margin: unset" v-if="errors.first('department')">กรุณาตรวจสอบข้อมูลข้างต้น</p>
       </div>
+      <!-- <div class="form-group">
+        <label class="form-label">หัวหน้าฝ่าย <input type="checkbox" value="1" v-model="local.isLeader"></label>
+        <template v-if="local.isLeader">
+          <label class="form-label" for="input-example-1"> ระบุหน่วยงานที่รับผิดชอบ</label>
+          <div class="form-group">
+            <select :class="getInputClass('childDepartments')" v-model="local.childDepartments" name="childDepartments" v-validate="'required'" multiple>
+              <option :value="null">กรุณาเลือก</option>
+              <option :key="index" v-for="(item, index) in childDepartments" :value="item._id">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+          <p class="form-input-hint text-error" style="margin: unset" v-if="errors.first('childDepartments')">กรุณาตรวจสอบข้อมูลข้างต้น</p>
+        </template>
+      </div> -->
       <div class="form-group" v-if="local.idSelected === null">
         <label class="form-label" for="input-example-1">รหัสผ่าน</label>
         <my-input
@@ -161,14 +176,23 @@ export default {
         newPassword: null,
         confirmNewPassword: null,
         departmentId: null,
+        isLeader: false,
         idSelected: null,
         items: [],
         departmentItems: [],
+        childDepartments: [], // for leader
         showResetPass: true,
         isPassNotMatch: false
       }
     }
   },
+  // computed: {
+  //   childDepartments () {
+  //     return this.local.departmentItems.filter((item) => {
+  //       return item._id !== this.local.departmentId
+  //     })
+  //   }
+  // },
   created () {
     this.fetchData();
   },
@@ -194,7 +218,9 @@ export default {
             name: this.local.name,
             username: this.local.username,
             password: this.local.password,
-            departmentId: this.local.departmentId
+            departmentId: this.local.departmentId,
+            // isLeader: this.local.isLeader,
+            // childDepartments: this.local.childDepartments
           }}))
           break;
         case 'remove':
@@ -218,7 +244,9 @@ export default {
             name: this.local.name,
             username: this.local.username,
             password: this.local.password,
-            departmentId: this.local.departmentId
+            departmentId: this.local.departmentId,
+            // isLeader: this.local.isLeader,
+            // childDepartments: this.local.childDepartments
           }
           if (this.local.showResetPass) {
             // console.log(this.passwordInValid());
@@ -270,9 +298,11 @@ export default {
     getDepartmentName (departmentId) {
       // console.log(departmentId); 
       if (!departmentId) return '';
-      return this.local.departmentItems.filter((item) => {
+      let departmentItems = this.local.departmentItems.filter((item) => {
         return item._id === departmentId
-      })[0].name
+      })
+      if (!departmentItems.length) return ''
+      return departmentItems[0].name;
     },
     getInputClass (key) {
       return [

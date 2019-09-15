@@ -13,6 +13,12 @@ const managementSchema = new Schema({
     timestamps: true
 });
 
+managementSchema.statics.findByDepartments = async function (data) {
+  let [err, management] = await to(this.find({ departmentId: { $in : data.departmentIds } }));
+  if(err) TE(err.message);
+  return management;
+}
+
 // managementSchema.statics.findByUsername = async function (username) {
 //   let [err, user] = await to(this.find({ username: new RegExp(username, 'i') }));
 //   if(err) TE(err.message);

@@ -30,6 +30,21 @@
         ></my-input>
       </div>
       <div class="form-group">
+        <label class="form-label">เพิ่มแผนกที่รับผิดชอบ <input type="checkbox" value="1" v-model="local.hasChildDepartment"></label>
+        <template v-if="local.hasChildDepartment">
+          <label class="form-label" for="input-example-1"> ระบุหน่วยงานที่รับผิดชอบ</label>
+          <div class="form-group">
+            <select :class="getInputClass('childDepartments')" v-model="local.childDepartments" name="childDepartments" v-validate="'required'" multiple>
+              <!-- <option :value="null">กรุณาเลือก</option> -->
+              <option :key="index" v-for="(item, index) in childDepartments" :value="item._id">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+          <p class="form-input-hint text-error" style="margin: unset" v-if="errors.first('childDepartments')">กรุณาตรวจสอบข้อมูลข้างต้น</p>
+        </template>
+      </div>
+      <div class="form-group">
         <label class="form-label"><input type="checkbox" value="1" v-model="local.isAdmin" @change="selectAdmin(local.isAdmin)"> ผู้ดูแลระบบ</label>
         <label class="form-label" :key="index" v-for="(route, index) in local.allRoutes"><input type="checkbox" :value="route.name" v-model="local.right"> {{route.meta.label}}</label>
        
@@ -107,6 +122,8 @@ export default {
         name: null,
         manager: null,
         isAdmin: false,
+        hasChildDepartment: false,
+        childDepartments: [], // for leader
         idSelected: null,
         items: [],
         allRoutes: [],
@@ -126,6 +143,13 @@ export default {
       // console.log(item);
     })
   },
+  computed: {
+    childDepartments () {
+      return this.local.items.filter((item) => {
+        return item._id !== this.local.idSelected
+      })
+    }
+  },
   methods: {
     async fetchData() {
       let err, res;
@@ -139,10 +163,16 @@ export default {
       switch(type) {
         case 'add':
           [ err, res ] = await to(this.$validator.validate());
+          console.log(res);
           if(err || !res) return
           resourceName = config.api.department.index;
           [ err, res ] = await to(service.postResource({ resourceName, data: {
-            name:  this.local.name, manager: this.local.manager, isAdmin: this.local.isAdmin, right: this.local.right
+            name:  this.local.name,
+            manager: this.local.manager,
+            isAdmin: this.local.isAdmin,
+            right: this.local.right,
+            hasChildDepartment: this.local.hasChildDepartment,
+            childDepartments: this.local.childDepartments
           }}))
           break;
         case 'remove':
@@ -163,7 +193,12 @@ export default {
         case 'update':
           resourceName = `${config.api.department.index}/${this.local.idSelected}`;
           [ err, res ] = await to(service.putResource({ resourceName, data: {
-            name: this.local.name, manager: this.local.manager, isAdmin: this.local.isAdmin, right: this.local.right
+            name: this.local.name,
+            manager: this.local.manager,
+            isAdmin: this.local.isAdmin,
+            right: this.local.right,
+            hasChildDepartment: this.local.hasChildDepartment,
+            childDepartments: this.local.childDepartments
           }}))
           if(err) return;
           break;
@@ -182,12 +217,18 @@ export default {
       this.local.manager = item.manager;
       this.local.isAdmin = item.isAdmin;
       this.local.right = item.right;
+      this.local.childDepartments = item.childDepartments;
+      if (item.childDepartments.length) {
+        this.local.hasChildDepartment = true 
+      }
     },
     resetForm () {
       this.local.name = '';
       this.local.manager = '';
       this.local.isAdmin = false;
       this.local.right = [];
+      this.local.childDepartments = [];
+      this.local.hasChildDepartment = false;
       this.local.idSelected = null;
       this.$validator.reset()
     },
@@ -200,6 +241,12 @@ export default {
         return
       }
       this.local.right = [];
+    },
+    getInputClass (key) {
+      return [
+        'form-select',
+        { 'is-error': this.errors.has(key) }
+      ]
     }
   }
 }

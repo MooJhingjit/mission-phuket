@@ -8,6 +8,7 @@ const departmentSchema = new Schema({
    manager: {type: String, required: true},
    isAdmin: {type: Boolean, required: true},
    right: {type: Array, required: false},
+   childDepartments: {type: Array, required: false},
    updatedBy: {type: String, required: false},
    createdBy: {type: String, required: false},
 },

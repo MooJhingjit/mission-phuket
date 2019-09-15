@@ -16,7 +16,7 @@ module.exports = {
   },
   create(department, options = null){
     let err, res;
-    let newDepartments = new Departments({
+    let newDepartment = new Departments({
       _id: new  mongoose.Types.ObjectId(),
       name: department.name,
       manager: department.manager,
@@ -24,9 +24,14 @@ module.exports = {
       right: department.right,
       createdBy: options.user.name
     })
-    return newDepartments.save().then((newDepartments, err) => {
+
+    let childDepartments = []
+    if (department.hasChildDepartment) childDepartments = department.childDepartments;
+    newDepartment.childDepartments = childDepartments;
+
+    return newDepartment.save().then((newDepartment, err) => {
       if(err) TE(err.message);
-      return newDepartments
+      return newDepartment
     })
   },
   async update(department, options = null) {
@@ -37,6 +42,11 @@ module.exports = {
       right: department.right,
       updatedBy: options.user.name
     };
+
+    let childDepartments = []
+    if (department.hasChildDepartment) childDepartments = department.childDepartments;
+    newDepartments.childDepartments = childDepartments;
+
     let [err, res] = await to(Departments.findByIdAndUpdate(department.id, newDepartments));
     if(err) TE(err.message);
     return res

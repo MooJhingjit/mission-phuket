@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
       req.userId = decoded._id
       decoded.departmentId = department._id;
       decoded.isAdmin = department.isAdmin;
-
+      decoded.childDepartments = department.childDepartments;
       // console.log(decoded);
       req.userSession = decoded
       next()

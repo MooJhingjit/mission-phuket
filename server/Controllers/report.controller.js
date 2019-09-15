@@ -10,23 +10,23 @@ module.exports = {
 		return ReS(res, {reportConfig});
   },
   async getReportTranslation(req, res) {
-    let [err, reportAssociated] = await to(ManagementRepo.getByDepartment(req.userSession.departmentId));
+    let [err, reportAssociated] = await to(ManagementRepo.getByDepartments([...req.userSession.childDepartments, req.userSession.departmentId]));
     reportAssociated = reportAssociated.map((item) => {
       return item.reportId;
     })
 		return ReS(res, {trans, reportAssociated});
   },
   async list(req, res) {
-    let err, report, departmentAssociated;
+    let err, report, reportAssociated;
     let tableConfig = await Helper.getTableConfig(req.query.page, 10);
-    [err, departmentAssociated] = await to(ManagementRepo.getByDepartment(req.userSession.departmentId));
+    [err, reportAssociated] = await to(ManagementRepo.getByDepartments([...req.userSession.childDepartments, req.userSession.departmentId]));
     [err, report] = await to(ReportRepo.getDataTable({
       type: 'table',
       searchDetail: req.query,
       perPage: tableConfig.perPage,
       from: tableConfig.from,
       sort: req.query.sort,
-      departmentAssociated
+      reportAssociated
     }, {...req.userSession}));
     if(err) return ReE(res, err, 400);
     let total = (!report) ? 0 : report.total

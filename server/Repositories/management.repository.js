@@ -14,11 +14,15 @@ module.exports = {
       return management
     })
   },
-  async getByDepartment (departmentId){
-    return Management.find({departmentId}).then((management, err) => {
-      if(err) TE(err.message);
-      return management
-    })
+  // async getByDepartment (departmentId){
+  //   return Management.find({departmentId}).then((management, err) => {
+  //     if(err) TE(err.message);
+  //     return management
+  //   })
+  // },
+  async getByDepartments (departmentIds){
+    let management = await Management.findByDepartments({departmentIds});
+    return management;
   },
   async create(data, options = null){
     // console.log(data);
