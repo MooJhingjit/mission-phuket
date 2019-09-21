@@ -79,14 +79,12 @@
                 <div class="tile-subtitle">{{getClinicalProgramRes('common', item, programReport.program.common[item])}}</div>
               </div>
             </div>
-            <hr/>
             <div class="tile tile-centered m-1" :key="`spacific${index}`" v-for="(item, index) in getClinicalKeys('spacific')">
               <div class="tile-content">
                 <div class="tile-title" :title="clinicalProgram.spacific[item].title">{{clinicalProgram.spacific[item].title}}</div>
                 <div class="tile-subtitle">{{getClinicalProgramRes('spacific' ,item, programReport.program.spacific[item])}}</div>
               </div>
             </div>
-            <hr/>
             <div class="tile tile-centered m-1" :key="`event${index}`" v-for="(item, index) in getClinicalKeys('event')">
               <div class="tile-content">
                 <div class="tile-title" :title="clinicalProgram.event[item].title">{{clinicalProgram.event[item].title}}</div>
@@ -301,10 +299,16 @@ export default {
       })[0]
     },
     getClinicalKeys (formKey) {
-      return Object.keys(this.clinicalProgram[formKey])
+      let filterItems = Object.keys(this.clinicalProgram[formKey]).filter((item) => {
+        return this.getClinicalProgramRes(formKey, item, this.programReport.program[formKey][item]) !== '-'
+      })
+      return filterItems;
     },
     getNonClinicalKeys (formKey) {
-      return ['budget', 'env', 'facilities', 'hrd', 'im', 'rights'];
+      let filterItems = ['budget', 'env', 'facilities', 'hrd', 'im', 'rights'].filter((item) => {
+        return this.getNonClinicalProgramRes(item, this.programReport.program[item]) !== '-'
+      })
+      return filterItems;
     },
   },
   watch: {
