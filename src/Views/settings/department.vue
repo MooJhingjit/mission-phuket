@@ -32,7 +32,7 @@
       <div class="form-group">
         <label class="form-label">เพิ่มแผนกที่รับผิดชอบ <input type="checkbox" value="1" v-model="local.hasChildDepartment"></label>
         <template v-if="local.hasChildDepartment">
-          <label class="form-label" for="input-example-1"> ระบุหน่วยงานที่รับผิดชอบ</label>
+          <label class="form-label" for="input-example-1"> ระบุแผนก (ได้มากกว่า 1 แผนก)</label>
           <div class="form-group">
             <select :class="getInputClass('childDepartments')" v-model="local.childDepartments" name="childDepartments" v-validate="'required'" multiple>
               <!-- <option :value="null">กรุณาเลือก</option> -->
