@@ -304,7 +304,7 @@ export default {
       })
       return filterItems;
     },
-    getNonClinicalKeys (formKey) {
+    getNonClinicalKeys () {
       let filterItems = ['budget', 'env', 'facilities', 'hrd', 'im', 'rights'].filter((item) => {
         return this.getNonClinicalProgramRes(item, this.programReport.program[item]) !== '-'
       })

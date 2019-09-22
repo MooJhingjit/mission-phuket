@@ -534,7 +534,7 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: `${config.api.report.index}/${reportId}`}));
       if(err) return;
       let item = res.data.report;
-      if (item.status === 'approved' || !this.IS_REPORTCREATER(item.createdByDepartment)) {
+      if (item.status !== 'reportCreated' || !this.IS_REPORTCREATER(item.createdByDepartment)) {
         this.GO_TOPAGE('Report')
         return;
       }

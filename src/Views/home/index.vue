@@ -32,7 +32,10 @@
             <span>{{moment(props.rowData.reportDate).format('DD/MM/YYYY')}}</span>
         </template>  
         <template slot="actions" scope="props">
-          <button v-if="USER_RIGHT.includes('EditReport') && IS_REPORTCREATER(props.rowData.createdByDepartment) && props.rowData.status !== 'approved'" class="btn m-1" @click="GO_TOPAGE('EditReport', {key: props.rowData._id})"><i class="fas fa-edit"></i> แก้ไข</button>
+          <button v-if="USER_RIGHT.includes('EditReport') && IS_REPORTCREATER(props.rowData.createdByDepartment) && props.rowData.status !== 'approved'"
+            :disabled="(props.rowData.status !== 'reportCreated')"
+            :title="(props.rowData.status !== 'reportCreated') ? 'ไม่สามารถแก้ไขได้ เนื่องจากมีการส่งแบบติดตามแล้ว': ''"
+            class="btn m-1" @click="GO_TOPAGE('EditReport', {key: props.rowData._id})"><i class="fas fa-edit"></i> แก้ไข</button>
           <button v-if="USER_RIGHT.includes('Management') && props.rowData.status !== 'approved'" class="btn btn-warning m-1" @click="GO_TOPAGE('Management', {key: props.rowData._id})"><i class="fas fa-edit"></i> จัดการ</button>
           <button v-if="USER_RIGHT.includes('Answer') && props.rowData.status !== 'approved' && local.reportAssociated.includes(props.rowData._id)" class="btn m-1" @click="GO_TOPAGE('Answer', {key: props.rowData._id})"><i class="fas fa-edit "></i> ตอบ</button>
           <button v-if="USER_RIGHT.includes('ReportDetail')" class="btn m-1" @click="GO_TOPAGE('ReportDetail', {key: props.rowData._id})"><i class="fas fa-info-circle"></i> ภาพรวม</button>
@@ -225,5 +228,8 @@ export default {
 .flex-item-center {
   display: flex !important;
   align-items: center;
+}
+.btn.disabled, .btn:disabled, .btn[disabled]{
+  pointer-events: auto !important;
 }
 </style>
