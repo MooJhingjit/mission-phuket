@@ -22,7 +22,7 @@ userSchema.statics.findByUsername = async function (username) {
 }
 
 userSchema.query.byUsername = async function(username) {
-  let [err, user] = await to(this.where({ username: new RegExp(username, 'i') }));
+  let [err, user] = await to(this.where({ username }));
   if(err) TE(err.message);
   return user;
 };

@@ -60,6 +60,11 @@
                   <option :value="item.key" :key="index" v-for="(item, index) in reportStatus">{{item.value}}</option>
                 </select>
               </div>
+              <!-- <div class="form-group" v-if="USER.childDepartments.length">
+                <select class="form-select" v-model="local.departmentGroup">
+                  <option :value="item.key" :key="index" v-for="(item, index) in departmentGroup">{{item.value}}</option>
+                </select>
+              </div> -->
             </div>
             <div class="column col-sm-12  col-5">
               <div class="form-group">
@@ -83,8 +88,6 @@
                 <label class="form-radio form-inline">
                   <input type="radio" name="reportAssociated" value="all" v-model="local.reportAssociated"><i class="form-icon"></i> ทั้งหมด
                 </label>
-                
-                
               </div>
             </div>
             <div class="column">
@@ -121,10 +124,19 @@ export default {
   },
   created () {
     this.local = this.searchParams
+    console.log(this.USER);
   },
   computed: {
     reportStatus () {
       return config.reportStatus
+    },
+    departmentGroup () {
+      return this.USER.childDepartments.map((item) => {
+        return {
+          key: item,
+          value: item
+        }
+      })
     }
   },
   methods: {

@@ -44,9 +44,11 @@ export default {
         this.LOGOUT()
         return;
       }
+      let departmentName = res.data.department.name;
+      delete res.data.department.name
       this.SET_USER_STORE({data: {
         ...res.data.user,
-        departmentName: res.data.department.name,
+        departmentName,
         ...res.data.department
       }})
       return 

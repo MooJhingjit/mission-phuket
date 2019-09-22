@@ -181,7 +181,7 @@ export default {
         items: [],
         departmentItems: [],
         childDepartments: [], // for leader
-        showResetPass: true,
+        showResetPass: false,
         isPassNotMatch: false
       }
     }
