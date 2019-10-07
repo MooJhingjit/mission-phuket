@@ -153,7 +153,7 @@ module.exports = {
             {title: 'CA breast', value: '10'},
             {title: 'Nephrolithotomy', value: '11'},
             {title: 'Death/rebleeding', value: '12'},
-            {title: 'Cx', value: '13'},
+            // {title: 'Cx', value: '13'}, // from ann's re
             {title: 'Pain/SSI', value: '14'},
           ]
         },
@@ -167,7 +167,8 @@ module.exports = {
             {title: 'Shock/CHF', value: '5'},
             {title: 'IICP/Rebleeding', value: '6'},
             {title: 'Relapse/Reinfection', value: '7'},
-            {title: 'Limb loss', value: '8'}
+            {title: 'Limb loss', value: '8'},
+            {title: 'Hypo/Hyperglycemia', value: '9'}
           ]
         },
         pediatrics: {
