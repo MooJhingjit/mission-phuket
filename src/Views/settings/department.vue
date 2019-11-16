@@ -163,7 +163,7 @@ export default {
       switch(type) {
         case 'add':
           [ err, res ] = await to(this.$validator.validate());
-          console.log(res);
+          // console.log(res);
           if(err || !res) return
           resourceName = config.api.department.index;
           [ err, res ] = await to(service.postResource({ resourceName, data: {

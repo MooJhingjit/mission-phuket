@@ -7,7 +7,7 @@
         </div>
         <div class="column col-sm-12">
           <div class="columns">
-            <div class="column col-sm-12 col-5">
+            <div class="column col-sm-12  col-5">
               <div class="form-group">
                 <!-- <label class="form-label" for="input-example-1">ค้นหา</label> -->
                 <!-- <input class="form-input" type="text" id="input-example-1" placeholder="คำค้นหา"> -->
@@ -66,7 +66,7 @@
                 </select>
               </div> -->
             </div>
-            <div class="column col-sm-12  col-5">
+            <div class="column col-sm-12  col-4">
               <div class="form-group">
                 <!-- <label class="form-label" for="input-example-1"></label> -->
                 <label class="form-radio form-inline">
@@ -90,9 +90,11 @@
                 </label>
               </div>
             </div>
-            <div class="column">
+            <div class="column columns">
+              <div class="column col-12"><button class="btn btn-primary" @click="search()"><i class="form-icon fas fa-search"></i> ค้นหา</button></div>
+              <div class="column col-12 mt-2"><button class="btn btn-primary" @click="printReport()"><i class="fas fa-print"></i> ออกรายงาน</button></div>
               <!-- <label class="form-label" for="input-example-1"></label> -->
-              <button class="btn btn-primary" @click="search()"><i class="form-icon fas fa-search"></i> ค้นหา</button>
+              
             </div>
           </div>
         </div>
@@ -124,7 +126,6 @@ export default {
   },
   created () {
     this.local = this.searchParams
-    console.log(this.USER);
   },
   computed: {
     reportStatus () {
@@ -143,6 +144,9 @@ export default {
     search() {
       // console.log(this.local);
       this.$emit('search', this.local)
+    },
+    printReport() {
+      this.$emit('printReport', this.local)
     }
   },
   watch: {

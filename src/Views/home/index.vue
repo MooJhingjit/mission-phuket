@@ -2,7 +2,9 @@
   <div class="container columns">
      <navigation-bar :hasSlot="true">
       <template v-slot:searchOptions>
-        <table-search-box :searchParams="local.searchParams" @search="(query) => searchHandle(query)"/>
+        <table-search-box :searchParams="local.searchParams"
+        @printReport="(query) => printReportHandle(query)"
+        @search="(query) => searchHandle(query)"/>
       </template>
      </navigation-bar>
     <div class="column col-12">
@@ -198,6 +200,7 @@ export default {
       ];
     },
     onPaginationData (paginationData) {
+      // console.log('paginationData', paginationData);
       this.$refs.pagination.setPaginationData(paginationData)
       this.$refs.paginationInfo.setPaginationData(paginationData)
     },
@@ -208,6 +211,49 @@ export default {
       // console.log(query);
       this.local.searchParams = query
       this.$refs.vuetable.refresh()
+    },
+    async printReportHandle (query) {
+      // console.log('print pdf');
+      let docDefinition = {
+        // content: [
+        //   { text: 'สวัสดีประเทศไทย reat pdf demo ', fontSize: 15 },
+        // ],
+        content: [
+          {
+            layout: 'lightHorizontalLines', // optional
+            table: {
+              // headers are automatically repeated if the table spans over multiple pages
+              // you can declare how many rows should be treated as headers
+              headerRows: 1,
+              widths: [ '*', 'auto', 100, '*' ],
+
+              body: [
+                [ 'First', 'Second', 'Third', 'The last one' ],
+                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
+                [ { text: 'ทดสอบ', bold: false }, 'Val 2', 'Val 3', 'Val 4' ]
+              ]
+            }
+          }
+        ],
+        defaultStyle: {
+          font: 'THSarabunNew'
+        }
+      };
+      this.PRINT_PDF(docDefinition)
+      // fetch report
+      let err, res;
+      // let queryString = {};
+      // let sort =  `${}|${this.local.sortOrder[0].direction}`
+      let sort  = {}
+      if (this.local.sortOrder[0]) {
+        sort =  `${this.local.sortOrder[0].sortField}|${this.local.sortOrder[0].direction}`
+      }
+      // queryString = {...query, ...sort}
+      [ err, res ] = await to(service.getResource({ resourceName: config.api.report.print, queryString: {...query, sort} }));
+      // console.log('err', err);
+      if(err) return;
+      // console.log('report data', res);
+
     },
     getAffectedPerson (arr = []) {
       arr = arr.split('|');

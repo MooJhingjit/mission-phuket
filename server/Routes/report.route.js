@@ -6,7 +6,9 @@ const { Reports } = require('@controller')
 router.get('/report-config', function(req, res){
   Reports.getReportConfig(req, res)
 })
-
+router.get('/fullreport', function(req, res){
+  Reports.getFullReport(req, res)
+})
 router.get('/report-translation', function(req, res){
   Reports.getReportTranslation(req, res)
 })

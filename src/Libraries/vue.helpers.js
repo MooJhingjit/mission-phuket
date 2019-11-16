@@ -2,6 +2,9 @@ import { mapGetters, mapActions } from 'vuex'
 import config from '@Config/app.config'
 // import moment from 'moment'
 import Helper from '@Libraries/common.helpers'
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+
 // import { bus } from '@/main'
 export default {
   computed: {
@@ -100,6 +103,24 @@ export default {
         return true
       }
       return false;
+    },
+    PRINT_PDF (docDefinition) {
+      pdfMake.vfs = pdfFonts.pdfMake.vfs;
+      pdfMake.fonts = {
+        THSarabunNew: {
+          normal: 'THSarabunNew.ttf',
+          bold: 'THSarabunNew-Bold.ttf',
+          italics: 'THSarabunNew-Italic.ttf',
+          bolditalics: 'THSarabunNew-BoldItalic.ttf'
+        },
+        Roboto: {
+          normal: 'Roboto-Regular.ttf',
+          bold: 'Roboto-Medium.ttf',
+          italics: 'Roboto-Italic.ttf',
+          bolditalics: 'Roboto-MediumItalic.ttf'
+        }
+      }
+      pdfMake.createPdf(docDefinition).print();
     },
     LOGOUT () {
       Helper.REMOVE_STORAGEITEM(config.variable.tokenStorage)

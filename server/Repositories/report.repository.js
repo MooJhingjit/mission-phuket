@@ -34,6 +34,17 @@ module.exports = {
     }
     return sort;
   },
+  async getFullReport (obj, user) {
+    let err, reports, total;
+    let condition = {};
+    let sort = { createdAt: 'asc'}
+    sort = await this.sortDataTable(obj.sort);
+    condition = await this.getCondtions(obj, user);
+    // console.log(condition);
+    [err, reports] = await to(Reports.find(condition).sort(sort))
+    if(err) TE(err.message);
+    return reports
+  },
   async getCondtions (obj, user) {
     let condition = {};
     condition.$and = [];

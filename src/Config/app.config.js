@@ -13,6 +13,7 @@ const api = {
   },
   report: {
     index: '/reports',
+    print: '/fullreport',
     config: '/report-config',
     translation: '/report-translation',
     approve: '/update-report-status'

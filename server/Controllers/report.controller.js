@@ -16,7 +16,7 @@ module.exports = {
     })
 		return ReS(res, {trans, reportAssociated});
   },
-  async list(req, res) {
+  async list(req, res) { // called from datatable
     let err, report, reportAssociated;
     let tableConfig = await Helper.getTableConfig(req.query.page, 10);
     [err, reportAssociated] = await to(ManagementRepo.getByDepartments([...req.userSession.childDepartments, req.userSession.departmentId]));
@@ -42,7 +42,18 @@ module.exports = {
       total: total,
       data: (!report) ? [] : report.data,
       msg: 'success'});
-	},
+  },
+  async getFullReport(req, res) {
+    // console.log(req.query);
+    let err, fullReport, reportAssociated;
+    [err, reportAssociated] = await to(ManagementRepo.getByDepartments([...req.userSession.childDepartments, req.userSession.departmentId]));
+    [err, fullReport] = await to(ReportRepo.getFullReport({
+      searchDetail: req.query,
+      sort: req.query.sort,
+      reportAssociated
+    }, {...req.userSession}));
+    return ReS(res, fullReport);
+  },
   async get(req, res) {
 		let err, report;
     [err, report] = await to(ReportRepo.get(req.params.id));
