@@ -185,7 +185,7 @@
                         <template v-for="(items, index) in clinicalProgram.common.PCT.options">
                           <option v-if="!items.child.length" :key="index" :value="items.value">{{items.title}}</option>
                           <optgroup v-else :key="index" :label="items.title">
-                            <option v-for="(subItems, subIndex) in items.child" :key="subIndex" :value="items.value">{{subItems.title}}</option>
+                            <option v-for="(subItems, subIndex) in items.child" :key="subIndex" :value="subItems.value">{{subItems.title}} {{items.value}}</option>
                           </optgroup>
                         </template>
                       </select>
@@ -197,7 +197,7 @@
                        <template v-for="(items, index) in clinicalProgram.common.IC.options">
                           <option v-if="!items.child.length" :key="index" :value="items.value">{{items.title}}</option>
                           <optgroup v-else :key="index" :label="items.title">
-                            <option v-for="(subItems, subIndex) in items.child" :key="subIndex" :value="items.value">{{subItems.title}}</option>
+                            <option v-for="(subItems, subIndex) in items.child" :key="subIndex" :value="subItems.value">{{subItems.title}}</option>
                           </optgroup>
                         </template>
                       </select>

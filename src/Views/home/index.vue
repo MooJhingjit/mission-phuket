@@ -71,6 +71,7 @@
         </div>
       </div>  
     </div>
+    <report-template class="report-template" ref="reportTemplate" :reportData="local.reportData" :searchData="local.searchParams"></report-template>
   </div>
   
 </template>
@@ -87,6 +88,7 @@ import Vuetable from 'vuetable-2/src/components/Vuetable.vue'
 import VuetablePagination from 'vuetable-2/src/components/VuetablePagination.vue'
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo'
 import TableSearchBox from './searchBox'
+import reportTemplate from './report'
 
 export default {
   components: {
@@ -94,7 +96,8 @@ export default {
     Vuetable,
     VuetablePagination,
     VuetablePaginationInfo,
-    TableSearchBox
+    TableSearchBox,
+    reportTemplate
   },
   name: 'Report',
   data () {
@@ -133,8 +136,8 @@ export default {
         ],
         sortOrder: [
           {
-            field: 'name',
-            direction: 'asc'
+            field: 'reportDate',
+            direction: 'desc'
           }
           // {
           //   field: 'dateEnd',
@@ -148,7 +151,8 @@ export default {
           incidentDateStart: '',
           incidentDateEnd: '',
           reportStatus: 'all'
-        }
+        },
+        reportData: []
       },
       moment: moment
     }
@@ -213,37 +217,8 @@ export default {
       this.$refs.vuetable.refresh()
     },
     async printReportHandle (query) {
-      // console.log('print pdf');
-      let docDefinition = {
-        // content: [
-        //   { text: 'สวัสดีประเทศไทย reat pdf demo ', fontSize: 15 },
-        // ],
-        content: [
-          {
-            layout: 'lightHorizontalLines', // optional
-            table: {
-              // headers are automatically repeated if the table spans over multiple pages
-              // you can declare how many rows should be treated as headers
-              headerRows: 1,
-              widths: [ '*', 'auto', 100, '*' ],
-
-              body: [
-                [ 'First', 'Second', 'Third', 'The last one' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ { text: 'ทดสอบ', bold: false }, 'Val 2', 'Val 3', 'Val 4' ]
-              ]
-            }
-          }
-        ],
-        defaultStyle: {
-          font: 'THSarabunNew'
-        }
-      };
-      this.PRINT_PDF(docDefinition)
       // fetch report
       let err, res;
-      // let queryString = {};
-      // let sort =  `${}|${this.local.sortOrder[0].direction}`
       let sort  = {}
       if (this.local.sortOrder[0]) {
         sort =  `${this.local.sortOrder[0].sortField}|${this.local.sortOrder[0].direction}`
@@ -252,9 +227,61 @@ export default {
       [ err, res ] = await to(service.getResource({ resourceName: config.api.report.print, queryString: {...query, sort} }));
       // console.log('err', err);
       if(err) return;
+      this.local.reportData = res.data;
+      // this.$refs.reportTemplate.print()
+      // console.log('preview report', res.data);
+      
+      // let docDefinition = this.generatePdfContent(res.data)
+      // console.log('docDefinition', docDefinition);
+      // this.PRINT_PDF(docDefinition)
       // console.log('report data', res);
 
     },
+    // generatePdfContent (dataObj) {
+    //   let content = [[ '', 'วันที่รายงาน', 'วันที่เกิดเหตุ', 'เลขที่', 'ผู้แจ้ง', 'แผนกที่แก้ไข', 'type', 'ความรุนแรง', 'โปรแกรม', 'ผลกระทบ', 'สาเหตุจาก', 'การแก้ปัญหาเบื้องต้น', 'สาเหตุ', 'วิธีป้องกัน', 'ผู้รับผิดชอบ', 'สถานะ', 'ประเภท' ]];
+    //   for (let [index, item] of dataObj.entries()) {
+    //     content.push([
+    //       index+1,
+    //       moment(item.reportDate).format('DD/MM/YYYY HH:mm:ss'),
+    //       moment(item.incidentDate).format('DD/MM/YYYY HH:mm:ss'),
+    //       '*number*',
+    //       item.reporter,
+    //       'แผนกที่แก้ไข',
+    //       '*type*',
+    //       '*ความรุนแรง*',
+    //       item.programType,
+    //       '*affectedPerson*',
+    //       '*สาเหตุจาก*',
+    //       '*การแก้ปัญหาเบื้องต้น*',
+    //       '*สาเหตุ*',
+    //       '*วิธีป้องกัน*',
+    //       '*ผู้รับผิดชอบ*',
+    //       '*สถานะ*',
+    //       '*ประเภท*'
+    //     ])
+    //   }
+      
+    //   let docDefinition = {
+    //     pageOrientation: 'landscape',
+    //     content: [
+    //       {
+    //         layout: 'lightHorizontalLines', // optional
+    //         table: {
+    //           // headers are automatically repeated if the table spans over multiple pages
+    //           // you can declare how many rows should be treated as headers
+    //           headerRows: 1,
+    //           widths: [ 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto' ],
+    //           // widths: ['16.6%', '16.6%', '16.6%', '16.6%', '16.6%', '16.6%'],
+    //           body: content
+    //         }
+    //       }
+    //     ],
+    //     defaultStyle: {
+    //       font: 'THSarabunNew'
+    //     }
+    //   };
+    //   return docDefinition;
+    // },
     getAffectedPerson (arr = []) {
       arr = arr.split('|');
       let person = arr.map((item) => {
@@ -277,5 +304,8 @@ export default {
 }
 .btn.disabled, .btn:disabled, .btn[disabled]{
   pointer-events: auto !important;
+}
+.report-template{
+  display: none;
 }
 </style>

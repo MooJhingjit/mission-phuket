@@ -1,6 +1,7 @@
-const { Reports, Answer } = require('@model');
+const { Reports, Answer, Management, Departments } = require('@model');
 const { to, TE }  = require('@service/util.service');
 const mongoose = require('mongoose');
+const { trans, reportConfig } = require('../Config')
 
 module.exports = {
   async list() {
@@ -12,7 +13,7 @@ module.exports = {
     let err, reports, total;
     let condition,result = {};
     let perpage = (!obj.perPage) ? 0 : obj.perPage;
-    let sort = { createdAt: 'asc'}
+    let sort = { reportDate: 'desc'}
     sort = await this.sortDataTable(obj.sort);
     condition = await this.getCondtions(obj, user);
     // console.log(condition);
@@ -43,7 +44,87 @@ module.exports = {
     // console.log(condition);
     [err, reports] = await to(Reports.find(condition).sort(sort))
     if(err) TE(err.message);
+    reports = await Promise.all(
+      reports.map( async (item) => {
+      item = item.toJSON();
+      // console.log(item.status);
+      item.program = this.getProgramValueForReport(item.programType, item.program)
+      
+      item.responsibilities = await this.getResponsibilitiesReport(item._id)
+      item.status = trans.status[item.status]
+      return item
+    }))
     return reports
+  },
+  getProgramValueForReport (programType, programObj) {
+    if (programType === 'non-clinical') programType = 'nonClinical'
+    let programKeys = Object.keys(reportConfig[programType])
+    let programValue = [];
+    // console.log(programKeys); // [ 'env', 'facilities', 'im', 'hrd', 'budget', 'rights' ]
+    for (let programKey of programKeys) {
+      let programGroup = programObj[programKey]
+      // console.log(programGroup);
+      if (programType === 'nonClinical') { // this case there is no child
+        if (programGroup !== null) {
+          let retrunKey = reportConfig[programType][programKey].title;
+          let returnValue = [];
+          returnValue = reportConfig[programType][programKey].options.find((x) => {
+            // if (x.child && x.child.length) return x.child
+            return x.value === programGroup;
+          }).title
+          programValue.push({
+            key: retrunKey,
+            value: returnValue
+          })
+        }
+      } else {
+        // console.log(programGroup);
+        Object.keys(programGroup).forEach(itemKey => {
+          if (programGroup[itemKey] !== null) {
+            // console.log(programGroup[itemKey]);
+            let retrunKey = reportConfig[programType][programKey][itemKey].title;
+            let returnValue = null;
+            // console.log(reportConfig[programType][programKey][itemKey]);
+            returnValue = reportConfig[programType][programKey][itemKey].options.find((x) => {
+              // if (x.child && x.child.length) return x.child
+              return x.value === programGroup[itemKey];
+            })
+            if (!returnValue) {
+              reportConfig[programType][programKey][itemKey].options.filter((item) => {
+                return item.child && item.child.length
+              }).map((item) => {
+                item.child.find(x => {
+                  if (x.value === programGroup[itemKey]) {
+                    returnValue = x.title
+                  }
+                })
+              })
+            }
+            else returnValue = returnValue.title
+            programValue.push({
+              key: retrunKey,
+              value: returnValue
+            })
+          }
+        })
+      }
+    }
+    return programValue
+  },
+  async getResponsibilitiesReport (reportId) {
+    let management = await Management.find({reportId})
+    let responsibilities = await Promise.all(
+      management.map( async (item) => {
+        let department = await Departments.findById(item.departmentId)
+        let answers = await Answer.find({reportId, departmentId: item.departmentId})
+        return {
+          department,
+          answers
+        }
+      })
+    )
+    // console.log(responsibilities);
+    return responsibilities;
   },
   async getCondtions (obj, user) {
     let condition = {};
@@ -153,7 +234,7 @@ module.exports = {
         status: report.status
       };
     }
-    console.log(field);
+    // console.log(field);
     let [err, res] = await to(Reports.findByIdAndUpdate(report.id, field));
     if(err) TE(err.message);
     return res
