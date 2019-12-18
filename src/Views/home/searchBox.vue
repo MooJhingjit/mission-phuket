@@ -92,7 +92,7 @@
             </div>
             <div class="column columns">
               <div class="column col-12"><button class="btn btn-primary" @click="search()"><i class="form-icon fas fa-search"></i> ค้นหา</button></div>
-              <div class="column col-12 mt-2"><button class="btn btn-primary" @click="printReport()"><i class="fas fa-print"></i> ออกรายงาน</button></div>
+              <div class="column col-12 mt-2" v-if="IS_ADMIN"><button class="btn btn-primary" @click="printReport()"><i class="fas fa-print"></i> ออกรายงาน</button></div>
               <!-- <label class="form-label" for="input-example-1"></label> -->
               
             </div>
