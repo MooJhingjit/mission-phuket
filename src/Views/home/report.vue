@@ -36,30 +36,30 @@
           <td>{{item.programType}}</td>
           <td>{{(item.violence.clinical || item.violence.general)}}</td>
           <td colspan="2">
-            <table class="table" style="text-align: left;"> 
-              <tr :key="index" v-for="(item, index) in item.program">
-                <td style="min-width: 500px;">{{item.key}}</td>
-                <td style="min-width: 500px;">{{item.value}}</td>
+            <table class="table" style="text-align: left;" > 
+              <tr :key="index" v-for="(e, index) in item.program">
+                <td :style="{'min-width': '500px', 'border-bottom': (item.program.length <= 1) ? '0': '.05rem solid #dadee4'}">{{e.key}}</td>
+                <td :style="{'min-width': '500px', 'border-bottom': (item.program.length <= 1) ? '0': '.05rem solid #dadee4'}">{{e.value}}</td>
               </tr>
             </table>
           </td>
           <td colspan="3">
             <table class="table" style="text-align: left;">
-              <tr :key="index" v-for="(item, index) in item.responsibilities">
+              <tr :key="index" v-for="(e, index) in item.responsibilities">
                 <!-- <td>{{item.department.name}}</td> -->
-                <td>
+                <td :style="{'border-bottom': (item.responsibilities.length <= 1) ? '0': '.05rem solid #dadee4'}">
                   <table class="table">
-                    <tr :key="index" v-for="(itemAns, index) in item.answers">
-                      <td  style="min-width: 400px;">{{itemAns.cause}}</td>
-                      <td  style="min-width: 400px;">{{itemAns.prevention}}</td>
-                      <td  style="min-width: 200px;">{{itemAns.responsible}} ({{item.department.name}})</td>
+                    <tr :key="index" v-for="(itemAns, index) in e.answers">
+                      <td  :style="{'min-width': '400px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">{{itemAns.cause}}</td>
+                      <td  :style="{'min-width': '400px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">{{itemAns.prevention}}</td>
+                      <td  :style="{'min-width': '200px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">{{itemAns.responsible}} ({{e.department.name}})</td>
                     </tr>
                   </table>
                 </td>
               </tr>
             </table>
           </td>
-          <td>xxxxxxxxxxx</td>
+          <td>{{item.causeAnalysis}}</td>
           <td>{{item.status}}</td>
         </tr>
       </tbody>
