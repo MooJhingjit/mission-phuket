@@ -48,7 +48,8 @@
               <tr :key="index" v-for="(e, index) in item.responsibilities">
                 <!-- <td>{{item.department.name}}</td> -->
                 <td :style="{'border-bottom': (item.responsibilities.length <= 1) ? '0': '.05rem solid #dadee4'}">
-                  <table class="table">
+                  <div v-if="!e.answers.length" style="text-align: right;">ผู้รับผิดชอบ {{e.department.name}}</div>
+                  <table class="table" v-else>
                     <tr :key="index" v-for="(itemAns, index) in e.answers">
                       <td  :style="{'min-width': '400px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">{{itemAns.cause}}</td>
                       <td  :style="{'min-width': '400px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">{{itemAns.prevention}}</td>
