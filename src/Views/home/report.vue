@@ -68,7 +68,7 @@
                   <div v-if="!e.answers.length" style="text-align: right;">{{e.department.name}}</div>
                   <table class="table" v-else>
                     <tr :key="index" v-for="(itemAns, index) in e.answers">
-                      <td  :style="{'min-width': '200px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">({{e.department.name}})</td>
+                      <td  :style="{'min-width': '200px', 'text-align': 'right', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">{{e.department.name}}</td>
                     </tr>
                   </table>
                 </td>
