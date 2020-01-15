@@ -54,7 +54,7 @@
                     <tr :key="index" v-for="(itemAns, index) in e.answers">
                       <td  :style="{'min-width': '400px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">{{itemAns.cause}}</td>
                       <td  :style="{'min-width': '400px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">{{itemAns.prevention}}</td>
-                      <td  :style="{'min-width': '200px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">{{itemAns.responsible}} ({{e.department.name}})</td>
+                      <td  :style="{'min-width': '200px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">{{itemAns.responsible}}</td>
                     </tr>
                   </table>
                 </td>
