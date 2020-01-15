@@ -16,7 +16,8 @@
           <th style="min-width: 100px">type</th>
           <th style="min-width: 100px">ความรุนแรง</th>
           <th colspan="2" style="min-width: 1000px; text-align: center;">โปรแกรม/ผลกระทบ</th>
-          <th colspan="3" style="min-width: 1000px; text-align: center;">แผนกที่แก้ไข / สาเหตุ / วิธีป้องกัน / ผู้รับผิดชอบ</th>
+          <th colspan="3" style="min-width: 1000px; text-align: center;">การตอบ (สาเหตุ/วิธีป้องกัน/ผู้รับผิดชอบ)</th>
+          <th style="min-width: 100px">แผนกที่รับผิดชอบ</th>
           <!-- <th>สาเหตุ</th>
           <th>วิธีป้องกัน</th>
           <th>ผู้รับผิดชอบ</th> -->
@@ -48,12 +49,26 @@
               <tr :key="index" v-for="(e, index) in item.responsibilities">
                 <!-- <td>{{item.department.name}}</td> -->
                 <td :style="{'border-bottom': (item.responsibilities.length <= 1) ? '0': '.05rem solid #dadee4'}">
-                  <div v-if="!e.answers.length" style="text-align: right;">{{e.department.name}}</div>
+                  <div v-if="!e.answers.length" style="text-align: right;"></div> <!-- {{e.department.name}} -->
                   <table class="table" v-else>
                     <tr :key="index" v-for="(itemAns, index) in e.answers">
                       <td  :style="{'min-width': '400px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">{{itemAns.cause}}</td>
                       <td  :style="{'min-width': '400px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">{{itemAns.prevention}}</td>
                       <td  :style="{'min-width': '200px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">{{itemAns.responsible}} ({{e.department.name}})</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td>
+            <table class="table" style="text-align: left;">
+              <tr :key="index" v-for="(e, index) in item.responsibilities">
+                <td :style="{'border-bottom': (item.responsibilities.length <= 1) ? '0': '.05rem solid #dadee4'}">
+                  <div v-if="!e.answers.length" style="text-align: right;">{{e.department.name}}</div>
+                  <table class="table" v-else>
+                    <tr :key="index" v-for="(itemAns, index) in e.answers">
+                      <td  :style="{'min-width': '200px', 'border-bottom': (e.answers.length <= 1) ? '0': '.05rem solid #dadee4'}">({{e.department.name}})</td>
                     </tr>
                   </table>
                 </td>
