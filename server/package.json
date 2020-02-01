@@ -16,6 +16,7 @@
     "jsonwebtoken": "^8.5.1",
     "module-alias": "^2.2.0",
     "mongoose": "^5.5.12",
+    "nodemon": "^2.0.2",
     "parse-error": "^0.2.0"
   },
   "_moduleAliases": {
