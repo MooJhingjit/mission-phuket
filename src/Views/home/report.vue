@@ -11,7 +11,7 @@
           <th></th>
           <th>วันที่รายงาน</th>
           <th>วันที่เกิดเหตุ</th>
-          <!-- <th>เลขที่</th> -->
+          <th>ชื่อ-นามสกุล</th>
           <th style="min-width: 100px">ผู้แจ้ง</th>
           <th style="min-width: 100px">type</th>
           <th style="min-width: 100px">ความรุนแรง</th>
@@ -21,7 +21,10 @@
           <!-- <th>สาเหตุ</th>
           <th>วิธีป้องกัน</th>
           <th>ผู้รับผิดชอบ</th> -->
+          <th style="min-width: 250px">สรุปเหตุการณ์</th>
           <th style="min-width: 250px">การแก้ปัญหาเบื้องต้น</th>
+          <th style="min-width: 250px">ความเห็นหัวหน้างาน/ฝ่าย</th>
+          <th style="min-width: 250px">หมายเหตุ</th>
           <th style="min-width: 250px">สถานะ</th>
           <!-- <th>ประเภท</th> -->
         </tr>
@@ -32,6 +35,7 @@
           <td>{{moment(item.reportDate).format('DD/MM/YYYY HH:mm:ss')}}</td>
           <td>{{moment(item.incidentDate).format('DD/MM/YYYY HH:mm:ss')}}</td>
           <!-- <td></td> เลขที่-->
+          <td>{{item.name}}</td>
           <td>{{item.reporter}}</td>
           <!-- <td>xxxxxxxxxxx</td> -->
           <td>{{item.programType}}</td>
@@ -75,7 +79,10 @@
               </tr>
             </table>
           </td>
+          <td>{{item.eventBriefing}}</td>
           <td>{{item.causeAnalysis}}</td>
+          <td>{{item.comment}}</td>
+          <td>{{item.note}}</td>
           <td>{{item.status}}</td>
         </tr>
       </tbody>
