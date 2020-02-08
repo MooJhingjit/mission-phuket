@@ -16,6 +16,7 @@
           <th style="min-width: 100px">type</th>
           <th style="min-width: 100px">ความรุนแรง</th>
           <th colspan="2" style="min-width: 1000px; text-align: center;">โปรแกรม/ผลกระทบ</th>
+          <th style="min-width: 200px">ผู้ที่ได้รับผลกระทบ</th>
           <th colspan="3" style="min-width: 1000px; text-align: center;">การตอบ (สาเหตุ/วิธีป้องกัน/ผู้รับผิดชอบ)</th>
           <th style="min-width: 100px">แผนกที่รับผิดชอบ</th>
           <!-- <th>สาเหตุ</th>
@@ -48,6 +49,7 @@
               </tr>
             </table>
           </td>
+          <td>{{getAffectedPerson(item.affectedPerson)}}</td>
           <td colspan="3">
             <table class="table" style="text-align: left;">
               <tr :key="index" v-for="(e, index) in item.responsibilities">
@@ -161,6 +163,17 @@ export default {
       ${html.innerHTML}
       </body></html>`); 
       win.document.close();
+    },
+    getAffectedPerson (persons) {
+      let affectedPerson = { // from server's config
+        patient: 'ผู้ป่วย',
+        relative: 'ญาติ',
+        authorities: 'เจ้าหน้าที่',
+        environment: 'สิ่งแวดล้อม'
+      }
+      return persons.split('|').map((item) => {
+        return affectedPerson[item]
+      }).join(', ')
     }
   },
   watch: {
