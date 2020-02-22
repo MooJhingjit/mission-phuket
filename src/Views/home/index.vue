@@ -150,7 +150,8 @@ export default {
           reportAssociated: 'waitForAnswer',
           incidentDateStart: '',
           incidentDateEnd: '',
-          reportStatus: 'all'
+          reportStatus: 'all',
+          department: 'all'
         },
         reportData: []
       },

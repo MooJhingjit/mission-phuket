@@ -66,7 +66,7 @@
                 </select>
               </div> -->
             </div>
-            <div class="column col-sm-12  col-4">
+            <div class="column col-sm-12  col-5">
               <div class="form-group">
                 <!-- <label class="form-label" for="input-example-1"></label> -->
                 <label class="form-radio form-inline">
@@ -92,10 +92,18 @@
             </div>
             <div class="column columns">
               <div class="column col-12"><button class="btn btn-primary" @click="search()"><i class="form-icon fas fa-search"></i> ค้นหา</button></div>
-              <div class="column col-12 mt-2" v-if="IS_ADMIN"><button class="btn btn-primary" @click="printReport()"><i class="fas fa-print"></i> ออกรายงาน</button></div>
-              <!-- <label class="form-label" for="input-example-1"></label> -->
-              
             </div>
+          </div>
+          <div class="columns mt-2" v-if="IS_ADMIN">
+            <div class="column col-sm-12 col-5">
+              <div class="form-group">
+                <select class="form-select" v-model="local.department">
+                  <option :value="'all'">ทุกแผนก</option>
+                  <option :value="item.key" :key="index" v-for="(item, index) in departmentSearchOptions">{{item.value}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="column col-6"><button class="btn btn-primary" @click="printReport()"><i class="fas fa-print"></i> ออกรายงาน</button></div>              
           </div>
         </div>
       </div>
@@ -107,6 +115,8 @@
 import MyDatePicker from '@Components/Form/myDatePicker'
 import MyInput from '@Components/Form/myInput'
 import config from '@Config/app.config'
+import service from '@Services/app.service'
+import to from 'await-to-js';
 
 export default {
   components: {
@@ -121,11 +131,13 @@ export default {
   },
   data () {
     return {
-      local: {}
+      local: {},
+      departments: []
     }
   },
   created () {
     this.local = this.searchParams
+    this.fetchDepartmentData()
   },
   computed: {
     reportStatus () {
@@ -138,9 +150,24 @@ export default {
           value: item
         }
       })
+    },
+    departmentSearchOptions () {
+      return this.departments.map((item) => {
+        return {
+          key: item._id,
+          value: item.name
+        }
+      })
     }
   },
   methods: {
+    async fetchDepartmentData() {
+      let err, res;
+      let resourceName = config.api.department.index;
+      [ err, res ] = await to(service.getResource({ resourceName }));
+      if(err) return;
+      this.departments = res.data.department
+    },
     search() {
       // console.log(this.local);
       this.$emit('search', this.local)
