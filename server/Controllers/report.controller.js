@@ -5,21 +5,27 @@ const AnswerRepo = require('@repository/answer.repository');
 const { to, ReE, ReS }  = require('@service/util.service');
 const Helper = require('../Libraries/helper.js')
 const { trans, reportConfig } = require('../Config')
+const getDataByDepartment = async (user, query, departmentIds = null) => {
+  if (user.isAdmin && query !== null && query.department !== 'all') departmentIds = query.department;
+  return await to(ManagementRepo.getByDepartments(departmentIds));
+};
 module.exports = {
   async getReportConfig(req, res) {
 		return ReS(res, {reportConfig});
   },
   async getReportTranslation(req, res) {
-    let [err, reportAssociated] = await to(ManagementRepo.getByDepartments([...req.userSession.childDepartments, req.userSession.departmentId]));
+    let [err, reportAssociated] = await getDataByDepartment(req.userSession, null, [...req.userSession.childDepartments, req.userSession.departmentId]);
+    // await to(ManagementRepo.getByDepartments([...req.userSession.childDepartments, req.userSession.departmentId]));
     reportAssociated = reportAssociated.map((item) => {
-      return item.reportId;
+      return item.reportId; // show update report button if this report related with user
     })
 		return ReS(res, {trans, reportAssociated});
   },
   async list(req, res) { // called from datatable
     let err, report, reportAssociated;
     let tableConfig = await Helper.getTableConfig(req.query.page, 10);
-    [err, reportAssociated] = await to(ManagementRepo.getByDepartments([...req.userSession.childDepartments, req.userSession.departmentId]));
+    [err, reportAssociated] = await getDataByDepartment(req.userSession, req.query, [...req.userSession.childDepartments, req.userSession.departmentId]);
+    // await to(ManagementRepo.getByDepartments([...req.userSession.childDepartments, req.userSession.departmentId]));
     [err, report] = await to(ReportRepo.getDataTable({
       type: 'table',
       searchDetail: req.query,
@@ -46,7 +52,8 @@ module.exports = {
   async getFullReport(req, res) {
     // console.log(req.query);
     let err, fullReport, reportAssociated;
-    [err, reportAssociated] = await to(ManagementRepo.getByDepartments([...req.userSession.childDepartments, req.userSession.departmentId]));
+    [err, reportAssociated] = await getDataByDepartment(req.userSession, req.query, [...req.userSession.childDepartments, req.userSession.departmentId]);
+    // await to(ManagementRepo.getByDepartments([...req.userSession.childDepartments, req.userSession.departmentId]));
     [err, fullReport] = await to(ReportRepo.getFullReport({
       searchDetail: req.query,
       sort: req.query.sort,

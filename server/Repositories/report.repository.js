@@ -21,7 +21,17 @@ module.exports = {
     [err, reports] = await to(Reports.find(condition).sort(sort).limit(perpage).skip(obj.from));
     if(err) TE(err.message);
     result.total = total
-    result.data = reports
+    result.data = reports.map(item => {
+      let createdByDepartment = JSON.parse(JSON.stringify(item.createdByDepartment));
+      let myDepartment = JSON.parse(JSON.stringify(user.departmentId));
+      if (createdByDepartment !== myDepartment) {        
+        item.reporter = '';
+        item.updatedBy = '';
+        item.createdBy = '';
+        item.createdByDepartment = null;
+      }
+      return item  // hide reporter
+    })
     return result
   },
   async sortDataTable (sortObj) {
@@ -129,11 +139,11 @@ module.exports = {
   async getCondtions (obj, user) {
     let condition = {};
     condition.$and = [];
-    if (!user.isAdmin) {
+    if (!user.isAdmin || (user.isAdmin && obj.searchDetail.department !== 'all')) {
       let reportIdArr = obj.reportAssociated.map((item) => {
         return item.reportId;
       })
-      if (obj.searchDetail.reportAssociated === 'waitForAnswer') {
+      if (!user.isAdmin && obj.searchDetail.reportAssociated === 'waitForAnswer') {
         reportIdArr = await Promise.all(
           reportIdArr.map(async (item) => {
             let [err, total] = await to(Answer.find({reportId: item, departmentId: user.departmentId}).countDocuments());
@@ -145,8 +155,14 @@ module.exports = {
           { $and: [{_id: { $in: reportIdArr } }] }
         )
       } else {
+        let subConditions = [{_id: { $in: reportIdArr } }]
+        if (user.isAdmin) {
+          subConditions.push({createdByDepartment: [obj.searchDetail.department]})
+        } else {
+          subConditions.push({createdByDepartment: [...user.childDepartments, user.departmentId]})
+        }
         condition.$and.push(
-          { $or: [{_id: { $in: reportIdArr } }, {createdByDepartment: [...user.childDepartments, user.departmentId]}] }
+          { $or: subConditions }
         )
       }
     }
