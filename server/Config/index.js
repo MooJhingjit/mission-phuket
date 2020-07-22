@@ -141,8 +141,9 @@ module.exports = {
             { title: 'Ecclampsia / convulsion', value: '15'},
             { title: 'Hysterectomy/Blood Tx', value: '16'},
             { title: 'Severe birth asphyxia', value: '17'},
-            { title: 'LBW', value: '17'},
-            { title: 'Death after Cordocentesis', value: '19'}
+            { title: 'LBW', value: '18'},
+            { title: 'Death after Cordocentesis', value: '19'},
+            { title: 'DIFU', value: '20'}
           ]
         },
         surgery: {
