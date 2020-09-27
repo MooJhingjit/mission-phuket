@@ -69,7 +69,9 @@ module.exports = {
             { title: 'เตรียมตรวจทางรังสีผิดพลาด(ผิดปรเภท/ผิดคำสั่ง/ผิดคน/ผิดตำแหน่ง/ผิดข้าง/ผิดเทคนิคการตรวจ)', value: '25', child: []},
             { title: 'ET. Tube/T.T. Tube เลื่อน/หลุด', value: '26', child: []},
             { title: 'สาย IV / Foley\'cath หลุด', value: '27', child: []},
-            { title: 'ICD เลื่อน/หลุด', value: '28', child: []}
+            { title: 'ICD เลื่อน/หลุด', value: '28', child: []},
+            { title: 'คีย์ข้อมูลตรวจวิเคราะห์ lab ไม่ครบ/ผิด', value: '29', child: []},
+            { title: 'ไม่ปฏิบัติตามแนวทาง/คู่มือการปฏิบัติงาน', value: '30', child: []}
           ]
         },
         IC: {
