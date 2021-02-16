@@ -219,7 +219,7 @@ module.exports = {
             {title: 'Compartment Synd', value: '9'}
           ]
         },
-        generalEnt: {
+        generalEnt: { // was removed from fontend
           title: 'ความเสี่ยงเฉพาะโรคสาขาศัลยกรรมทั่วไป- ENT',
           options: [
             {title: 'Rupture Appendicitis', value: '1'},

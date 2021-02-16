@@ -256,13 +256,13 @@
                         <option :key="index" v-for="(item, index) in clinicalProgram.spacific.orthopedic.options" :value="item.value">{{item.title}}</option>
                       </select>
                     </div>
-                    <div class="form-group column col-6">
+                    <!-- <div class="form-group column col-6">
                       <label class="form-label">{{clinicalProgram.spacific.generalEnt.title}}</label>
                       <select class="form-select" v-model="local.program.spacific.generalEnt">
                       <option :value="null">กรุณาเลือก</option>
                         <option :key="index" v-for="(item, index) in clinicalProgram.spacific.generalEnt.options" :value="item.value">{{item.title}}</option>
                       </select>
-                    </div>
+                    </div> -->
                     <div class="form-group column col-6">
                       <label class="form-label">{{clinicalProgram.spacific.optic.title}}</label>
                       <select class="form-select" v-model="local.program.spacific.optic">
