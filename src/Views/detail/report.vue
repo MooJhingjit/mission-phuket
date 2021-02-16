@@ -128,36 +128,37 @@
               </td>
             </tr>
             <tr>
-              <td>
+              <!-- <td>
                 <label>{{clinicalProgram.spacific.generalEnt.title}}</label>: {{getClinicalValue('spacific', 'generalEnt', report.program.spacific.generalEnt)}}
-              </td>
+              </td> -->
               <td>
                 <label>{{clinicalProgram.spacific.gynecology.title}}</label>: {{getClinicalValue('spacific', 'gynecology', report.program.spacific.gynecology)}}
               </td>
-            </tr>
-            <tr>
               <td>
                 <label>{{clinicalProgram.spacific.medicine.title}}</label>: {{getClinicalValue('spacific', 'medicine', report.program.spacific.medicine)}}
               </td>
+            </tr>
+            <tr>
               <td>
                 <label>{{clinicalProgram.spacific.optic.title}}</label>: {{getClinicalValue('spacific', 'optic', report.program.spacific.optic)}}
               </td>
-            </tr>
-            <tr>
               <td>
                 <label>{{clinicalProgram.spacific.orthopedic.title}}</label>: {{getClinicalValue('spacific', 'orthopedic', report.program.spacific.orthopedic)}}
               </td>
+            </tr>
+            <tr>
               <td>
                 <label>{{clinicalProgram.spacific.pediatrics.title}}</label>: {{getClinicalValue('spacific', 'pediatrics', report.program.spacific.pediatrics)}}
+              </td>
+              <td>
+                <label>{{clinicalProgram.spacific.radiology.title}}</label>: {{getClinicalValue('spacific', 'radiology', report.program.spacific.radiology)}}
               </td>
             </tr>
             <tr>
               <td>
-                <label>{{clinicalProgram.spacific.radiology.title}}</label>: {{getClinicalValue('spacific', 'radiology', report.program.spacific.radiology)}}
-              </td>
-              <td>
                 <label>{{clinicalProgram.spacific.surgery.title}}</label>: {{getClinicalValue('spacific', 'surgery', report.program.spacific.surgery)}}
               </td>
+              <td></td>
             </tr>
           </table>
           <br/>

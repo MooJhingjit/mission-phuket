@@ -165,6 +165,9 @@ module.exports = {
             {title: 'Death/rebleeding', value: '12'},
             // {title: 'Cx', value: '13'}, // from ann's re
             {title: 'Pain/SSI', value: '14'},
+            {title: 'Bleedig', value: '15'},
+            {title: 'Pneenths', value: '16'},
+            {title: 'Hemarome', value: '17'},
           ]
         },
         medicine: {
@@ -178,7 +181,8 @@ module.exports = {
             {title: 'IICP/Rebleeding', value: '6'},
             {title: 'Relapse/Reinfection', value: '7'},
             {title: 'Limb loss', value: '8'},
-            {title: 'Hypo/Hyperglycemia', value: '9'}
+            {title: 'Hypo/Hyperglycemia', value: '9'},
+            {title: 'Sepris', value: '10'},
           ]
         },
         pediatrics: {
